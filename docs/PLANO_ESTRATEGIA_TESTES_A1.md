@@ -11,11 +11,11 @@ Definir como planejar, executar e registrar testes do Sistema de Folha de Pagame
 
 ## 2. Referências e premissas
 
-- A fonte dos requisitos é o documento `T1 - Requisitos do Cliente`; IDs e interpretações devem ser conferidos contra a versão aprovada desse documento.
-- O escopo considerado inclui RF001-RF009, RN001-RN008, RNF001-RNF004 e critérios de aceitação explicitados pelo cliente.
-- O documento do cliente distingue requisitos de recomendações. Itens indicados neste plano como sujeitos à confirmação só serão critérios obrigatórios após decisão registrada da equipe e, quando aplicável, validação do cliente/professor.
-- O estado atual observado usa Java 17, Spring Boot 3.5.5, Thymeleaf e persistência em arquivo TSV. A dependência `spring-boot-starter-test` está declarada no `pom.xml`.
-- PostgreSQL é uma possibilidade futura do plano de trabalho, não parte do ambiente atual. Só deve ser usado nos testes desta versão caso sua integração seja concluída e aprovada.
+- A fonte única dos requisitos é [Visão de Sistema e ERS Rastreável](../VisaoDeSistema+ERSRastreavel.pdf); o antigo `T1 - Requisitos do Cliente.pdf` foi substituído e não deve orientar escopo nem rastreabilidade.
+- O escopo inclui RF001-RF011, RN001-RN010, RNF001-RNF004 e todos os critérios gerais de aceitação da ERS.
+- Os requisitos da ERS são tratados como obrigatórios. Qualquer exclusão ou adiamento requer decisão formal de escopo e não deve ser disfarçado como requisito condicional.
+- O estado atual observado usa Java 17, Spring Boot 3.5.5, Thymeleaf e persistência TSV; a ERS exige banco SQL em RNF003, portanto há uma lacuna de implementação. A dependência `spring-boot-starter-test` está declarada no `pom.xml`.
+- A ERS requer apuração mês/ano e preservação de histórico após exclusão lógica. Os casos definem `mes` e `ano` como proposta de parâmetros HTTP porque a ERS não prescreve a URL.
 - Usar exclusivamente dados fictícios. Não guardar credenciais ou dados pessoais reais no repositório ou nas evidências.
 
 ## 3. Escopo de teste
@@ -25,28 +25,26 @@ Definir como planejar, executar e registrar testes do Sistema de Folha de Pagame
 - Cadastro e consulta de colaboradores padrão, comissionados e por produção.
 - Cálculo do salário final e dos adicionais de cada categoria.
 - Validação de campos obrigatórios e valores não negativos.
-- Folha individual, folha consolidada, totais gerais e resumo por categoria, conforme os requisitos aplicáveis.
-- Persistência, leitura após reinício e operações de manutenção que estejam no escopo aprovado.
+- Cálculo e emissão de folha individual/consolidada filtrados por mês e ano.
+- Resumo com quantidade, total geral e totais por categoria no mês/ano.
+- Relatório individual e recibo com salário base, adicionais e salário final; valores variáveis nulos devem ser apresentados como R$ 0,00.
+- Inclusão, consulta, alteração e exclusão lógica, preservando folhas históricas após remoção do cadastro ativo.
+- Persistência em banco SQL, leitura após reinício e integridade histórica.
 - Fluxos inválidos, limites de valores, regressão e avaliação guiada da interface.
-
-### Sujeito à confirmação
-
-- Unicidade de matrícula (RN001), manutenção completa (RF009) e resumo por categoria devem ser tratados como obrigatórios apenas se confirmados para a entrega. A implementação atual oferece validação de matrícula única, manutenção e resumo, mas a presença no produto não transforma, por si só, uma recomendação do cliente em requisito obrigatório.
-- Extensibilidade (RNF004) pode ser verificada por inspeção do desenho de domínio ou protótipo isolado; não se presume que um novo tipo de remuneração deva ser entregue nesta atividade.
 
 ### Fora do escopo atual
 
 - Regras fiscais, descontos legais, integração bancária, autenticação e integrações externas que não constem dos requisitos aprovados.
-- Testes de carga, alta disponibilidade ou desempenho em produção sem metas quantitativas acordadas.
-- Testes contra banco PostgreSQL até que essa persistência esteja implementada e haja ambiente de teste isolado.
+- Testes de carga, alta disponibilidade ou desempenho em produção sem metas quantitativas acordadas; esses atributos não têm metas na ERS.
+- O comportamento de SQL não pode ser aprovado usando TSV como substituto. CT-A1-030 deve permanecer bloqueado até a persistência SQL e o ambiente de teste estarem disponíveis.
 
 ## 4. Estratégia por nível
 
 | Nível | Finalidade e foco | Ferramenta/execução | Critério de aprovação |
 |---|---|---|---|
 | Unitário | Validar fórmulas, regras de domínio, fronteiras e validações isoladas. | JUnit 5/Spring Boot Test pelo Maven Wrapper. | Resultado igual ao esperado; teste determinístico e isolado. |
-| Integração | Verificar serviço, repositório TSV, validação do fluxo e persistência/recuperação dos dados. | JUnit/Spring Boot Test, arquivos temporários por teste. PostgreSQL somente se integrado. | Operações e restrições produzem o estado esperado sem contaminar outros testes. |
-| Sistema | Percorrer fluxos web completos: cadastro, consulta, relatórios, validação e reinício da aplicação. | Aplicação local e navegador; registrar nome e versão do navegador. | Fluxo completo atende ao resultado esperado sem defeito impeditivo. |
+| Integração | Verificar controller, serviço, banco SQL, validação do fluxo, persistência/recuperação e histórico após exclusão lógica. | JUnit/Spring Boot Test e banco SQL exclusivo; dados isolados por teste. | Operações, restrições e histórico produzem o estado esperado sem contaminar outros testes. |
+| Sistema | Percorrer cadastro, consulta, manutenção, relatórios filtrados por mês/ano, recibos, zeros explícitos, validação e reinício. | Aplicação local, banco SQL isolado e navegador; registrar nome e versão. | Fluxo completo atende à ERS sem defeito impeditivo. |
 | Aceitação | Confirmar critérios obrigatórios com representante definido pela equipe/cliente. | Casos revisados em ferramenta de gestão aprovada ou planilha versionada. | Cada critério obrigatório aprovado ou desvio formalmente aceito. |
 
 Identificar explicitamente quais casos são automatizados e quais são manuais. Repetir os casos afetados após correções e executar regressão dos cálculos, validações, persistência e relatórios relacionados.
@@ -65,7 +63,7 @@ Identificar explicitamente quais casos são automatizados e quais são manuais. 
 ```
 
 - Framework: Spring Boot 3.5.5; testes com `spring-boot-starter-test`/JUnit.
-- Persistência atual: TSV. Testes de repositório devem usar arquivo temporário exclusivo, preparado antes do teste e isolado de `dados/colaboradores.tsv`.
+- Persistência requerida pela ERS: banco SQL. Configurar instância/esquema exclusivo de teste, com dados reproduzíveis e sem credenciais versionadas. O TSV atual não satisfaz RNF003.
 - Cobertura: JaCoCo ou ferramenta equivalente não está declarada no `pom.xml` no estado consultado. Só publicar percentual após configurar uma ferramenta aprovada e registrar o escopo medido.
 
 ### Ambiente manual
@@ -73,7 +71,7 @@ Identificar explicitamente quais casos são automatizados e quais são manuais. 
 - Executar a aplicação conforme as instruções do `README.md` e confirmar a URL/porta efetiva na configuração da versão testada.
 - Registrar navegador e versão, commit ou versão da aplicação, data, executor e dados de teste.
 - Usar dados fictícios e preparar o estado inicial necessário para cada execução.
-- Quando PostgreSQL for incluído, usar instância/banco exclusivo de teste, esquema e dados reproduzíveis, sem credenciais versionadas. Nunca executar rotinas destrutivas contra dados reais.
+- Usar banco SQL exclusivo de teste, esquema e dados reproduzíveis, sem credenciais versionadas. Nunca executar rotinas destrutivas contra dados reais.
 
 ## 6. Ferramentas e evidências
 
@@ -115,7 +113,8 @@ Se algum pré-requisito impedir a execução, marcar os casos afetados como **bl
 - Casos críticos aprovados e nenhum defeito crítico aberto relacionado à entrega sem decisão formal.
 - Resultados de build, testes unitários, integração, sistema e aceitação registrados conforme aplicabilidade.
 - Evidências rastreáveis à versão testada.
-- Unicidade, CRUD e resumo por categoria identificados como incluídos ou fora do escopo, de acordo com a decisão registrada.
+- RF001-RF011, RN001-RN010, RNF001-RNF004 e critérios gerais de aceitação da ERS rastreados a casos; desvios devem ter decisão formal.
+- Filtragem por mês/ano, soft delete com histórico e persistência SQL verificados, ou explicitamente reprovados/bloqueados com evidência.
 
 A meta recomendada de cobertura de código de 80%, se aprovada pela equipe, é métrica complementar. Ela não substitui testes funcionais nem comprova por si só a qualidade da versão.
 
@@ -125,8 +124,8 @@ Os casos usam IDs estáveis no formato `CT-A1-NNN` e relacionam requisito, níve
 
 ## 10. Referências
 
-- `T1 - Requisitos do Cliente` e critérios de aceitação aprovados.
+- [Visão de Sistema e ERS Rastreável](../VisaoDeSistema+ERSRastreavel.pdf), fonte única dos requisitos e critérios de aceitação desta versão.
 - [Casos de Teste Rastreáveis - A1](CASOS_TESTE_RASTREAVEIS_A1.md).
 - [PGQ oficial](PGQ.md), para processo de qualidade, revisão e defeitos.
 - `README.md`, `pom.xml` e configuração efetiva da versão testada.
-- `PLANO_KANBAN_QDS_1.1.0.md`, para tarefas, ferramenta proposta e prazos.
+- O antigo `T1 - Requisitos do Cliente.pdf` não é referência de testes para esta versão.
