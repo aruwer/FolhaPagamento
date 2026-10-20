@@ -34,7 +34,7 @@ As metas abaixo são objetivos propostos para a versão e exigem comprovação a
 | :--- | :--- |
 | Cobertura | 80% |
 | Defeitos Críticos | 0 |
-| Requisitos Atendidos | 100% |
+| Requisitos Atendidos | 80% |
 
 *Nota de medição:* A meta de PRs integrados com revisão e de Testes obrigatórios executados também é de 100%. A cobertura será aferida configurando a ferramenta compatível no `pom.xml`.
 
