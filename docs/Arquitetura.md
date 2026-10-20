@@ -7,24 +7,9 @@
 
 ---
 
-## 1. Decisões Arquiteturais e Tecnológicas
-A arquitetura do sistema segue o padrão **MVC (Model-View-Controller)** em camadas, promovendo uma clara separação de responsabilidades.
+# 4. DIAGRAMAS UML
 
-*   **Tecnologias Atuais e Planejadas:** Java 17, Spring Boot 3.5.5 (core do back-end), Thymeleaf + HTML/CSS/JS (renderização no lado do servidor e interface do usuário).
-*   **Persistência e Base de Dados:** O sistema utiliza o Spring Data JPA para a abstração da persistência. A base de dados principal planejada é o **PostgreSQL**. A estratégia de herança para as classes de domínio (`Colaborador`) deverá adotar *Single Table* ou *Joined* dependendo dos ganhos de performance planejados na migração.
-*   **Evolução e Escalabilidade:** O design suporta a inclusão de novos tipos de remuneração através de polimorfismo na classe `Colaborador`. Quando a migração de banco de dados se concretizar, as anotações do JPA tratarão do mapeamento sem impactar as camadas de Serviço ou Interface. *Nota: Os diagramas deverão ser atualizados caso a migração torne o modelo diferente do estado atual.*
-
-## 2. Estrutura em Camadas (Componentes)
-*   **Interface (Presentation):** `FolhaPagamentoController` e os templates `Thymeleaf`. Responsáveis por receber requisições HTTP, mapear para o `ColaboradorForm` e devolver as views HTML.
-*   **Aplicação/Serviço (Application):** `FolhaPagamentoService`. Orquestra as regras de negócio, processa a lógica de cálculo (chamando as entidades) e interage com a persistência.
-*   **Domínio (Domain):** `Colaborador` (abstrata), `ColaboradorPadrao`, `ColaboradorComissionado`, `ColaboradorProducao`. Contêm o estado e o comportamento core (ex: cálculo de vencimentos baseados em diferentes regras de negócio).
-*   **Persistência (Infrastructure):** `RepositorioColaboradores`. Interface de comunicação com o banco PostgreSQL.
-
----
-
-## 3. Diagrama de Casos de Uso
-Este diagrama ilustra os fluxos principais de interação do usuário com o sistema.
-
+### Diagrama de Casos de Uso
 ```mermaid
 flowchart LR
     Usuario([RH / Administrador])
@@ -38,8 +23,11 @@ flowchart LR
     Usuario --- UC2
     Usuario --- UC3
     Usuario --- UC4
+```
 
-    classDiagram
+### Diagrama de Classes
+```mermaid
+classDiagram
     %% Camada de Interface
     class FolhaPagamentoController {
         +exibirFormulario()
@@ -92,7 +80,6 @@ flowchart LR
     }
 
     %% Relações e Fronteiras
-    FolhaPagamentoWebApplication ..> FolhaPagamentoController : Inicia (Boot)
     FolhaPagamentoController ..> ColaboradorForm : Recebe (DTO)
     FolhaPagamentoController --> FolhaPagamentoService : Chama
     FolhaPagamentoService --> RepositorioColaboradores : Consome
@@ -100,8 +87,13 @@ flowchart LR
     Colaborador <|-- ColaboradorPadrao : Herda
     Colaborador <|-- ColaboradorComissionado : Herda
     Colaborador <|-- ColaboradorProducao : Herda
+```
 
-    sequenceDiagram
+### Diagramas de Sequência
+
+**Fluxo de Cadastro e Manutenção**
+```mermaid
+sequenceDiagram
     autonumber
     actor RH as Usuário (RH)
     participant View as Thymeleaf View
@@ -117,8 +109,11 @@ flowchart LR
     Service-->>Control: Retorna sucesso
     Control-->>View: Redireciona para lista
     View-->>RH: Exibe mensagem de sucesso
+```
 
-    sequenceDiagram
+**Fluxo de Consulta e Geração de Relatórios**
+```mermaid
+sequenceDiagram
     autonumber
     actor RH as Usuário (RH)
     participant View as Thymeleaf View
@@ -140,3 +135,29 @@ flowchart LR
     Service-->>Control: ResumoFolha (Dados agregados)
     Control->>View: Envia modelo para o template
     View-->>RH: Renderiza tela com a tabela de resultados
+```
+
+---
+
+# 5. DOCUMENTO DE ARQUITETURA
+
+### Decisões Arquiteturais e Estrutura
+A arquitetura do sistema segue o padrão **MVC (Model-View-Controller)** em camadas, promovendo uma clara separação de responsabilidades. O design suporta a inclusão de novos tipos de remuneração através de polimorfismo na classe `Colaborador`. Quando a migração de banco de dados se concretizar, as anotações do JPA tratarão do mapeamento sem impactar as camadas de Serviço ou Interface.
+
+Abaixo apresentamos a arquitetura em camadas do sistema, partindo da interação do usuário até a persistência:
+
+```mermaid
+flowchart LR
+    Usuario[Usuário] --> Interface[Interface]
+    Interface --> Negocio[Camada de Negócio]
+    Negocio --> BD[(Banco de Dados)]
+```
+
+### Tecnologias
+Tabela de tecnologias definidas para a implementação do projeto:
+
+| Camada | Tecnologia |
+| :--- | :--- |
+| **Front-end** | Thymeleaf, HTML, CSS, JavaScript |
+| **Back-end** | Java 17, Spring Boot 3.5.5 |
+| **Banco** | PostgreSQL |
