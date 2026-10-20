@@ -15,7 +15,7 @@ Na pasta raiz do projeto:
 .\mvnw.cmd spring-boot:run
 ```
 
-Na primeira execução, o Maven Wrapper baixa o Maven necessário. Acesse [http://localhost:8080](http://localhost:8081) no navegador.
+Na primeira execução, o Maven Wrapper baixa o Maven necessário. Acesse [http://localhost:8081](http://localhost:8081) no navegador.
 
 Para gerar um JAR executável:
 
