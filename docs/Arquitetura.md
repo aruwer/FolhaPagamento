@@ -1,7 +1,7 @@
 # Documento de Arquitetura e Modelagem UML
 **Projeto:** Folha de Pagamento  
 **Versão:** QDS_1.2.0 (Revisão Pós-Feedback A1)  
-**Responsável:** Dev 2 (Revisão: Dev 1)  
+**Responsável:** Rafaela Acosta (Revisão: Amanda Ruwer)  
 **Dependências:** KAN-01  
 **Branch:** docs/QDS_1.1.0/uml-arquitetura  
 
