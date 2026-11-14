@@ -2,3 +2,7 @@ out/
 target/
 dados/
 *.class
+oracleJdk-27/
+LICENSE
+README
+release

@@ -9,6 +9,9 @@ public final class ColaboradorComissionado extends Colaborador {
         super(matricula, nome, salarioBase);
         validarNaoNegativo(valorVendas, "O valor das vendas");
         validarNaoNegativo(percentualComissao, "O percentual de comissão");
+        if (percentualComissao > 100.0) {
+            throw new IllegalArgumentException("O percentual de comissão não pode ser maior que 100%.");
+        }
         this.valorVendas = valorVendas;
         this.percentualComissao = percentualComissao;
     }

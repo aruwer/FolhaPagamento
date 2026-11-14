@@ -1,5 +1,6 @@
 package folhapagamento;
 
+import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -25,6 +26,7 @@ public class ColaboradorForm {
     private Double valorVendas;
 
     @DecimalMin(value = "0.0", message = "A comissão não pode ser negativa.")
+    @DecimalMax(value = "100.0", message = "A comissão não pode ser maior que 100%.")
     private Double percentualComissao;
 
     @DecimalMin(value = "0.0", message = "A quantidade produzida não pode ser negativa.")
