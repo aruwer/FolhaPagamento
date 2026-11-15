@@ -46,6 +46,22 @@ Para gerar um JAR executável:
 java -jar target\folha-pagamento-1.2.0.jar
 ```
 
+## Testes
+
+Os testes unitários usam JUnit 5 e Mockito. Para executá-los:
+
+```powershell
+.\mvnw.cmd test
+```
+
+Para executar os testes e gerar o relatório de cobertura JaCoCo:
+
+```powershell
+.\mvnw.cmd verify
+```
+
+O relatório HTML é gerado em `target/site/jacoco/index.html`.
+
 Os dados ficam em `dados/colaboradores.tsv`, criado automaticamente. O local pode ser alterado pela propriedade `folha.arquivo-dados`.
 
 ## Funcionalidades

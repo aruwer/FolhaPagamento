@@ -14,7 +14,7 @@ Definir como planejar, executar e registrar testes do Sistema de Folha de Pagame
 - A fonte única dos requisitos é [Visão de Sistema e ERS Rastreável](VisaoDeSistema+ERSRastreavel.pdf), armazenada nesta mesma pasta `docs`. O documento anterior de requisitos não é usado para definir escopo nem rastreabilidade.
 - O escopo inclui RF001-RF011, RN001-RN010, RNF001-RNF004 e todos os critérios gerais de aceitação da ERS.
 - Os requisitos da ERS são tratados como obrigatórios. Qualquer exclusão ou adiamento requer decisão formal de escopo e não deve ser disfarçado como requisito condicional.
-- O estado atual observado usa Java 17, Spring Boot 3.5.5, Thymeleaf e persistência em TSV; a ERS exige banco SQL em RNF003. A dependência `spring-boot-starter-test` está declarada, mas não há suíte em `src/test` neste estado do repositório. Assim, JUnit/MockMvc são ferramentas planejadas, não testes já executados.
+- O estado atual observado usa Java 17, Spring Boot 3.5.5, Thymeleaf e persistência em TSV; a ERS exige banco SQL em RNF003. `spring-boot-starter-test` fornece JUnit 5 e Mockito; os testes unitários em `src/test/java` cobrem cálculos e validações do domínio, resumo da folha e formatação monetária. A configuração não comprova os requisitos ainda não implementados nem substitui testes de integração/sistema.
 - A ERS exige apuração mês/ano, exclusão lógica com histórico e valores nulos apresentados como zero. Ela não define os parâmetros HTTP da competência nem rota específica de recibo; os casos registram propostas e não tratam essas rotas como contrato já implementado.
 - Os cenários descrevem verificações planejadas. Requisitos sem implementação/ambiente disponível devem ficar bloqueados ou reprovados com evidência, nunca marcados como aprovados por inferência. A especificação A1 pode estar completa mesmo quando um caso de implementação futura permaneça bloqueado para execução.
 - Usar exclusivamente dados fictícios. Não guardar credenciais ou dados pessoais reais no repositório ou nas evidências.
@@ -48,7 +48,7 @@ Definir como planejar, executar e registrar testes do Sistema de Folha de Pagame
 | Sistema | Percorrer cadastro, consulta, manutenção, relatórios filtrados por mês/ano, recibos, zeros explícitos, validação e reinício. | Aplicação local, banco SQL isolado e navegador; registrar nome e versão. | Fluxo completo atende à ERS sem defeito impeditivo. |
 | Aceitação | Confirmar os critérios da ERS com representante definido pela equipe e, quando aplicável, cliente/professora. | Casos revisados em ferramenta de gestão aprovada ou planilha versionada. | Cada critério obrigatório aprovado ou desvio formalmente aceito, com evidência. |
 
-Os casos identificam a camada e a forma proposta de execução. Os candidatos a automação HTTP poderão usar MockMvc/JUnit após a criação da suíte; os casos de UI/aceitação são manuais no navegador. No estado atual não há testes automatizados em `src/test`, portanto não declarar automação executada. Após correções, repetir os casos afetados e a regressão de cálculos, validações, persistência e relatórios.
+Os casos identificam a camada e a forma proposta de execução. Os testes unitários existentes usam JUnit 5 e Mockito; os casos de UI/aceitação são manuais no navegador. Os cenários HTTP poderão ser automatizados com MockMvc em testes futuros. Após correções, repetir os casos afetados e a regressão de cálculos, validações, persistência e relatórios.
 
 ## 5. Ambiente
 
@@ -63,9 +63,9 @@ Os casos identificam a camada e a forma proposta de execução. Os candidatos a 
 .\mvnw.cmd clean package
 ```
 
-- Framework: Spring Boot 3.5.5; `spring-boot-starter-test`/JUnit consta no `pom.xml`, mas a suíte ainda precisa ser criada.
+- Framework: Spring Boot 3.5.5; `spring-boot-starter-test`/JUnit 5 e Mockito no `pom.xml`; Surefire executa os testes unitários em `src/test/java`.
 - Persistência requerida pela ERS: banco SQL. O projeto atual usa TSV, então cenários de persistência SQL ficam bloqueados até implementar essa arquitetura. Quando disponível, configurar instância/esquema exclusivo, dados reproduzíveis e credenciais fora do repositório.
-- Cobertura: JaCoCo ou ferramenta equivalente não está declarada no `pom.xml` no estado consultado. Só publicar percentual após configurar uma ferramenta aprovada e registrar o escopo medido.
+- Cobertura: JaCoCo 0.8.13 gera dados de execução durante os testes e o relatório HTML no ciclo `verify`, em `target/site/jacoco/index.html`. A cobertura reportada deve identificar o escopo medido; não há limite mínimo configurado.
 
 ### Ambiente manual
 
@@ -79,11 +79,11 @@ Os casos identificam a camada e a forma proposta de execução. Os candidatos a 
 | Ferramenta | Uso | Situação |
 |---|---|---|
 | Maven Wrapper | Compilar o projeto e executar a suíte. | Incluído (`mvnw.cmd`); comandos: `test` e `clean package`. |
-| JUnit 5, Spring Boot Test e MockMvc | Automatizar testes unitários e de integração HTTP. | Dependências de teste declaradas; falta criar a suíte em `src/test`. |
+| JUnit 5, Spring Boot Test, Mockito e Surefire | Automatizar testes unitários e executar a suíte Maven. | Dependências e plugin configurados; testes iniciais em `src/test/java/folhapagamento`. |
+| JaCoCo | Medir e reportar cobertura de código. | Plugin configurado; relatório HTML gerado por `.\mvnw.cmd verify` em `target/site/jacoco/index.html`; sem limiar de aprovação. |
 | Microsoft Edge ou Google Chrome | Executar casos manuais de sistema/UI/aceitação. | Usar o navegador disponível no ambiente e registrar produto, versão, viewport e evidências por caso. |
 | Git e Markdown versionado | Manter casos, matriz e registro de resultados. | Usar a tabela de execução deste documento de casos; repetir uma linha por caso e execução. |
 | GitHub Issues e Pull Requests | Registrar defeitos, revisão e versão testada. | Usar o repositório remoto; vincular issue/PR ao ID do caso quando houver defeito ou correção. |
-| JaCoCo | Medir cobertura de código, se exigida para a versão. | Não configurado; não reportar percentual até configurar e executar a ferramenta. |
 
 Para cada execução guardar: ID do caso, versão/commit, data, executor, ambiente, dados utilizados, resultado (aprovado/reprovado/bloqueado), evidência e, em caso de falha, issue relacionada. Não registrar casos ainda não executados como aprovados.
 
