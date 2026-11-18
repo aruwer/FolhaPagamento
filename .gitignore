@@ -2,3 +2,4 @@ out/
 target/
 dados/
 *.class
+.env
