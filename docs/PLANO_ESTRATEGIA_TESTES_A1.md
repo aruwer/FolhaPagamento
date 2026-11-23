@@ -69,7 +69,7 @@ Os casos identificam a camada e a forma proposta de execução. Os testes unitá
 
 ### Ambiente manual
 
-- Executar a aplicação conforme `application.properties`; no estado consultado a porta é `8081`. O README ainda informa `8080`, então confirmar a URL efetiva antes de cada execução e corrigir a divergência na documentação de execução.
+- Executar a aplicação conforme `application.properties`; a porta configurada e documentada no README é `8081`.
 - Registrar navegador e versão, commit ou versão da aplicação, data, executor e dados de teste.
 - Usar dados fictícios e preparar o estado inicial necessário para cada execução.
 - Usar banco SQL exclusivo de teste, esquema e dados reproduzíveis, sem credenciais versionadas. Nunca executar rotinas destrutivas contra dados reais.

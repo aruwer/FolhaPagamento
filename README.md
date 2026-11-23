@@ -34,8 +34,13 @@ Para manter a integridade dos links internos do repositório, os artefatos foram
 O PostgreSQL é a persistência padrão. Prepare as variáveis locais e inicie o banco:
 
 ```powershell
-Copy-Item .env.example .env
-$env:DATABASE_PASSWORD = "replace_with_local_password"
+if (-not (Test-Path .env)) {
+    Copy-Item .env.example .env
+}
+$passwordLine = Get-Content .env | Where-Object { $_ -match '^POSTGRES_PASSWORD=' } | Select-Object -First 1
+if (-not $passwordLine) { throw "POSTGRES_PASSWORD não definido em .env." }
+$env:DATABASE_PASSWORD = $passwordLine.Substring("POSTGRES_PASSWORD=".Length)
+if (-not $env:DATABASE_PASSWORD) { throw "POSTGRES_PASSWORD está vazio em .env." }
 docker compose up -d
 docker compose ps
 .\mvnw.cmd spring-boot:run
@@ -43,7 +48,7 @@ docker compose ps
 
 O Docker Compose publica o banco em `localhost:5433` e o pgAdmin em `http://localhost:5050`. O Flyway aplica as migrações e o Hibernate valida o esquema ao iniciar a aplicação. Acesse [http://localhost:8081](http://localhost:8081).
 
-Use a mesma senha local em `POSTGRES_PASSWORD` no `.env` e em `DATABASE_PASSWORD` no PowerShell. Os valores do `.env.example` são apenas exemplos locais; não use essas senhas em ambientes compartilhados ou de produção.
+O comando carrega `DATABASE_PASSWORD` do mesmo `POSTGRES_PASSWORD` que o Compose lê do `.env`. Se o volume do PostgreSQL já foi inicializado, alterar a senha no `.env` não altera a senha gravada no banco: restaure a senha usada na primeira inicialização ou altere a senha do usuário dentro do PostgreSQL. Os valores de exemplo são apenas para desenvolvimento local; não use essas senhas em ambientes compartilhados ou de produção.
 
 Para gerar um JAR executável:
 
