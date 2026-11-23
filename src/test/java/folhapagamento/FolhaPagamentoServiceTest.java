@@ -61,7 +61,7 @@ class FolhaPagamentoServiceTest {
     }
 
     @Test
-    @DisplayName("Deve expor totais por categoria somente para leitura")
+    @DisplayName("RF011: totais por categoria são somente para leitura")
     void totaisPorCategoriaNaoPodeSerAlterado() {
         when(repositorio.listar()).thenReturn(List.of(new ColaboradorPadrao("001", "Ana", 2_000)));
 
@@ -97,7 +97,7 @@ class FolhaPagamentoServiceTest {
     }
 
     @Test
-    @DisplayName("Deve delegar atualização e exclusão")
+    @DisplayName("RF009: delega atualização e exclusão ao repositório")
     void atualizaEExcluiColaboradores() throws IOException {
         Colaborador colaborador = new ColaboradorPadrao("001", "Ana", 2_000);
 
@@ -109,7 +109,7 @@ class FolhaPagamentoServiceTest {
     }
 
     @Test
-    @DisplayName("Deve delegar processamento, consulta e resumo de competência")
+    @DisplayName("RF006, RF007 e RF008: delega operações da folha por competência")
     void delegaOperacoesDaFolhaProcessada() {
         FolhaProcessada item = new FolhaProcessada(1L, "001", "Ana", "PADRAO",
                 3, 2099, new BigDecimal("2000.00"), BigDecimal.ZERO.setScale(2),

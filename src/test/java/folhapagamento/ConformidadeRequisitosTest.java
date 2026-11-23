@@ -3,11 +3,13 @@ package folhapagamento;
 import java.math.BigDecimal;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ConformidadeRequisitosTest {
 
     @Test
+    @DisplayName("RF002–RF004, RN008: fórmulas de cálculo por categoria")
     void deveValidarFormulasDeCalculoRN001aRN003() {
         Colaborador padrao = new ColaboradorPadrao("101", "Ana Silva", 3000.00);
         assertEquals(new BigDecimal("0.00"), padrao.getAdicional());
@@ -26,6 +28,7 @@ class ConformidadeRequisitosTest {
     }
 
     @Test
+    @DisplayName("RNF002, RN002–RN007: dados vazios e negativos bloqueados")
     void deveBloquearDadosVaziosNegativosOuAcimaDoLimite() {
         assertThrows(IllegalArgumentException.class, () -> new ColaboradorPadrao("", "Nome", 2000.0));
         assertThrows(IllegalArgumentException.class, () -> new ColaboradorPadrao("001", "   ", 2000.0));
@@ -38,6 +41,7 @@ class ConformidadeRequisitosTest {
     }
 
     @Test
+    @DisplayName("RF001, RNF004: conversão do formulário para o domínio")
     void deveConstruirEConverterColaboradorFormCorretamente() {
         ColaboradorForm form = new ColaboradorForm();
         form.setMatricula("201");

@@ -35,7 +35,7 @@ class ColaboradorFormTest {
     }
 
     @Test
-    @DisplayName("Deve inicializar tipo padrão e permitir leitura/escrita de todos os campos")
+    @DisplayName("RF001: inicializa tipo padrão e permite acesso aos campos do formulário")
     void valoresPadraoEGettersSetters() {
         ColaboradorForm form = new ColaboradorForm();
 
@@ -68,7 +68,7 @@ class ColaboradorFormTest {
     }
 
     @Nested
-    @DisplayName("Validação Bean Validation")
+    @DisplayName("RNF002: valida os dados com Bean Validation")
     class ValidacaoBeanValidation {
         @Test
         @DisplayName("CT-001 - Deve validar e construir formulário padrão válido")
@@ -171,7 +171,7 @@ class ColaboradorFormTest {
     }
 
     @Test
-    @DisplayName("Deve rejeitar formulário sem salário base ou com tipo desconhecido ao construir")
+    @DisplayName("RNF002: rejeita salário base ausente e tipo desconhecido ao construir")
     void rejeitaSalarioAusenteETipoDesconhecidoNaConstrucao() {
         ColaboradorForm form = formularioValido();
         form.setSalarioBase(null);
@@ -183,7 +183,7 @@ class ColaboradorFormTest {
     }
 
     @Test
-    @DisplayName("Deve converter cada subtipo para seus dados de formulário")
+    @DisplayName("RF001, RF003 e RF004: converte cada subtipo para os dados do formulário")
     void converteSubtiposParaForm() {
         ColaboradorForm comissionado = ColaboradorForm.de(
                 new ColaboradorComissionado("002", "Bia", 1_000, 500, 10));

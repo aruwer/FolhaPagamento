@@ -9,6 +9,7 @@ import java.time.YearMonth;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -27,6 +28,7 @@ class RepositorioColaboradoresTest {
     private FolhaPagamentoService service;
 
     @Test
+    @DisplayName("CT-009, CT-023: persistência dos três tipos e matrícula duplicada")
     void persisteTiposDeColaboradorERejeitaDuplicidade() throws Exception {
         String padrao = matriculaUnica();
         String comissionado = matriculaUnica();
@@ -45,6 +47,7 @@ class RepositorioColaboradoresTest {
     }
 
     @Test
+    @DisplayName("CT-024, CT-025: atualização e exclusão lógica")
     void atualizaCadastroEExcluiColaboradorAtivo() throws Exception {
         String matricula = matriculaUnica();
         service.cadastrar(new ColaboradorPadrao(matricula, "Cadastro Inicial", 2_000));
@@ -60,6 +63,7 @@ class RepositorioColaboradoresTest {
     }
 
     @Test
+    @DisplayName("CT-037: histórico preservado após exclusão lógica")
     void preservaSnapshotDaFolhaDepoisDeAtualizarEExcluir() throws Exception {
         String matricula = matriculaUnica();
         YearMonth competencia = YearMonth.now();
@@ -82,6 +86,7 @@ class RepositorioColaboradoresTest {
     }
 
     @Test
+    @DisplayName("CT-036: processamento idempotente e competência inválida rejeitada")
     void processamentoELeituraSaoIdempotentesERejeitamCompetenciaInvalida() throws Exception {
         String matricula = matriculaUnica();
         service.cadastrar(new ColaboradorPadrao(matricula, "Competência", 1_000));

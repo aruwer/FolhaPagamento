@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -36,6 +37,7 @@ class RepositorioColaboradoresPostgresTest {
     private FolhaPagamentoService service;
 
     @Test
+    @DisplayName("CT-009, CT-030 (parcial, PostgreSQL real): matrícula duplicada")
     void persisteCadastroERejeitaMatriculaDuplicada() throws Exception {
         String matricula = matriculaUnica();
         service.cadastrar(new ColaboradorComissionado(
@@ -48,6 +50,7 @@ class RepositorioColaboradoresPostgresTest {
     }
 
     @Test
+    @DisplayName("CT-037 (PostgreSQL): histórico após exclusão lógica")
     void congelaFolhaPorCompetenciaEPreservaHistoricoNoSoftDelete() throws Exception {
         String matricula = matriculaUnica();
         service.cadastrar(new ColaboradorPadrao(matricula, "Colaborador Histórico",
@@ -73,6 +76,7 @@ class RepositorioColaboradoresPostgresTest {
     }
 
     @Test
+    @DisplayName("CT-036, RN008: competência e precisão monetária (PostgreSQL)")
     void validaCompetenciaEPrecisaoMonetaria() {
         ColaboradorComissionado colaborador = new ColaboradorComissionado(
                 matriculaUnica(), "Arredondamento", new BigDecimal("1.00"),
