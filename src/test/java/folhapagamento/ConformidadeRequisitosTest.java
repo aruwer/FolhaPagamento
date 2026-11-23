@@ -1,5 +1,7 @@
 package folhapagamento;
 
+import java.math.BigDecimal;
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -8,18 +10,18 @@ class ConformidadeRequisitosTest {
     @Test
     void deveValidarFormulasDeCalculoRN001aRN003() {
         Colaborador padrao = new ColaboradorPadrao("101", "Ana Silva", 3000.00);
-        assertEquals(0.0, padrao.getAdicional(), 0.001);
-        assertEquals(3000.00, padrao.getSalarioFinal(), 0.001);
+        assertEquals(new BigDecimal("0.00"), padrao.getAdicional());
+        assertEquals(new BigDecimal("3000.00"), padrao.getSalarioFinal());
         assertEquals("Padrão", padrao.getTipo());
 
         Colaborador comissionado = new ColaboradorComissionado("102", "Bruno Costa", 2500.00, 10000.00, 10.0);
-        assertEquals(1000.00, comissionado.getAdicional(), 0.001);
-        assertEquals(3500.00, comissionado.getSalarioFinal(), 0.001);
+        assertEquals(new BigDecimal("1000.00"), comissionado.getAdicional());
+        assertEquals(new BigDecimal("3500.00"), comissionado.getSalarioFinal());
         assertEquals("Comissionado", comissionado.getTipo());
 
         Colaborador producao = new ColaboradorProducao("103", "Carla Dias", 2200.00, 150.0, 5.00);
-        assertEquals(750.00, producao.getAdicional(), 0.001);
-        assertEquals(2950.00, producao.getSalarioFinal(), 0.001);
+        assertEquals(new BigDecimal("750.00"), producao.getAdicional());
+        assertEquals(new BigDecimal("2950.00"), producao.getSalarioFinal());
         assertEquals("Por produção", producao.getTipo());
     }
 
@@ -41,15 +43,15 @@ class ConformidadeRequisitosTest {
         form.setMatricula("201");
         form.setNome("Carlos");
         form.setTipo("COMISSIONADO");
-        form.setSalarioBase(3000.0);
-        form.setValorVendas(5000.0);
-        form.setPercentualComissao(10.0);
+        form.setSalarioBase(new BigDecimal("3000.00"));
+        form.setValorVendas(new BigDecimal("5000.00"));
+        form.setPercentualComissao(new BigDecimal("10.00"));
 
         Colaborador criado = form.construirColaborador();
-        assertEquals(3500.0, criado.getSalarioFinal(), 0.001);
+        assertEquals(new BigDecimal("3500.00"), criado.getSalarioFinal());
 
         ColaboradorForm convertido = ColaboradorForm.de(criado);
         assertEquals("COMISSIONADO", convertido.getTipo());
-        assertEquals(5000.0, convertido.getValorVendas());
+        assertEquals(new BigDecimal("5000.00"), convertido.getValorVendas());
     }
 }

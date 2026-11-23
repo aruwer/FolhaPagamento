@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.math.BigDecimal;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -50,20 +51,20 @@ class ColaboradorFormTest {
         form.setMatricula("001");
         form.setNome("Ana");
         form.setTipo("COMISSIONADO");
-        form.setSalarioBase(1_000.0);
-        form.setValorVendas(2_000.0);
-        form.setPercentualComissao(10.0);
-        form.setQuantidadeProduzida(3.0);
-        form.setValorPorUnidade(4.0);
+        form.setSalarioBase(new BigDecimal("1000.00"));
+        form.setValorVendas(new BigDecimal("2000.00"));
+        form.setPercentualComissao(new BigDecimal("10.00"));
+        form.setQuantidadeProduzida(new BigDecimal("3.000"));
+        form.setValorPorUnidade(new BigDecimal("4.00"));
 
         assertEquals("001", form.getMatricula());
         assertEquals("Ana", form.getNome());
         assertEquals("COMISSIONADO", form.getTipo());
-        assertEquals(1_000.0, form.getSalarioBase());
-        assertEquals(2_000.0, form.getValorVendas());
-        assertEquals(10.0, form.getPercentualComissao());
-        assertEquals(3.0, form.getQuantidadeProduzida());
-        assertEquals(4.0, form.getValorPorUnidade());
+        assertEquals(new BigDecimal("1000.00"), form.getSalarioBase());
+        assertEquals(new BigDecimal("2000.00"), form.getValorVendas());
+        assertEquals(new BigDecimal("10.00"), form.getPercentualComissao());
+        assertEquals(new BigDecimal("3.000"), form.getQuantidadeProduzida());
+        assertEquals(new BigDecimal("4.00"), form.getValorPorUnidade());
     }
 
     @Nested
@@ -97,11 +98,11 @@ class ColaboradorFormTest {
     @DisplayName("CT-014, CT-017, CT-018, CT-021 e CT-022 - Deve rejeitar valores negativos")
     void validaValoresVariaveisNegativos() {
         ColaboradorForm form = formularioValido();
-        form.setSalarioBase(-1.0);
-        form.setValorVendas(-1.0);
-        form.setPercentualComissao(-1.0);
-        form.setQuantidadeProduzida(-1.0);
-        form.setValorPorUnidade(-1.0);
+        form.setSalarioBase(new BigDecimal("-1.00"));
+        form.setValorVendas(new BigDecimal("-1.00"));
+        form.setPercentualComissao(new BigDecimal("-1.00"));
+        form.setQuantidadeProduzida(new BigDecimal("-1.000"));
+        form.setValorPorUnidade(new BigDecimal("-1.00"));
 
         Set<String> propriedades = propriedadesComViolacao(form);
 
@@ -114,8 +115,8 @@ class ColaboradorFormTest {
     void validaComissaoAcimaDoLimite() {
         ColaboradorForm form = formularioValido();
         form.setTipo("COMISSIONADO");
-        form.setValorVendas(100.0);
-        form.setPercentualComissao(100.01);
+        form.setValorVendas(new BigDecimal("100.00"));
+        form.setPercentualComissao(new BigDecimal("100.01"));
 
         assertTrue(propriedadesComViolacao(form).contains("percentualComissao"));
     }
@@ -125,10 +126,10 @@ class ColaboradorFormTest {
     void construiComissionado() {
         ColaboradorForm form = formularioValido();
         form.setTipo("COMISSIONADO");
-        form.setValorVendas(10_000.0);
-        form.setPercentualComissao(5.0);
+        form.setValorVendas(new BigDecimal("10000.00"));
+        form.setPercentualComissao(new BigDecimal("5.00"));
 
-        assertEquals(1_500.0, form.construirColaborador().getSalarioFinal());
+        assertEquals(new BigDecimal("1500.00"), form.construirColaborador().getSalarioFinal());
     }
 
     @Test
@@ -136,33 +137,37 @@ class ColaboradorFormTest {
     void construiProducao() {
         ColaboradorForm form = formularioValido();
         form.setTipo("PRODUCAO");
-        form.setQuantidadeProduzida(100.0);
-        form.setValorPorUnidade(2.0);
+        form.setQuantidadeProduzida(new BigDecimal("100"));
+        form.setValorPorUnidade(new BigDecimal("2.00"));
 
-        assertEquals(1_200.0, form.construirColaborador().getSalarioFinal());
+        assertEquals(new BigDecimal("1200.00"), form.construirColaborador().getSalarioFinal());
     }
 
     @Test
-    @DisplayName("CT-015 - Deve exigir vendas e comissão ao construir formulário comissionado")
-    void exigeDadosDeComissionadoNaConstrucao() {
+    @DisplayName("RN010 - Deve tratar valores variáveis ausentes como zero")
+    void valoresVariaveisAusentesSaoZero() {
         ColaboradorForm form = formularioValido();
         form.setTipo("COMISSIONADO");
 
         assertFalse(validator.validate(form).stream()
                 .anyMatch(violacao -> Set.of("valorVendas", "percentualComissao")
                         .contains(violacao.getPropertyPath().toString())));
-        IllegalArgumentException erro = assertThrows(IllegalArgumentException.class, form::construirColaborador);
-        assertEquals("Informe o valor das vendas.", erro.getMessage());
+        ColaboradorComissionado comissionado = (ColaboradorComissionado) form.construirColaborador();
+        assertEquals(new BigDecimal("0.00"), comissionado.getAdicional());
+
+        form.setTipo("PRODUCAO");
+        ColaboradorProducao producao = (ColaboradorProducao) form.construirColaborador();
+        assertEquals(new BigDecimal("0.00"), producao.getAdicional());
     }
 
     @Test
-    @DisplayName("CT-019 e CT-020 - Deve exigir quantidade e valor unitário na construção")
-    void exigeDadosDeProducaoNaConstrucao() {
+    @DisplayName("RN010 - Dados de produção ausentes devem resultar em adicional zerado")
+    void dadosDeProducaoAusentesSaoZero() {
         ColaboradorForm form = formularioValido();
         form.setTipo("PRODUCAO");
 
-        IllegalArgumentException erro = assertThrows(IllegalArgumentException.class, form::construirColaborador);
-        assertEquals("Informe a quantidade produzida.", erro.getMessage());
+        ColaboradorProducao producao = (ColaboradorProducao) form.construirColaborador();
+        assertEquals(new BigDecimal("0.00"), producao.getAdicional());
     }
 
     @Test
@@ -172,7 +177,7 @@ class ColaboradorFormTest {
         form.setSalarioBase(null);
         assertThrows(IllegalArgumentException.class, form::construirColaborador);
 
-        form.setSalarioBase(1_000.0);
+        form.setSalarioBase(new BigDecimal("1000.00"));
         form.setTipo("DESCONHECIDO");
         assertThrows(IllegalArgumentException.class, form::construirColaborador);
     }
@@ -187,11 +192,11 @@ class ColaboradorFormTest {
         ColaboradorForm padrao = ColaboradorForm.de(new ColaboradorPadrao("004", "Dani", 1_000));
 
         assertEquals("COMISSIONADO", comissionado.getTipo());
-        assertEquals(500.0, comissionado.getValorVendas());
-        assertEquals(10.0, comissionado.getPercentualComissao());
+        assertEquals(new BigDecimal("500.00"), comissionado.getValorVendas());
+        assertEquals(new BigDecimal("10.00"), comissionado.getPercentualComissao());
         assertEquals("PRODUCAO", producao.getTipo());
-        assertEquals(20.0, producao.getQuantidadeProduzida());
-        assertEquals(3.0, producao.getValorPorUnidade());
+        assertEquals(new BigDecimal("20"), producao.getQuantidadeProduzida());
+        assertEquals(new BigDecimal("3.00"), producao.getValorPorUnidade());
         assertEquals("PADRAO", padrao.getTipo());
     }
 
@@ -199,7 +204,7 @@ class ColaboradorFormTest {
         ColaboradorForm form = new ColaboradorForm();
         form.setMatricula("001");
         form.setNome("Ana");
-        form.setSalarioBase(1_000.0);
+        form.setSalarioBase(new BigDecimal("1000.00"));
         return form;
     }
 

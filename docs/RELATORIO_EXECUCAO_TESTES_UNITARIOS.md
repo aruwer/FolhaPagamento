@@ -1,7 +1,24 @@
 # Relatório de Execução dos Testes Unitários
 
+## Execução mais recente — 23/11/2026
+
+**Branch:** `feat/QDS_2.0.0/db-postgresql`
+**Comando:** `.\mvnw.cmd clean verify`
+**Resultado:** BUILD SUCCESS; 68 testes descobertos, 0 falhas, 0 erros e 3 ignorados. Os ignorados são os testes de integração PostgreSQL com Testcontainers, que não puderam iniciar sem Docker.
+**JaCoCo:** 93% de cobertura de instruções e 74% de cobertura de branches.
+**Runtime:** Java 23.0.1; o projeto tem alvo Java 17, cuja execução ainda deve ser validada.
+**Verificações incluídas:** persistência e regras com H2; inicialização do contexto Spring; renderização via MockMvc das telas inicial, cadastro e folha por competência.
+
+A execução valida o build e os fluxos cobertos por H2, mas não confirma a aplicação das migrations nem o comportamento contra um servidor PostgreSQL real. A validação PostgreSQL permanece pendente.
+
+---
+
+# Registro Histórico de Execução dos Testes Unitários
+
+> O detalhamento abaixo registra uma execução anterior (15/11/2026), antes da migração para JPA/PostgreSQL. Seus resultados não representam o estado atual do projeto; foram preservados como histórico.
+
 **Projeto:** Folha de Pagamento  
-**Branch:** `feat/QDS_2.0.0/testes-unitarios-junit`  
+**Branch:** `feat/QDS_2.0.0/testes-unitarios-junit`
 **Data da execução:** 15/11/2026  
 **Comando executado por classe:** `.\mvnw.cmd -Dtest=<ClasseDeTeste> test`  
 **Fonte dos resultados:** relatórios XML do Maven Surefire em `target/surefire-reports/`.

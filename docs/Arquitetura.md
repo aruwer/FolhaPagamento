@@ -36,14 +36,15 @@ flowchart LR
 
 ---
 
-### 4.2. Diagrama de Classes (Estado Atual AS-IS e Contrato de Domínio)
+### 4.2. Diagrama de Classes (Arquitetura Implementada)
 O diagrama reflete fielmente o código-fonte Java do projeto:
 * **Identificação e Base Herdada:** A classe abstrata `Colaborador` utiliza `matricula` (String) como identificador de negócio e define o `salarioBase` como atributo comum herdado por todas as modalidades.
 * **Regras de Cálculo por Modalidade:**
   * `ColaboradorPadrao`: recebe o `salarioBase` integral.
   * `ColaboradorComissionado`: herda `salarioBase` e adiciona o cálculo sobre `vendasBrutas` (ou total de vendas) multiplicado pelo `percentualComissao`.
   * `ColaboradorProducao`: herda `salarioBase` e soma a bonificação baseada na `quantidadeProduzida` multiplicada pelo `valorPorUnidade`.
-* **Persistência Atual (TSV):** `RepositorioColaboradores` está representado como a **classe concreta atual**, que persiste os registros em arquivo tabular (`.tsv`), preparando a extração de interface para o modelo alvo em SQL.
+* **Persistência atual:** `RepositorioColaboradores` define o contrato usado pelo serviço e `RepositorioColaboradoresJpa` o implementa com Spring Data JPA e PostgreSQL.
+* **Histórico da folha:** cada processamento grava snapshots imutáveis por competência em `folhas_processadas`; a exclusão de colaboradores é lógica.
 
 ```mermaid
 classDiagram
@@ -53,10 +54,15 @@ classDiagram
     class FolhaPagamentoController {
         -FolhaPagamentoService service
         -FormatadorMoeda formatador
-        +exibirFormulario(Model) String
-        +cadastrarColaborador(ColaboradorForm, RedirectAttributes) String
-        +listarColaboradores(Model) String
-        +exibirResumoFolha(Model) String
+        +inicio(Model) String
+        +novo(Model) String
+        +cadastrar(ColaboradorForm, BindingResult, RedirectAttributes) String
+        +editar(String, Model, RedirectAttributes) String
+        +atualizar(String, ColaboradorForm, BindingResult, RedirectAttributes) String
+        +excluir(String, RedirectAttributes) String
+        +folha(Integer, Integer, Model) String
+        +processarFolha(Integer, Integer, RedirectAttributes) String
+        +folhaIndividual(String, Integer, Integer, Model) String
     }
 
     class ColaboradorForm {
@@ -76,34 +82,74 @@ classDiagram
         -RepositorioColaboradores repositorio
         +cadastrar(Colaborador) void
         +atualizar(Colaborador) void
-        +removerPorMatricula(String) void
-        +listarTodos() List~Colaborador~
-        +buscarPorMatricula(String) Optional~Colaborador~
-        +gerarResumoFolha() ResumoFolha
+        +excluir(String) void
+        +listar() List~Colaborador~
+        +buscar(String) Optional~Colaborador~
+        +processarFolha(int, int) List~FolhaProcessada~
+        +consultarFolha(int, int) List~FolhaProcessada~
+        +gerarResumo(int, int) ResumoFolha
     }
 
     class ResumoFolha {
-        -int totalColaboradores
-        -BigDecimal totalSalariosBase
-        -BigDecimal totalAdicionais
-        -BigDecimal totalFolhaPagamento
-        +getTotalFolhaPagamento() BigDecimal
+        -int quantidadeColaboradores
+        -BigDecimal totalFolha
+        -Map~String, BigDecimal~ totaisPorCategoria
+        -Map~String, Integer~ quantidadePorCategoria
     }
 
     class FormatadorMoeda {
+        +formatar(double) String
         +formatar(BigDecimal) String
     }
 
-    %% Camada de Persistência Atual (AS-IS: Classe Concreta TSV)
+    %% Contrato e adaptador de persistência
     class RepositorioColaboradores {
-        <<Concrete - Class TSV>>
-        -Path arquivoTsv
-        +salvar(Colaborador) void
-        +listarTodos() List~Colaborador~
-        +buscarPorMatricula(String) Optional~Colaborador~
-        +remover(String) boolean
-        -serializarLinhaTsv(Colaborador) String
-        -desserializarLinhaTsv(String) Colaborador
+        <<interface>>
+        +cadastrar(Colaborador) void
+        +listar() List~Colaborador~
+        +buscar(String) Optional~Colaborador~
+        +atualizar(Colaborador) void
+        +excluir(String) void
+        +processarFolha(int, int) List~FolhaProcessada~
+        +consultarFolha(int, int) List~FolhaProcessada~
+        +buscarFolha(String, int, int) Optional~FolhaProcessada~
+    }
+
+    class RepositorioColaboradoresJpa {
+        -ColaboradorJpaRepository colaboradores
+        -FolhaProcessadaJpaRepository folhas
+    }
+
+    class ColaboradorJpaEntity {
+        -Long id
+        -String matricula
+        -String nome
+        -BigDecimal salarioBase
+        -boolean ativo
+        -OffsetDateTime excluidoEm
+        -OffsetDateTime criadoEm
+    }
+
+    class FolhaProcessadaJpaEntity {
+        -Long id
+        -int mes
+        -int ano
+        -BigDecimal salarioBaseSnapshot
+        -BigDecimal adicionalCalculado
+        -BigDecimal salarioFinal
+        -OffsetDateTime dataProcessamento
+    }
+
+    class FolhaProcessada {
+        <<record>>
+        +String matricula
+        +String nome
+        +String tipo
+        +int mes
+        +int ano
+        +BigDecimal salarioBase
+        +BigDecimal adicional
+        +BigDecimal salarioFinal
     }
 
     %% Camada de Domínio
@@ -116,43 +162,44 @@ classDiagram
         +getNome() String
         +getSalarioBase() BigDecimal
         +getTipo() String*
-        +calcularAdicional() BigDecimal*
-        +calcularSalarioFinal() BigDecimal
+        +getAdicional() BigDecimal*
+        +getSalarioFinal() BigDecimal
     }
 
     class ColaboradorPadrao {
         +getTipo() String
-        +calcularAdicional() BigDecimal
-        +calcularSalarioFinal() BigDecimal
+        +getAdicional() BigDecimal
     }
 
     class ColaboradorComissionado {
-        -BigDecimal vendasBrutas
+        -BigDecimal valorVendas
         -BigDecimal percentualComissao
-        +getVendasBrutas() BigDecimal
+        +getValorVendas() BigDecimal
         +getPercentualComissao() BigDecimal
-        +calcularComissao() BigDecimal
-        +calcularAdicional() BigDecimal
-        +calcularSalarioFinal() BigDecimal
+        +getAdicional() BigDecimal
     }
 
     class ColaboradorProducao {
-        -int quantidadeProduzida
+        -BigDecimal quantidadeProduzida
         -BigDecimal valorPorUnidade
-        +getQuantidadeProduzida() int
+        +getQuantidadeProduzida() BigDecimal
         +getValorPorUnidade() BigDecimal
-        +calcularBonusProducao() BigDecimal
-        +calcularAdicional() BigDecimal
-        +calcularSalarioFinal() BigDecimal
+        +getAdicional() BigDecimal
     }
 
     %% Relacionamentos
     FolhaPagamentoController ..> ColaboradorForm : Recebe e valida
     FolhaPagamentoController --> FolhaPagamentoService : Orquestra fluxo
     FolhaPagamentoController --> FormatadorMoeda : Formata valores (BRL)
-    FolhaPagamentoService --> RepositorioColaboradores : Persiste em TSV
+    FolhaPagamentoService --> RepositorioColaboradores : Usa contrato
     FolhaPagamentoService ..> ResumoFolha : Consolida cálculos
-    RepositorioColaboradores --> Colaborador : Lê/Grava registros
+    RepositorioColaboradores <|.. RepositorioColaboradoresJpa : Implementa
+    RepositorioColaboradoresJpa --> ColaboradorJpaRepository : CRUD JPA
+    RepositorioColaboradoresJpa --> FolhaProcessadaJpaRepository : Snapshots JPA
+    RepositorioColaboradoresJpa --> ColaboradorJpaEntity : Persiste
+    RepositorioColaboradoresJpa --> FolhaProcessadaJpaEntity : Persiste snapshots
+    FolhaProcessadaJpaEntity --> ColaboradorJpaEntity : Referencia
+    FolhaProcessadaJpaEntity ..> FolhaProcessada : Projeta leitura
     Colaborador <|-- ColaboradorPadrao : Herda salarioBase
     Colaborador <|-- ColaboradorComissionado : Herda salarioBase
     Colaborador <|-- ColaboradorProducao : Herda salarioBase
@@ -162,7 +209,7 @@ classDiagram
 
 ### 4.3. Diagramas de Sequência
 
-**Fluxo 1: Cadastro de Colaborador (Persistência Atual em TSV e Validação por Matrícula)**
+**Fluxo 1: Cadastro de Colaborador (Persistência PostgreSQL e Validação por Matrícula)**
 ```mermaid
 sequenceDiagram
     autonumber
@@ -171,24 +218,24 @@ sequenceDiagram
     participant Control as FolhaPagamentoController
     participant Form as ColaboradorForm
     participant Service as FolhaPagamentoService
-    participant Repo as RepositorioColaboradores (TSV)
+    participant Repo as RepositorioColaboradoresJpa
+    participant Db as PostgreSQL
 
     Admin->>View: Preenche matrícula, nome, tipo, salário base e variáveis
     View->>Control: POST /colaboradores (ColaboradorForm)
     Control->>Form: toColaborador() (Instancia Padrão, Comissionado ou Produção)
     Form-->>Control: Objeto Colaborador criado
     Control->>Service: cadastrar(colaborador)
-    Service->>Repo: buscarPorMatricula(matricula)
-    Repo-->>Service: Verifica unicidade da matrícula no TSV
-    Service->>Repo: salvar(colaborador)
-    Repo->>Repo: serializarLinhaTsv() e gravar no arquivo .tsv
-    Repo-->>Service: Confirmação de gravação
+    Service->>Repo: cadastrar(colaborador)
+    Repo->>Db: Verifica matrícula ativa e insere entidade JPA
+    Db-->>Repo: Confirmação transacional
+    Repo-->>Service: Cadastro persistido
     Service-->>Control: Registro concluído
     Control-->>View: Redirect /colaboradores (Mensagem de sucesso)
     View-->>Admin: Exibe listagem atualizada
 ```
 
-**Fluxo 2: Consulta e Emissão do Resumo da Folha de Pagamento**
+**Fluxo 2: Processamento e Consulta da Folha por Competência**
 ```mermaid
 sequenceDiagram
     autonumber
@@ -196,27 +243,30 @@ sequenceDiagram
     participant View as Thymeleaf View
     participant Control as FolhaPagamentoController
     participant Service as FolhaPagamentoService
-    participant Repo as RepositorioColaboradores (TSV)
-    participant Domain as Colaborador (Polimórfico)
-    participant Resumo as ResumoFolha
+    participant Repo as RepositorioColaboradoresJpa
+    participant Db as PostgreSQL
+    participant Snapshot as FolhaProcessadaJpaEntity
 
-    Admin->>Control: GET /folha/resumo
-    Control->>Service: gerarResumoFolha()
-    Service->>Repo: listarTodos()
-    Repo->>Repo: Lê linhas do arquivo .tsv e desserializa objetos
-    Repo-->>Service: List<Colaborador>
-    
-    loop Para cada Colaborador da lista
-        Service->>Domain: getSalarioBase()
-        Service->>Domain: calcularSalarioFinal() (Base + Comissão ou Produção)
-        Domain-->>Service: Valor final calculado conforme contrato
+    Admin->>Control: POST /folha/processar (mês, ano)
+    Control->>Service: processarFolha(mês, ano)
+    Service->>Repo: processarFolha(mês, ano)
+    Repo->>Db: Busca colaboradores e snapshots existentes
+    loop Para cada colaborador elegível sem snapshot
+        Repo->>Snapshot: Calcula valores e cria snapshot
+        Snapshot->>Db: Persiste valores e identificação históricos
     end
-    
-    Service->>Resumo: Instancia ResumoFolha (totais agregados)
-    Resumo-->>Service: Objeto ResumoFolha
-    Service-->>Control: Retorna ResumoFolha e Lista
-    Control->>View: Adiciona dados formatados (FormatadorMoeda) ao Model
-    View-->>Admin: Renderiza tabela analítica e resumo geral da folha
+    Repo-->>Service: Folha processada da competência
+    Service-->>Control: Confirma processamento
+    Control-->>Admin: Redirect para GET /folha?mes=...&ano=...
+    Admin->>Control: GET /folha?mes=...&ano=...
+    Control->>Service: consultarFolha(mês, ano)
+    Service->>Repo: consulta somente leitura
+    Repo->>Db: Busca snapshots da competência
+    Db-->>Repo: Snapshots ordenados por matrícula
+    Repo-->>Service: Lista de FolhaProcessada
+    Service-->>Control: Lista e resumo por categoria
+    Control->>View: Renderiza folha e valores formatados
+    View-->>Admin: Exibe folha consolidada e links para demonstrativos
 ```
 
 ---
@@ -231,13 +281,14 @@ flowchart LR
     Usuario["👤 Administrador / RH"] --> View["Interface Web<br/>(Thymeleaf + HTML/CSS)"]
     View --> Controller["Camada de Controle<br/>(FolhaPagamentoController)"]
     Controller --> Service["Camada de Negócio<br/>(FolhaPagamentoService + Domínio)"]
-    Service --> RepoAtual["Persistência Atual (AS-IS)<br/>RepositorioColaboradores (.TSV)"]
-    Service -. "Evolução Planejada (TO-BE)" .-> RepoAlvo[("Banco Relacional<br/>PostgreSQL + Spring Data JPA")]
+    Service --> Repository["Contrato de persistência<br/>(RepositorioColaboradores)"]
+    Repository --> Adapter["Adaptador JPA<br/>(RepositorioColaboradoresJpa)"]
+    Adapter --> Database[("PostgreSQL<br/>colaboradores + folhas_processadas")]
 ```
 
 1. **Camada de Apresentação (Interface e Controle):** Composta pelos templates `Thymeleaf` e pelo `FolhaPagamentoController`. Recebe os formulários HTTP (`ColaboradorForm`), aplica formatação monetária (`FormatadorMoeda`) e encaminha comandos para a camada de serviço.
 2. **Camada de Negócio e Domínio:** Centralizada em `FolhaPagamentoService`, `ResumoFolha` e na hierarquia polimórfica de `Colaborador`. Isola todas as fórmulas de remuneração (Padrão, Comissionado por vendas/percentual e Produção por quantidade/valor unitário).
-3. **Camada de Persistência (Infraestrutura de Dados):** Atualmente implementada pela classe concreta `RepositorioColaboradores` com armazenamento em arquivo tabular `.tsv`, estruturada para substituição transparente por um repositório relacional PostgreSQL.
+3. **Camada de Persistência (Infraestrutura de Dados):** `RepositorioColaboradores` define o contrato, implementado por `RepositorioColaboradoresJpa` com Spring Data JPA. Flyway versiona o esquema PostgreSQL; H2 e Testcontainers suportam os testes.
 
 ---
 
@@ -247,50 +298,17 @@ flowchart LR
 | :--- | :--- | :--- | :--- |
 | **Front-end** | Thymeleaf + HTML5 / CSS3 / JS | Renderização Server-Side (SSR) | Integração nativa com o Spring MVC, permitindo bind direto de objetos Java (`ColaboradorForm` e `ResumoFolha`) no HTML sem necessidade de manter um projeto SPA separado, reduzindo a complexidade operacional. |
 | **Back-end** | Java + Spring Boot | Java 17 LTS / Spring Boot 3.5.5 | Java 17 garante suporte de longo prazo (LTS), tipagem forte e segurança aritmética com `BigDecimal` para cálculos financeiros. O Spring Boot fornece injeção de dependências (`@Service`, `@Controller`) e configuração simplificada via Maven (`pom.xml`). |
-| **Persistência (Atual - AS-IS)** | Arquivo Tabular (`.tsv`) via Java NIO | Armazenamento local em arquivo | Permite execução imediata e portabilidade em ambiente de desenvolvimento e testes iniciais sem depender de infraestrutura externa de banco de dados. |
-| **Banco de Dados (Alvo - TO-BE)** | PostgreSQL + Spring Data JPA | SGBD Relacional / ORM | O PostgreSQL assegura conformidade ACID (transações seguras), integridade referencial, restrições de domínio (`CHECK` e `UNIQUE` para matrícula) e precisão numérica (`NUMERIC(12,2)`), eliminando riscos de concorrência de leitura/escrita presentes em arquivos `.tsv`. |
+| **Persistência** | PostgreSQL + Spring Data JPA | SGBD relacional / ORM | Transações, integridade referencial e restrições `CHECK`/`UNIQUE`; valores monetários persistidos em `NUMERIC(12,2)`. |
+| **Migrações** | Flyway | V1 e V2 em `src/main/resources/db/migration` | Evolução versionada do esquema; Hibernate executa validação (`ddl-auto=validate`) na inicialização. |
+| **Testes de persistência** | H2 + Testcontainers | H2 para integração rápida; PostgreSQL 17 em container | Testa o adaptador e a compatibilidade das migrations com o SGBD alvo quando Docker está disponível. |
 
----
+### 5.3. Modelo de Dados e Histórico da Folha
 
-### 5.3. Plano de Dados e Estratégia de Migração (TSV ➔ PostgreSQL)
+As migrations Flyway `V1__schema.sql` e `V2__colaboradores_data_exclusao.sql` criam e evoluem as tabelas `colaboradores` e `folhas_processadas`.
 
-Para atender aos requisitos de escalabilidade, segurança transacional e integridade dos dados na evolução do sistema (etapa A3), foi definido o plano de transição do repositório concreto em arquivo `.tsv` para o banco de dados relacional **PostgreSQL**.
-
-#### 5.3.1. Modelo de Dados Alvo (Estratégia *Single Table Inheritance*)
-Dada a simplicidade e o alto desempenho de leitura exigido para o cálculo global da folha, o mapeamento Objeto-Relacional (JPA) adotará a estratégia **`SINGLE_TABLE`** (`@Inheritance(strategy = InheritanceType.SINGLE_TABLE)`). Todos os colaboradores serão armazenados em uma única tabela `tb_colaborador`, diferenciados pela coluna discriminadora `tipo_contrato`, evitando `JOINs` custosos na geração de relatórios.
-
-**Estrutura Física da Tabela Alvo (`tb_colaborador`):**
-```sql
-CREATE TABLE tb_colaborador (
-    matricula VARCHAR(20) PRIMARY KEY,
-    nome VARCHAR(120) NOT NULL,
-    tipo_contrato VARCHAR(20) NOT NULL CHECK (tipo_contrato IN ('PADRAO', 'COMISSIONADO', 'PRODUCAO')),
-    salario_base NUMERIC(12, 2) NOT NULL CHECK (salario_base >= 0),
-    
-    -- Atributos específicos de ColaboradorComissionado (NULL para demais tipos)
-    vendas_brutas NUMERIC(12, 2) DEFAULT 0.00 CHECK (vendas_brutas >= 0),
-    percentual_comissao NUMERIC(5, 2) DEFAULT 0.00 CHECK (percentual_comissao >= 0 AND percentual_comissao <= 100),
-    
-    -- Atributos específicos de ColaboradorProducao (NULL para demais tipos)
-    quantidade_produzida INTEGER DEFAULT 0 CHECK (quantidade_produzida >= 0),
-    valor_por_unidade NUMERIC(10, 2) DEFAULT 0.00 CHECK (valor_por_unidade >= 0),
-    
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-#### 5.3.2. Estratégia de Transição e Migração em 4 Etapas
-Para garantir que a mudança de persistência não quebre os testes existentes nem afete as camadas `Controller` e `Service`:
-
-1. **Extração de Interface (Padrão *Repository* / *Adapter*):**
-   * Transformar o contrato de `RepositorioColaboradores` em uma interface de domínio (`ColaboradorRepository`).
-   * Renomear a classe concreta atual para `TsvColaboradorRepositoryImpl` (ativada via `@Profile("tsv")` ou ambiente de teste legado).
-2. **Implementação JPA/PostgreSQL:**
-   * Adicionar as dependências `spring-boot-starter-data-jpa` e `postgresql` no `pom.xml`.
-   * Mapear a hierarquia `Colaborador` com `@Entity`, `@Id` na `matricula` e `@DiscriminatorColumn(name = "tipo_contrato")`.
-   * Criar a implementação `JpaColaboradorRepositoryImpl` apoiada pelo Spring Data JPA (`@Profile("postgres")`).
-3. **Script ETL de Carga de Dados (Migração TSV para SQL):**
-   * Executar rotina de inicialização (`CommandLineRunner`) que lê os registros existentes no arquivo `.tsv` utilizando o parser atual, valida as restrições de integridade (unicidade de `matricula` e valores não negativos) e realiza o *upsert* em lote na tabela `tb_colaborador`.
-4. **Validação de Paridade:**
-   * Executar a suíte de testes comparando o resultado de `gerarResumoFolha()` entre a origem `.tsv` e o destino PostgreSQL, garantindo 100% de paridade nos cálculos de salário base, comissões e produção antes de desativar a escrita em arquivo.
+- `colaboradores` armazena os campos das três categorias em uma tabela, com `tipo_colaborador`, dados variáveis nullable, restrições de valores não negativos e matrícula única. A coluna `ativo` e o timestamp `excluido_em` implementam exclusão lógica.
+- `folhas_processadas` mantém snapshots dos dados cadastrais e remuneratórios por matrícula e competência. A chave única (`colaborador_id`, `mes`, `ano`) impede snapshots duplicados da mesma folha.
+- O processamento é transacional e idempotente: cria snapshots somente para colaboradores elegíveis sem registro naquela competência. Consultas e demonstrativos leem os snapshots e não recalculam folhas processadas.
+- Colaboradores desligados continuam disponíveis nos snapshots já processados; sua elegibilidade para novas competências considera a data de cadastro e a data de exclusão.
+- A aplicação usa PostgreSQL por padrão, `spring.jpa.hibernate.ddl-auto=validate` e Flyway para validar e versionar o esquema. `docker-compose.yml` fornece PostgreSQL e pgAdmin locais; os testes rápidos usam H2 e a suíte Testcontainers usa PostgreSQL 17 quando Docker está disponível.
+- O arquivo legado `dados/colaboradores.tsv` não é importado automaticamente. Qualquer migração de dados existentes deve ser planejada e validada separadamente antes de remover a fonte original.

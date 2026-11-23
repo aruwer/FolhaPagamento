@@ -1,11 +1,19 @@
 package folhapagamento;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Objects;
+
 public abstract class Colaborador {
     private final String matricula;
     private final String nome;
-    private final double salarioBase;
+    private final BigDecimal salarioBase;
 
     protected Colaborador(String matricula, String nome, double salarioBase) {
+        this(matricula, nome, BigDecimal.valueOf(salarioBase));
+    }
+
+    protected Colaborador(String matricula, String nome, BigDecimal salarioBase) {
         if (matricula == null || matricula.isBlank()) {
             throw new IllegalArgumentException("A matrícula é obrigatória.");
         }
@@ -15,13 +23,31 @@ public abstract class Colaborador {
         validarNaoNegativo(salarioBase, "O salário base");
         this.matricula = matricula.trim();
         this.nome = nome.trim();
-        this.salarioBase = salarioBase;
+        this.salarioBase = valorMonetario(salarioBase);
     }
 
     protected static void validarNaoNegativo(double valor, String campo) {
         if (!Double.isFinite(valor) || valor < 0) {
             throw new IllegalArgumentException(campo + " não pode ser negativo.");
         }
+    }
+
+    protected static void validarNaoNegativo(BigDecimal valor, String campo) {
+        if (valor == null || valor.signum() < 0) {
+            throw new IllegalArgumentException(campo + " não pode ser negativo.");
+        }
+    }
+
+    protected static BigDecimal valorOuZero(BigDecimal valor) {
+        return valor == null ? BigDecimal.ZERO : valor;
+    }
+
+    protected static BigDecimal valorMonetario(BigDecimal valor) {
+        Objects.requireNonNull(valor);
+        if (valor.stripTrailingZeros().scale() > 2) {
+            throw new IllegalArgumentException("Valores monetários devem ter no máximo duas casas decimais.");
+        }
+        return valor.setScale(2, RoundingMode.UNNECESSARY);
     }
 
     public String getMatricula() {
@@ -32,7 +58,7 @@ public abstract class Colaborador {
         return nome;
     }
 
-    public double getSalarioBase() {
+    public BigDecimal getSalarioBase() {
         return salarioBase;
     }
 
@@ -40,13 +66,11 @@ public abstract class Colaborador {
 
     public abstract String getCodigoPersistencia();
 
-    public abstract double getAdicional();
+    public abstract BigDecimal getAdicional();
 
     public abstract String getDetalhesRemuneracao();
 
-    public abstract String[] getDadosEspecificos();
-
-    public final double getSalarioFinal() {
-        return salarioBase + getAdicional();
+    public final BigDecimal getSalarioFinal() {
+        return salarioBase.add(getAdicional()).setScale(2, RoundingMode.HALF_UP);
     }
 }

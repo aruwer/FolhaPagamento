@@ -14,7 +14,7 @@ Definir como planejar, executar e registrar testes do Sistema de Folha de Pagame
 - A fonte única dos requisitos é [Visão de Sistema e ERS Rastreável](VisaoDeSistema+ERSRastreavel.pdf), armazenada nesta mesma pasta `docs`. O documento anterior de requisitos não é usado para definir escopo nem rastreabilidade.
 - O escopo inclui RF001-RF011, RN001-RN010, RNF001-RNF004 e todos os critérios gerais de aceitação da ERS.
 - Os requisitos da ERS são tratados como obrigatórios. Qualquer exclusão ou adiamento requer decisão formal de escopo e não deve ser disfarçado como requisito condicional.
-- O estado atual observado usa Java 17, Spring Boot 3.5.5, Thymeleaf e persistência em TSV; a ERS exige banco SQL em RNF003. `spring-boot-starter-test` fornece JUnit 5 e Mockito; os testes unitários em `src/test/java` cobrem cálculos e validações do domínio, resumo da folha e formatação monetária. A configuração não comprova os requisitos ainda não implementados nem substitui testes de integração/sistema.
+- O estado atual usa Java 17, Spring Boot 3.5.5, Thymeleaf, Spring Data JPA, Flyway e PostgreSQL. H2 é usado nos testes de integração; Testcontainers executa cenários em PostgreSQL quando Docker está disponível. Os testes unitários cobrem cálculos e validações do domínio, resumo da folha e formatação monetária.
 - A ERS exige apuração mês/ano, exclusão lógica com histórico e valores nulos apresentados como zero. Ela não define os parâmetros HTTP da competência nem rota específica de recibo; os casos registram propostas e não tratam essas rotas como contrato já implementado.
 - Os cenários descrevem verificações planejadas. Requisitos sem implementação/ambiente disponível devem ficar bloqueados ou reprovados com evidência, nunca marcados como aprovados por inferência. A especificação A1 pode estar completa mesmo quando um caso de implementação futura permaneça bloqueado para execução.
 - Usar exclusivamente dados fictícios. Não guardar credenciais ou dados pessoais reais no repositório ou nas evidências.
@@ -37,7 +37,7 @@ Definir como planejar, executar e registrar testes do Sistema de Folha de Pagame
 
 - Regras fiscais, descontos legais, integração bancária, autenticação e integrações externas que não constem dos requisitos aprovados.
 - Testes de carga, alta disponibilidade ou desempenho em produção sem metas quantitativas acordadas; esses atributos não têm metas na ERS.
-- RNF003 não pode ser aprovado usando TSV como substituto. CT-030 deve permanecer bloqueado até a persistência SQL e o ambiente de teste estarem disponíveis.
+- RNF003 deve ser verificado com os testes de persistência PostgreSQL; o teste Testcontainers fica ignorado quando não há Docker e não substitui a evidência de execução real em PostgreSQL.
 
 ## 4. Estratégia por nível
 
@@ -64,7 +64,7 @@ Os casos identificam a camada e a forma proposta de execução. Os testes unitá
 ```
 
 - Framework: Spring Boot 3.5.5; `spring-boot-starter-test`/JUnit 5 e Mockito no `pom.xml`; Surefire executa os testes unitários em `src/test/java`.
-- Persistência requerida pela ERS: banco SQL. O projeto atual usa TSV, então cenários de persistência SQL ficam bloqueados até implementar essa arquitetura. Quando disponível, configurar instância/esquema exclusivo, dados reproduzíveis e credenciais fora do repositório.
+- Persistência requerida pela ERS: PostgreSQL com migrações Flyway. Os testes locais usam H2 isolado; testes específicos de PostgreSQL usam Testcontainers e requerem Docker.
 - Cobertura: JaCoCo 0.8.13 gera dados de execução durante os testes e o relatório HTML no ciclo `verify`, em `target/site/jacoco/index.html`. A cobertura reportada deve identificar o escopo medido; não há limite mínimo configurado.
 
 ### Ambiente manual
@@ -129,4 +129,4 @@ Os casos usam IDs estáveis no formato `CT-NNN` e relacionam requisito, nível, 
 - [Casos de Teste Rastreáveis - A1](CASOS_TESTE_RASTREAVEIS_A1.md).
 - [PGQ oficial](PGQ.md), para processo de qualidade, revisão e defeitos.
 - `README.md`, `pom.xml` e configuração efetiva da versão testada.
-- Aplicação e testes ainda não comprovam RNF003 (SQL), filtro de competência, exclusão lógica/histórico ou emissão de recibo. Esses pontos são lacunas/bloqueios conhecidos, não resultados aprovados.
+- A aplicação implementa persistência PostgreSQL, processamento por competência, snapshots e exclusão lógica. Esses requisitos só podem ser considerados aprovados após execução e registro dos casos de integração/sistema/aceitação correspondentes; a configuração de teste não substitui a evidência de homologação.

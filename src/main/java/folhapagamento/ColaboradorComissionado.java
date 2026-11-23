@@ -1,19 +1,30 @@
 package folhapagamento;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public final class ColaboradorComissionado extends Colaborador {
-    private final double valorVendas;
-    private final double percentualComissao;
+    private final BigDecimal valorVendas;
+    private final BigDecimal percentualComissao;
 
     public ColaboradorComissionado(String matricula, String nome, double salarioBase,
             double valorVendas, double percentualComissao) {
+        this(matricula, nome, BigDecimal.valueOf(salarioBase),
+                BigDecimal.valueOf(valorVendas), BigDecimal.valueOf(percentualComissao));
+    }
+
+    public ColaboradorComissionado(String matricula, String nome, BigDecimal salarioBase,
+            BigDecimal valorVendas, BigDecimal percentualComissao) {
         super(matricula, nome, salarioBase);
+        valorVendas = valorOuZero(valorVendas);
+        percentualComissao = valorOuZero(percentualComissao);
         validarNaoNegativo(valorVendas, "O valor das vendas");
         validarNaoNegativo(percentualComissao, "O percentual de comissão");
-        if (percentualComissao > 100.0) {
+        if (percentualComissao.compareTo(BigDecimal.valueOf(100)) > 0) {
             throw new IllegalArgumentException("O percentual de comissão não pode ser maior que 100%.");
         }
-        this.valorVendas = valorVendas;
-        this.percentualComissao = percentualComissao;
+        this.valorVendas = valorMonetario(valorVendas);
+        this.percentualComissao = valorMonetario(percentualComissao);
     }
 
     @Override
@@ -27,25 +38,22 @@ public final class ColaboradorComissionado extends Colaborador {
     }
 
     @Override
-    public double getAdicional() {
-        return valorVendas * percentualComissao / 100;
+    public BigDecimal getAdicional() {
+        return valorVendas.multiply(percentualComissao)
+                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
     }
 
-    public double getValorVendas() {
+    public BigDecimal getValorVendas() {
         return valorVendas;
     }
 
-    public double getPercentualComissao() {
+    public BigDecimal getPercentualComissao() {
         return percentualComissao;
     }
 
     @Override
     public String getDetalhesRemuneracao() {
-        return "Vendas: " + valorVendas + " | Comissão: " + percentualComissao + "%";
-    }
-
-    @Override
-    public String[] getDadosEspecificos() {
-        return new String[] { Double.toString(valorVendas), Double.toString(percentualComissao) };
+        return "Vendas: " + valorVendas.toPlainString() + " | Comissão: "
+                + percentualComissao.toPlainString() + "%";
     }
 }

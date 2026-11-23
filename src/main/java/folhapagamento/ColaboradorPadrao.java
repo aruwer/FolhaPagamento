@@ -1,7 +1,13 @@
 package folhapagamento;
 
+import java.math.BigDecimal;
+
 public final class ColaboradorPadrao extends Colaborador {
     public ColaboradorPadrao(String matricula, String nome, double salarioBase) {
+        super(matricula, nome, salarioBase);
+    }
+
+    public ColaboradorPadrao(String matricula, String nome, BigDecimal salarioBase) {
         super(matricula, nome, salarioBase);
     }
 
@@ -16,17 +22,12 @@ public final class ColaboradorPadrao extends Colaborador {
     }
 
     @Override
-    public double getAdicional() {
-        return 0;
+    public BigDecimal getAdicional() {
+        return BigDecimal.ZERO.setScale(2);
     }
 
     @Override
     public String getDetalhesRemuneracao() {
         return "Sem remuneração adicional";
-    }
-
-    @Override
-    public String[] getDadosEspecificos() {
-        return new String[0];
     }
 }

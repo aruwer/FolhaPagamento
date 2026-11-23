@@ -31,28 +31,36 @@ Para manter a integridade dos links internos do repositório, os artefatos foram
 
 ## Executar
 
-Na pasta raiz do projeto:
+O PostgreSQL é a persistência padrão. Prepare as variáveis locais e inicie o banco:
 
 ```powershell
+Copy-Item .env.example .env
+$env:DATABASE_PASSWORD = "replace_with_local_password"
+docker compose up -d
+docker compose ps
 .\mvnw.cmd spring-boot:run
 ```
 
-Na primeira execução, o Maven Wrapper baixa o Maven necessário. Acesse [http://localhost:8081](http://localhost:8081) no navegador.
+O Docker Compose publica o banco em `localhost:5433` e o pgAdmin em `http://localhost:5050`. O Flyway aplica as migrações e o Hibernate valida o esquema ao iniciar a aplicação. Acesse [http://localhost:8081](http://localhost:8081).
+
+Use a mesma senha local em `POSTGRES_PASSWORD` no `.env` e em `DATABASE_PASSWORD` no PowerShell. Os valores do `.env.example` são apenas exemplos locais; não use essas senhas em ambientes compartilhados ou de produção.
 
 Para gerar um JAR executável:
 
 ```powershell
 .\mvnw.cmd clean package
-java -jar target\folha-pagamento-1.2.0.jar
+java -jar target\folha-pagamento-1.1.0.jar
 ```
 
 ## Testes
 
-Os testes unitários usam JUnit 5 e Mockito. Para executá-los:
+Os testes usam JUnit 5, Mockito e H2. Para executar os testes unitários e de integração:
 
 ```powershell
 .\mvnw.cmd test
 ```
+
+Os testes de integração PostgreSQL usam Testcontainers e são executados quando o Docker está disponível; sem Docker, eles são ignorados.
 
 Para executar os testes e gerar o relatório de cobertura JaCoCo:
 
@@ -62,13 +70,25 @@ Para executar os testes e gerar o relatório de cobertura JaCoCo:
 
 O relatório HTML é gerado em `target/site/jacoco/index.html`.
 
-Os dados ficam em `dados/colaboradores.tsv`, criado automaticamente. O local pode ser alterado pela propriedade `folha.arquivo-dados`.
+## Banco de dados
+
+O esquema é versionado em `src/main/resources/db/migration` e aplicado pelo Flyway. Configure `DATABASE_URL`, `DATABASE_USERNAME` e `DATABASE_PASSWORD` para usar outra instância. A porta local padrão do Compose é `5433`.
+
+Para parar os serviços sem apagar o volume de dados:
+
+```powershell
+docker compose down
+```
+
+O arquivo legado `dados/colaboradores.tsv` não é importado automaticamente para o PostgreSQL.
 
 ## Funcionalidades
 
 - Cadastro, consulta, alteração e exclusão de colaboradores.
 - Remuneração padrão, comissionada e por produção, calculada por tipo.
 - Folha individual e consolidada, com opção de impressão pelo navegador.
+- Processamento idempotente da folha por competência (mês/ano), com snapshots históricos.
 - Resumo com quantidade de colaboradores, custo total e valores por categoria.
+- Exclusão lógica que mantém colaboradores e folhas processadas no banco.
 - Validação de dados e matrícula única.
 - Páginas Thymeleaf e backend Spring Boot no mesmo repositório.
