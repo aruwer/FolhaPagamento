@@ -30,13 +30,13 @@ Para reiniciar com dados limpos, pare a aplicação e rode `docker compose down 
 
 | Caso | Título | Executor | Data | Navegador | Resultado | Defeito |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| CT-030 (manual) | Persistência, histórico e regras no PostgreSQL | Amanda Ruwer | 23/11/2026 | Opera | Aprovado | - |
-| CT-032 | Fluxo de usabilidade | Amanda Ruwer | 23/11/2026 | Opera | Aprovado | - |
-| CT-033 | Extensibilidade do domínio (inspeção) | Amanda Ruwer | 23/11/2026 | Opera | Aprovado | - |
-| CT-034 | Campos conforme a categoria | Amanda Ruwer | 23/11/2026 | Opera | Aprovado | - |
-| CT-035 | Validação compreensível | Amanda Ruwer | 23/11/2026 | Opera | Aprovado | - |
-| CT-038 | Adicionais zerados (visual) | Amanda Ruwer | 23/11/2026 | Opera | Aprovado | - |
-| CT-040 | Imprimir demonstrativo | Amanda Ruwer | 23/11/2026 | Opera | Aprovado | - |
+| CT-030 (manual) | Persistência, histórico e regras no PostgreSQL |  |  |  | Pendente: vídeos anexados não revisados pelo agente | - |
+| CT-032 | Fluxo de usabilidade |  |  |  | Pendente: vídeos anexados não revisados pelo agente | - |
+| CT-033 | Extensibilidade do domínio (inspeção) |  |  |  | Pendente: conclusão do revisor humano | - |
+| CT-034 | Campos conforme a categoria | Amanda Ruwer | 23/11/2026 | Opera | Aprovado: capturas revisadas pelo agente | - |
+| CT-035 | Validação compreensível | Amanda Ruwer | 23/11/2026 | Opera | Aprovado: captura revisada pelo agente | - |
+| CT-038 | Adicionais zerados (visual) | Amanda Ruwer | 23/11/2026 | Opera | Pendente: captura mostra a folha consolidada, não o demonstrativo individual | BUG-004 |
+| CT-040 | Imprimir demonstrativo | Amanda Ruwer | 23/11/2026 | Opera | Pendente: as capturas revisadas mostram a folha consolidada, não o demonstrativo individual | - |
 
 ---
 
@@ -135,11 +135,27 @@ Este roteiro verifica manualmente, pela aplicação ligada ao PostgreSQL do Dock
 
 Preencha após executar todos os passos. Se algum passo falhar, marque **Reprovado**, guarde a evidência e registre um defeito; se não puder executar, marque **Bloqueado** e explique o motivo.
 
-- **Resultado geral:** [X] Aprovado [ ] Reprovado [ ] Bloqueado
-- **Executor:** Amanda Ruwer
-- **Data:** 23/11/2026
-- **Banco/ambiente:** PostgreSQL 17 via Docker Compose
-- **Observações/defeito:** Não
+- **Resultado geral:** [ ] Aprovado [ ] Reprovado [ ] Bloqueado [X] Pendente de revisão
+- **Resultado obtido:** [preencher após revisão dos vídeos CT-030-A/B/C]
+- **Executor:** [confirmar após revisão das evidências]
+- **Data:** [confirmar após revisão das evidências]
+- **Banco/ambiente:** PostgreSQL 17 via Docker Compose (informação registrada pela equipe; não verificada nesta revisão)
+- **Observações/defeito:** Os vídeos CT-030-A.mp4, CT-030-B.mp4 e CT-030-C.mp4 estão anexados; conteúdo não revisado pelo agente. A execução Testcontainers consta como ignorada no log automatizado.
+
+### CT-030-D — Persistência após reinício da aplicação
+
+1. Inicie o PostgreSQL pelo Docker Compose e a aplicação na porta 8081.
+2. Cadastre um colaborador fictício com matrícula `MANUAL004` e anote os dados usados.
+3. Encerre a aplicação sem remover o volume do Docker Compose.
+4. Inicie a aplicação novamente e abra a listagem.
+5. Confirme se `MANUAL004` e seus dados continuam apresentados.
+
+- **Resultado esperado:** o cadastro persiste após reiniciar a aplicação e o PostgreSQL, sem reaplicar os dados manualmente.
+- **Evidência:** [preencher com captura ou vídeo da execução]
+- **Resultado obtido:** [preencher: descrever o que apareceu na tela, passo a passo]
+- **Situação:** [ ] Aprovado  [ ] Reprovado  [ ] Bloqueado
+- **Executor/data/ambiente:** [preencher após execução]
+- **Observação:** os vídeos CT-030-A/B/C existentes estão anexados, mas não foram revisados pelo agente e não são considerados evidência revisada deste cenário de reinício.
 
 ---
 
@@ -155,7 +171,7 @@ Preencha após executar todos os passos. Se algum passo falhar, marque **Reprova
 | 3 | Selecione "Produção". | Aparecem "Quantidade produzida" e "Valor por unidade". Os campos de comissão ficam ocultos. |
 
 - **Evidência:** `CT-034-passo1.png`, `CT-034-passo2.png`, `CT-034-passo3.png`
-- **Resultado obtido:** Cenário aprovado. Todos os requisitos foram atingidos.
+- **Resultado obtido:** Nas capturas CT-034-passo1.png, CT-034-passo2.png e CT-034-passo3.png, a seleção padrão mostra apenas a observação da categoria padrão; a seleção comissionada mostra os campos de vendas e percentual; e a seleção de produção mostra quantidade e valor por unidade. Os campos variáveis correspondem à categoria selecionada.
 - **Situação:** [X] Aprovado  [ ] Reprovado  [ ] Bloqueado
 - **Observações:** ____
 
@@ -172,7 +188,7 @@ Preencha após executar todos os passos. Se algum passo falhar, marque **Reprova
 | 2 | Clique em "Cadastrar colaborador". | O navegador bloqueia o envio e destaca os campos obrigatórios. A página do formulário continua aberta, e nenhum colaborador é criado. |
 
 - **Evidência:** `CT-035-passo1.png`
-- **Resultado obtido:** Cenário aprovado. Todos os requisitos foram atingidos.
+- **Resultado obtido:** A captura CT-035-passo1.png mostra matrícula preenchida, nome e salário base vazios e a validação nativa do navegador “Preencha este campo.” junto ao campo de nome.
 - **Situação:** [X] Aprovado  [ ] Reprovado  [ ] Bloqueado
 - **Observações:** __
 
@@ -188,8 +204,8 @@ Preencha após executar todos os passos. Se algum passo falhar, marque **Reprova
 | 2 | Observe o campo de adicional. | O valor aparece como **R$ 0,00**, e não vazio ou oculto. |
 
 - **Evidência:** `CT-038-passo1.png`
-- **Resultado obtido:** Cenário aprovado. Todos os requisitos foram atingidos.
-- **Situação:** [X] Aprovado  [ ] Reprovado  [ ] Bloqueado
+- **Resultado obtido:** A captura CT-038-passo1.png mostra a tabela da folha consolidada e, na linha FP038, adicional exibido como “R$ 0,00” e salário final “R$ 2.000,00”.
+- **Situação:** [ ] Aprovado  [ ] Reprovado  [ ] Bloqueado [X] Pendente de evidência correspondente
 - **Observações:** __
 
 ---
@@ -204,8 +220,8 @@ Preencha após executar todos os passos. Se algum passo falhar, marque **Reprova
 | 2 | Confira a pré-visualização. | Contém matrícula, nome, tipo, salário base, adicionais (com R$ 0,00 explícito) e salário final. Não há botões de navegação na impressão. |
 
 - **Evidência:** `CT-040-passo1.png`, `CT-040-passo2.png`
-- **Resultado obtido:** Cenário aprovado. Todos os requisitos foram atingidos.
-- **Situação:** [X] Aprovado  [ ] Reprovado  [ ] Bloqueado
+- **Resultado obtido:** CT-040-passo1.png mostra a folha consolidada e o botão “Imprimir folha”. CT-040-passo2.png mostra a pré-visualização de impressão em duas páginas, com a tabela e sem os controles de navegação do sistema na área impressa. Essas imagens não demonstram a impressão do demonstrativo individual.
+- **Situação:** [ ] Aprovado  [ ] Reprovado  [ ] Bloqueado [X] Pendente de revisão humana
 - **Observações:** __
 
 ---
@@ -242,6 +258,6 @@ Esse caso é uma inspeção, não um teste de execução. Um revisor lê o códi
 | Banco | `db/migration/V1__schema.sql` | Restrição `CHECK` por categoria |
 | Interface | `colaboradores/form.html`, `colaborador-form.js` | Opção nova e campos visíveis |
 
-- **Conclusão do revisor:** A extensibilidade é coerente por polimorfismo: cada novo tipo exige uma subclasse de `Colaborador` que implemente `getTipo()`, `getCodigoPersistencia()`, `getAdicional()` e `getDetalhesRemuneracao()`, sem alterar os cálculos das subclasses existentes. Para o exemplo `BONUS_FIXO`, são necessárias ainda: um `case` em `ColaboradorForm.construirColaborador()` e em `ColaboradorJpaEntity.paraDominio()`; um valor no enum `TipoColaborador`, no conversor `de()` e nas conversões de persistência; uma opção e campos condicionais em `form.html`/`colaborador-form.js`; e uma migration para incluir o novo valor nos `CHECK`s de `colaboradores.tipo_colaborador` e `folhas_processadas.tipo_snapshot`, além da restrição de campos por tipo. `ColaboradorComissionado` e `ColaboradorProducao` não precisam ser alterados. Os cálculos existentes permanecem isolados e podem ser exercidos por testes de regressão.
-- **Situação:** [X] Aprovado  [ ] Reprovado  [ ] Bloqueado
-- **Revisor e data:** Inspeção assistida por Copilot — 23/11/2026
+- **Conclusão do revisor:** [preencher após inspeção e validação por revisor humano]
+- **Situação:** [ ] Aprovado  [ ] Reprovado  [ ] Bloqueado [X] Pendente
+- **Revisor e data:** [preencher]
