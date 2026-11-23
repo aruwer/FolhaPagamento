@@ -22,7 +22,7 @@ Para manter a integridade dos links internos do repositório, os artefatos foram
 - **05 - Plano de Testes:** `docs/PLANO_ESTRATEGIA_TESTES_A1.md`
 - **06 - Casos de Teste (Especificação):** `docs/CASOS_TESTE_RASTREAVEIS_A1.md`
 - **07 - EAP, Cronograma e Responsabilidades:** `docs/Consolidar EAP, cronograma e responsabilidades.pdf`
-- **08 a 11 - (Artefatos da Fase A3):** Evidências de execução de testes, manuais e termo de homologação serão adicionados na entrega final.
+- **08 a 11 - Artefatos da Fase A3:** [relatório de execução](docs/Relatorio_Execucao_Testes_Unitarios.md), [registro de defeitos](docs/Registro_Defeitos.md), [métricas](docs/Metricas_Qualidade.md), [revisão técnica](docs/Relatorio_Revisao_Tecnica.md), [manual do usuário](docs/Manual_Usuario.md), [manual técnico](docs/Manual_Tecnico.md), [termo de homologação](docs/Termo_Homologacao.md), [relatório final de qualidade](docs/Relatorio_Final_Qualidade.md) e evidências em `09_Homologacao/evidencias/`.
 
 ## Requisitos
 
