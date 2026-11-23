@@ -1,7 +1,7 @@
 # Casos de Teste Rastreáveis - A1
 
 **Projeto:** Sistema de Folha de Pagamento  
-**Versão-alvo:** QDS_1.1.0  
+**Versão-alvo:** QDS_2.0.0<br>
 **Tarefa:** [Testes][A1] Especificar no mínimo 20 casos de teste rastreáveis  
 **Status:** Casos especificados; resultados pendentes de execução
 
@@ -11,7 +11,7 @@
 - Prioridades: **P0** bloqueadora para aceitação; **P1** alta; **P2** padrão/complementar. Prioridade ordena execução e risco, não transforma requisito da ERS em opcional.
 - Níveis: **U** unitário; **I** integração; **S** sistema; **A** aceitação.
 - **Automação:** `Sim` indica candidato a JUnit/Spring Boot Test; `Manual` indica navegador ou validação/aceitação manual. A ferramenta final depende da arquitetura implementada.
-- `RF`, `RN` e `RNF` referem-se aos identificadores de [Visão de Sistema e ERS Rastreável](VisaoDeSistema+ERSRastreavel.pdf), fonte única dos requisitos para estes casos.
+- `RF`, `RN` e `RNF` referem-se aos identificadores de [ERS](ERS.md), fonte única dos requisitos para estes casos.
 - Os requisitos da ERS são critérios desta especificação. Um comportamento complementar não descrito na ERS é identificado como tal e não é contabilizado como cobertura de requisito.
 - Pré-condição geral: versão/commit identificado, ambiente de teste isolado e uso de dados fictícios. Para casos de UI, aplicação iniciada e navegador registrado.
 - Em cada cenário, `Scenario`, `Given`, `When` e `Then` são palavras-chave Gherkin em inglês; nomes, contexto, ação e resultado estão em português.
@@ -434,11 +434,11 @@ Scenario: calcular totais e quantidade por categoria
 ### CT-030 - Recuperar dados persistidos
 
 **Requisitos:** RNF003 | **Nível:** Integração HTTP | **Prioridade:** P0 | **Execução:** HTTP local com banco SQL isolado  
-**Endpoint proposto:** cadastrar com `POST /colaboradores`; após reinício, consultar `GET /folha/T130?mes=3&ano=2026`. A aplicação atual usa TSV e não possui essa rota com filtro.
+**Endpoint proposto:** cadastrar com `POST /colaboradores`; após reinício, consultar `GET /folha/T130?mes=3&ano=2026`. A persistência atual é PostgreSQL; a consulta por competência está disponível pela rota de folha.
 
 **Variáveis sugeridas:** `bancoTeste = banco SQL exclusivo e descartável`; `matricula = "T130"`; `nome = "Sara Melo"`; `salarioBase = 1900.00`; `quantidadeProduzida = 80.00`; `valorPorUnidade = 3.00`; `salarioFinalEsperado = 2140.00`.
 
-**Situação prevista:** bloqueado até a implementação de persistência SQL; a aplicação atual usa TSV.
+**Situação:** persistência PostgreSQL implementada. A execução do cenário de reinício depende de PostgreSQL ativo e ainda não foi registrada.
 
 ```gherkin
 Scenario: persistir colaborador em SQL após reiniciar a aplicação
@@ -468,7 +468,7 @@ Scenario: gerar resumo de folha vazia
 
 **Variáveis sugeridas:** `competenciaAlvo = 03/2026`; `competenciasDistratoras = [04/2026, 03/2025]`; `salarioFinalAlvoEsperado = 2500.00`; `totalAlvoEsperado = 2500.00`.
 
-**Situação prevista:** bloqueado até que a implementação permita registrar dados por competência e defina/implemente o contrato de consulta mensal/anual. A query abaixo é uma proposta, não endpoint atualmente disponível.
+**Situação:** implementado: processamento explícito por competência (`POST /folha/processar`) e consulta filtrada por `mes` e `ano` (`GET /folha`). Execução pendente.
 
 ```gherkin
 Scenario: gerar folha somente para o mês e ano solicitados
@@ -486,7 +486,7 @@ Scenario: gerar folha somente para o mês e ano solicitados
 
 **Variáveis sugeridas:** `matricula = "A237"`; `competenciaAnterior = 02/2026`; `salarioFinalHistoricoEsperado = 2500.00`; `visivelNaListaAtiva = false`.
 
-**Resultado esperado contra a implementação atual:** reprovado. O repositório atual remove fisicamente o colaborador do TSV e não conserva folha por competência; após confirmar essa observação na execução, registrar como reprovado, anexar evidência e abrir defeito. A aprovação exige demonstrar que o cadastro sai da lista ativa e a folha anterior continua íntegra.
+**Situação:** implementado: exclusão lógica (`excluido_em`) e snapshots por competência preservam o histórico. Execução pendente. A aprovação exige demonstrar que o cadastro sai da lista ativa e a folha anterior continua íntegra.
 
 ```gherkin
 Scenario: excluir cadastro sem apagar a folha já processada
@@ -518,7 +518,7 @@ Scenario: tratar valores variáveis em branco como zero no relatório
 	Then a ausência deve ser tratada como zero e o adicional deve aparecer como R$ 0,00, conforme RN010
 ```
 
-**Divergência conhecida:** o `ColaboradorForm` atual exige os campos variáveis; se continuar rejeitando a submissão em branco, registrar este cenário como reprovado, não como bloqueado ou aprovado.
+**Resolvida:** campos variáveis em branco são tratados como R$ 0,00 (RN010). Verificar no navegador antes de registrar o resultado.
 
 ### CT-039 - Resumir folha por categoria e competência
 
@@ -527,7 +527,7 @@ Scenario: tratar valores variáveis em branco como zero no relatório
 
 **Variáveis sugeridas:** `quantidadeEsperada = 3`; `totalPadraoEsperado = 2500.00`; `totalComissionadoEsperado = 2500.00`; `totalProducaoEsperado = 2100.00`; `totalGeralEsperado = 7100.00`; `competenciasDistratoras = [04/2026, 03/2025]`.
 
-**Situação prevista:** bloqueado até que existam lançamentos associados a competências e o contrato de filtro mensal/anual esteja implementado.
+**Situação:** implementado: processamento explícito da competência e resumo filtrado por mês e ano. Execução pendente.
 
 ```gherkin
 Scenario: exibir totais e quantidade apenas da competência selecionada
@@ -677,4 +677,4 @@ Preencher uma linha por execução. Não antecipar resultado nem evidência.
 
 ## 7. Revisão
 
-Antes da execução oficial, revisar os casos exclusivamente contra [Visão de Sistema e ERS Rastreável](VisaoDeSistema+ERSRastreavel.pdf). Confirmar com a equipe o contrato HTTP de mês/ano, que a ERS não especifica. Não inventar endpoint de recibo: verificar a impressão existente do demonstrativo. Casos sem execução permanecem pendentes; RNF003, competências e preservação de histórico ficam reprovados ou bloqueados conforme o resultado observado e a implementação disponível. Revisar dados/resultados esperados com outra pessoa e associar evidências/defeitos aos IDs.
+Antes da execução oficial, revisar os casos exclusivamente contra [ERS](ERS.md). Confirmar com a equipe o contrato HTTP de mês/ano, que a ERS não especifica. Não inventar endpoint de recibo: verificar a impressão existente do demonstrativo. Casos sem execução permanecem pendentes; RNF003, competências e preservação de histórico permanecem pendentes de execução registrada. Revisar dados/resultados esperados com outra pessoa e associar evidências/defeitos aos IDs.

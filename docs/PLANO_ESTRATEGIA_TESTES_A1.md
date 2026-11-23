@@ -1,17 +1,17 @@
 # Plano de Estratégia de Testes e Ambiente - A1
 
 **Projeto:** Sistema de Folha de Pagamento  
-**Versão:** QDS_1.1.0  
+**Versão:** QDS_2.0.0<br>
 **Tarefa:** [Testes][A1] Planejar estratégia de testes e ambiente  
 **Status:** Especificação do plano para A1; decisões de ambiente e contratos pendentes estão identificados abaixo
 
 ## 1. Objetivo
 
-Definir como planejar, executar e registrar testes do Sistema de Folha de Pagamento, com rastreabilidade entre requisitos, casos de teste, resultados e evidências. Este documento cobre estratégia e ambiente de testes; os casos detalhados estão em [Casos de Teste Rastreáveis - A1](CASOS_TESTE_RASTREAVEIS_A1.md). O processo geral de qualidade e revisão permanece definido em [PGQ.md](PGQ.md).
+Definir como planejar, executar e registrar testes do Sistema de Folha de Pagamento, com rastreabilidade entre requisitos, casos de teste, resultados e evidências. Este documento cobre estratégia e ambiente de testes; os casos detalhados estão em [Casos de Teste Rastreáveis - A1](Casos_Teste_Rastreaveis_A1.md). O processo geral de qualidade e revisão permanece definido em [PGQ.md](PGQ.md).
 
 ## 2. Referências e premissas
 
-- A fonte única dos requisitos é [Visão de Sistema e ERS Rastreável](VisaoDeSistema+ERSRastreavel.pdf), armazenada nesta mesma pasta `docs`. O documento anterior de requisitos não é usado para definir escopo nem rastreabilidade.
+- A fonte única dos requisitos é [Visão de Sistema e ERS Rastreável](ERS.md), armazenada nesta mesma pasta `docs`. O documento anterior de requisitos não é usado para definir escopo nem rastreabilidade.
 - O escopo inclui RF001-RF011, RN001-RN010, RNF001-RNF004 e todos os critérios gerais de aceitação da ERS.
 - Os requisitos da ERS são tratados como obrigatórios. Qualquer exclusão ou adiamento requer decisão formal de escopo e não deve ser disfarçado como requisito condicional.
 - O estado atual usa Java 17, Spring Boot 3.5.5, Thymeleaf, Spring Data JPA, Flyway e PostgreSQL. H2 é usado nos testes de integração; Testcontainers executa cenários em PostgreSQL quando Docker está disponível. Os testes unitários cobrem cálculos e validações do domínio, resumo da folha e formatação monetária.
@@ -125,8 +125,8 @@ Os casos usam IDs estáveis no formato `CT-NNN` e relacionam requisito, nível, 
 
 ## 10. Referências
 
-- [Visão de Sistema e ERS Rastreável](VisaoDeSistema+ERSRastreavel.pdf), fonte única dos requisitos e critérios de aceitação desta versão; o arquivo está em `docs/` junto a este plano.
-- [Casos de Teste Rastreáveis - A1](CASOS_TESTE_RASTREAVEIS_A1.md).
+- [Visão de Sistema e ERS Rastreável](ERS.md), fonte única dos requisitos e critérios de aceitação desta versão; o arquivo está em `docs/` junto a este plano.
+- [Casos de Teste Rastreáveis - A1](Casos_Teste_Rastreaveis_A1.md).
 - [PGQ oficial](PGQ.md), para processo de qualidade, revisão e defeitos.
 - `README.md`, `pom.xml` e configuração efetiva da versão testada.
 - A aplicação implementa persistência PostgreSQL, processamento por competência, snapshots e exclusão lógica. Esses requisitos só podem ser considerados aprovados após execução e registro dos casos de integração/sistema/aceitação correspondentes; a configuração de teste não substitui a evidência de homologação.

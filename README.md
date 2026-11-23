@@ -1,6 +1,6 @@
 # Sistema de Folha de Pagamento - Grupo 11
 
-**Versão Atual:** `1.1.0` 
+**Versão Atual:** `2.0.0`
 
 **Equipe:** Amanda Ruwer, Ana Luísa Lopes e Rafaela Acosta
 
@@ -54,7 +54,7 @@ Para gerar um JAR executável:
 
 ```powershell
 .\mvnw.cmd clean package
-java -jar target\folha-pagamento-1.1.0.jar
+java -jar target\folha-pagamento-2.0.0.jar
 ```
 
 ## Testes

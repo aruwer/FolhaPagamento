@@ -1,9 +1,8 @@
 # Documento de Arquitetura e Modelagem UML
 **Projeto:** Folha de Pagamento  
-**Versão:** QDS_1.2.0 (Revisão Pós-Feedback A1)  
-**Responsável:** Rafaela Acosta (Revisão: Amanda Ruwer)  
-**Dependências:** KAN-01  
-**Branch:** docs/QDS_1.1.0/uml-arquitetura  
+**Versão do artefato Maven:** 2.0.0<br>
+**Equipe:** Amanda Ruwer, Ana Luísa Lopes e Rafaela Acosta<br>
+**Última revisão técnica:** 23/11/2026
 
 ---
 
@@ -24,7 +23,8 @@ flowchart LR
         UC02(["UC02: Consultar Colaboradores"])
         UC03(["UC03: Atualizar ou Remover Cadastro"])
         UC04(["UC04: Processar Folha de Pagamento"])
-        UC05(["UC05: Emitir Resumo Consolidado"])
+        UC05(["UC05: Consultar Folha Consolidada"])
+        UC06(["UC06: Consultar Demonstrativo Individual"])
     end
 
     Admin --> UC01
@@ -32,16 +32,17 @@ flowchart LR
     Admin --> UC03
     Admin --> UC04
     Admin --> UC05
+    Admin --> UC06
 ```
 
 ---
 
 ### 4.2. Diagrama de Classes (Arquitetura Implementada)
-O diagrama reflete fielmente o código-fonte Java do projeto:
+O diagrama apresenta as principais classes e responsabilidades da implementação atual:
 * **Identificação e Base Herdada:** A classe abstrata `Colaborador` utiliza `matricula` (String) como identificador de negócio e define o `salarioBase` como atributo comum herdado por todas as modalidades.
 * **Regras de Cálculo por Modalidade:**
   * `ColaboradorPadrao`: recebe o `salarioBase` integral.
-  * `ColaboradorComissionado`: herda `salarioBase` e adiciona o cálculo sobre `vendasBrutas` (ou total de vendas) multiplicado pelo `percentualComissao`.
+  * `ColaboradorComissionado`: herda `salarioBase` e adiciona o cálculo sobre `valorVendas` multiplicado pelo `percentualComissao`.
   * `ColaboradorProducao`: herda `salarioBase` e soma a bonificação baseada na `quantidadeProduzida` multiplicada pelo `valorPorUnidade`.
 * **Persistência atual:** `RepositorioColaboradores` define o contrato usado pelo serviço e `RepositorioColaboradoresJpa` o implementa com Spring Data JPA e PostgreSQL.
 * **Histórico da folha:** cada processamento grava snapshots imutáveis por competência em `folhas_processadas`; a exclusão de colaboradores é lógica.
@@ -53,12 +54,11 @@ classDiagram
     %% Camada de Apresentação / Web
     class FolhaPagamentoController {
         -FolhaPagamentoService service
-        -FormatadorMoeda formatador
         +inicio(Model) String
         +novo(Model) String
-        +cadastrar(ColaboradorForm, BindingResult, RedirectAttributes) String
+        +cadastrar(ColaboradorForm, BindingResult, Model, RedirectAttributes) String
         +editar(String, Model, RedirectAttributes) String
-        +atualizar(String, ColaboradorForm, BindingResult, RedirectAttributes) String
+        +atualizar(String, ColaboradorForm, BindingResult, Model, RedirectAttributes) String
         +excluir(String, RedirectAttributes) String
         +folha(Integer, Integer, Model) String
         +processarFolha(Integer, Integer, RedirectAttributes) String
@@ -70,11 +70,11 @@ classDiagram
         -String nome
         -String tipo
         -BigDecimal salarioBase
-        -BigDecimal vendasBrutas
+        -BigDecimal valorVendas
         -BigDecimal percentualComissao
-        -Integer quantidadeProduzida
+        -BigDecimal quantidadeProduzida
         -BigDecimal valorPorUnidade
-        +toColaborador() Colaborador
+        +construirColaborador() Colaborador
     }
 
     %% Camada de Serviço / Aplicação
@@ -87,7 +87,10 @@ classDiagram
         +buscar(String) Optional~Colaborador~
         +processarFolha(int, int) List~FolhaProcessada~
         +consultarFolha(int, int) List~FolhaProcessada~
+        +buscarFolha(String, int, int) Optional~FolhaProcessada~
         +gerarResumo(int, int) ResumoFolha
+        +gerarResumo() ResumoFolha
+        +resumir(List~FolhaProcessada~) ResumoFolha
     }
 
     class ResumoFolha {
@@ -99,6 +102,7 @@ classDiagram
 
     class FormatadorMoeda {
         +formatar(double) String
+        +formatar(Double) String
         +formatar(BigDecimal) String
     }
 
@@ -120,18 +124,36 @@ classDiagram
         -FolhaProcessadaJpaRepository folhas
     }
 
+    class ColaboradorJpaRepository {
+        <<interface>>
+    }
+
+    class FolhaProcessadaJpaRepository {
+        <<interface>>
+    }
+
     class ColaboradorJpaEntity {
         -Long id
         -String matricula
         -String nome
+        -TipoColaborador tipoColaborador
         -BigDecimal salarioBase
+        -BigDecimal valorVendas
+        -BigDecimal percentualComissao
+        -BigDecimal quantidadeProduzida
+        -BigDecimal valorPorUnidade
         -boolean ativo
         -OffsetDateTime excluidoEm
         -OffsetDateTime criadoEm
+        -OffsetDateTime atualizadoEm
     }
 
     class FolhaProcessadaJpaEntity {
         -Long id
+        -ColaboradorJpaEntity colaborador
+        -String matriculaSnapshot
+        -String nomeSnapshot
+        -String tipoSnapshot
         -int mes
         -int ano
         -BigDecimal salarioBaseSnapshot
@@ -142,6 +164,7 @@ classDiagram
 
     class FolhaProcessada {
         <<record>>
+        +Long id
         +String matricula
         +String nome
         +String tipo
@@ -150,6 +173,7 @@ classDiagram
         +BigDecimal salarioBase
         +BigDecimal adicional
         +BigDecimal salarioFinal
+        +OffsetDateTime processadaEm
     }
 
     %% Camada de Domínio
@@ -162,13 +186,17 @@ classDiagram
         +getNome() String
         +getSalarioBase() BigDecimal
         +getTipo() String*
+        +getCodigoPersistencia() String*
         +getAdicional() BigDecimal*
+        +getDetalhesRemuneracao() String*
         +getSalarioFinal() BigDecimal
     }
 
     class ColaboradorPadrao {
         +getTipo() String
+        +getCodigoPersistencia() String
         +getAdicional() BigDecimal
+        +getDetalhesRemuneracao() String
     }
 
     class ColaboradorComissionado {
@@ -176,7 +204,9 @@ classDiagram
         -BigDecimal percentualComissao
         +getValorVendas() BigDecimal
         +getPercentualComissao() BigDecimal
+        +getCodigoPersistencia() String
         +getAdicional() BigDecimal
+        +getDetalhesRemuneracao() String
     }
 
     class ColaboradorProducao {
@@ -184,13 +214,14 @@ classDiagram
         -BigDecimal valorPorUnidade
         +getQuantidadeProduzida() BigDecimal
         +getValorPorUnidade() BigDecimal
+        +getCodigoPersistencia() String
         +getAdicional() BigDecimal
+        +getDetalhesRemuneracao() String
     }
 
     %% Relacionamentos
     FolhaPagamentoController ..> ColaboradorForm : Recebe e valida
     FolhaPagamentoController --> FolhaPagamentoService : Orquestra fluxo
-    FolhaPagamentoController --> FormatadorMoeda : Formata valores (BRL)
     FolhaPagamentoService --> RepositorioColaboradores : Usa contrato
     FolhaPagamentoService ..> ResumoFolha : Consolida cálculos
     RepositorioColaboradores <|.. RepositorioColaboradoresJpa : Implementa
@@ -198,7 +229,7 @@ classDiagram
     RepositorioColaboradoresJpa --> FolhaProcessadaJpaRepository : Snapshots JPA
     RepositorioColaboradoresJpa --> ColaboradorJpaEntity : Persiste
     RepositorioColaboradoresJpa --> FolhaProcessadaJpaEntity : Persiste snapshots
-    FolhaProcessadaJpaEntity --> ColaboradorJpaEntity : Referencia
+    FolhaProcessadaJpaEntity --> ColaboradorJpaEntity : N:1
     FolhaProcessadaJpaEntity ..> FolhaProcessada : Projeta leitura
     Colaborador <|-- ColaboradorPadrao : Herda salarioBase
     Colaborador <|-- ColaboradorComissionado : Herda salarioBase
@@ -221,9 +252,9 @@ sequenceDiagram
     participant Repo as RepositorioColaboradoresJpa
     participant Db as PostgreSQL
 
-    Admin->>View: Preenche matrícula, nome, tipo, salário base e variáveis
+    Admin->>View: Preenche dados cadastrais e variáveis do tipo selecionado
     View->>Control: POST /colaboradores (ColaboradorForm)
-    Control->>Form: toColaborador() (Instancia Padrão, Comissionado ou Produção)
+    Control->>Form: construirColaborador() (instancia o subtipo selecionado)
     Form-->>Control: Objeto Colaborador criado
     Control->>Service: cadastrar(colaborador)
     Service->>Repo: cadastrar(colaborador)
@@ -231,8 +262,8 @@ sequenceDiagram
     Db-->>Repo: Confirmação transacional
     Repo-->>Service: Cadastro persistido
     Service-->>Control: Registro concluído
-    Control-->>View: Redirect /colaboradores (Mensagem de sucesso)
-    View-->>Admin: Exibe listagem atualizada
+    Control-->>View: Redirect / (Mensagem de sucesso)
+    View-->>Admin: Exibe a página inicial com a listagem atualizada
 ```
 
 **Fluxo 2: Processamento e Consulta da Folha por Competência**
@@ -286,7 +317,7 @@ flowchart LR
     Adapter --> Database[("PostgreSQL<br/>colaboradores + folhas_processadas")]
 ```
 
-1. **Camada de Apresentação (Interface e Controle):** Composta pelos templates `Thymeleaf` e pelo `FolhaPagamentoController`. Recebe os formulários HTTP (`ColaboradorForm`), aplica formatação monetária (`FormatadorMoeda`) e encaminha comandos para a camada de serviço.
+1. **Camada de Apresentação (Interface e Controle):** Composta pelos templates `Thymeleaf` e pelo `FolhaPagamentoController`. Recebe os formulários HTTP (`ColaboradorForm`) e encaminha comandos para a camada de serviço. Os templates usam o bean `FormatadorMoeda` para exibir valores em BRL.
 2. **Camada de Negócio e Domínio:** Centralizada em `FolhaPagamentoService`, `ResumoFolha` e na hierarquia polimórfica de `Colaborador`. Isola todas as fórmulas de remuneração (Padrão, Comissionado por vendas/percentual e Produção por quantidade/valor unitário).
 3. **Camada de Persistência (Infraestrutura de Dados):** `RepositorioColaboradores` define o contrato, implementado por `RepositorioColaboradoresJpa` com Spring Data JPA. Flyway versiona o esquema PostgreSQL; H2 e Testcontainers suportam os testes.
 
@@ -300,7 +331,7 @@ flowchart LR
 | **Back-end** | Java + Spring Boot | Java 17 LTS / Spring Boot 3.5.5 | Java 17 garante suporte de longo prazo (LTS), tipagem forte e segurança aritmética com `BigDecimal` para cálculos financeiros. O Spring Boot fornece injeção de dependências (`@Service`, `@Controller`) e configuração simplificada via Maven (`pom.xml`). |
 | **Persistência** | PostgreSQL + Spring Data JPA | SGBD relacional / ORM | Transações, integridade referencial e restrições `CHECK`/`UNIQUE`; valores monetários persistidos em `NUMERIC(12,2)`. |
 | **Migrações** | Flyway | V1 e V2 em `src/main/resources/db/migration` | Evolução versionada do esquema; Hibernate executa validação (`ddl-auto=validate`) na inicialização. |
-| **Testes de persistência** | H2 + Testcontainers | H2 para integração rápida; PostgreSQL 17 em container | Testa o adaptador e a compatibilidade das migrations com o SGBD alvo quando Docker está disponível. |
+| **Testes de persistência** | H2 + Testcontainers | H2 para integração rápida; PostgreSQL 17 em container | H2 cobre os testes de integração rápidos. Testcontainers está configurado para validar PostgreSQL; nesta máquina os 3 testes foram ignorados porque o cliente Java não reconheceu o endpoint Docker Desktop. |
 
 ### 5.3. Modelo de Dados e Histórico da Folha
 
@@ -310,5 +341,6 @@ As migrations Flyway `V1__schema.sql` e `V2__colaboradores_data_exclusao.sql` cr
 - `folhas_processadas` mantém snapshots dos dados cadastrais e remuneratórios por matrícula e competência. A chave única (`colaborador_id`, `mes`, `ano`) impede snapshots duplicados da mesma folha.
 - O processamento é transacional e idempotente: cria snapshots somente para colaboradores elegíveis sem registro naquela competência. Consultas e demonstrativos leem os snapshots e não recalculam folhas processadas.
 - Colaboradores desligados continuam disponíveis nos snapshots já processados; sua elegibilidade para novas competências considera a data de cadastro e a data de exclusão.
-- A aplicação usa PostgreSQL por padrão, `spring.jpa.hibernate.ddl-auto=validate` e Flyway para validar e versionar o esquema. `docker-compose.yml` fornece PostgreSQL e pgAdmin locais; os testes rápidos usam H2 e a suíte Testcontainers usa PostgreSQL 17 quando Docker está disponível.
+- A aplicação usa PostgreSQL por padrão, `spring.jpa.hibernate.ddl-auto=validate` e Flyway para validar e versionar o esquema. `docker-compose.yml` fornece PostgreSQL e pgAdmin locais; os testes rápidos usam H2. A execução Testcontainers com PostgreSQL 17 está configurada, mas permanece pendente neste ambiente devido à conexão do cliente Java com o Docker Desktop.
+- `scripts/seed-colaboradores.sql` é uma carga opcional e idempotente de dez colaboradores fictícios para demonstração; não é migration Flyway e não cria folhas processadas.
 - O arquivo legado `dados/colaboradores.tsv` não é importado automaticamente. Qualquer migração de dados existentes deve ser planejada e validada separadamente antes de remover a fonte original.
