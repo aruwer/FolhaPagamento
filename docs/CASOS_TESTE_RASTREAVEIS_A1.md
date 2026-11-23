@@ -221,32 +221,32 @@ Scenario: rejeitar salário base negativo
 	Then a resposta não deve ser 5xx, deve indicar a validação do campo e não deve persistir o colaborador
 ```
 
-### CT-015 - Rejeitar vendas ausentes no cadastro comissionado
+### CT-015 - Vendas em branco no cadastro comissionado são tratadas como zero (RN010)
 
-**Requisitos:** RF003, RNF002 | **Nível:** Integração HTTP | **Prioridade:** P0 | **Execução:** MockMvc ou HTTP local  
+**Requisitos:** RF003, RN010, RNF002 | **Nível:** Integração HTTP | **Prioridade:** P0 | **Execução:** MockMvc ou HTTP local
 **Endpoint:** `POST /colaboradores` com `tipo=COMISSIONADO` e sem `valorVendas`.
 
-**Variáveis sugeridas:** `matricula = "C115"`; `nome = "Gabi Luz"`; `salarioBase = 2000.00`; `valorVendas = null`; `percentualComissao = 5.00`; `quantidadePersistidaEsperada = 0`.
+**Variáveis sugeridas:** `matricula = "C115"`; `nome = "Gabi Luz"`; `salarioBase = 2000.00`; `valorVendas = null`; `percentualComissao = 5.00`; `quantidadePersistidaEsperada = 1`.
 
 ```gherkin
-Scenario: rejeitar cadastro comissionado sem valor de vendas
+Scenario: tratar valor de vendas em branco como zero no cadastro comissionado
 	Given que o formulário comissionado contém base 2000.00 e percentual 5.00, mas vendas não informadas
 	When a pessoa envia o formulário
-	Then a ausência de vendas deve ser indicada e os dados não devem ser persistidos
+	Then o cadastro deve ser concluído, o adicional (ou a comissão) deve aparecer como R$ 0,00 e o salário final deve ser igual à base
 ```
 
-### CT-016 - Rejeitar percentual de comissão ausente
+### CT-016 - Percentual em branco no cadastro comissionado é tratado como zero (RN010)
 
-**Requisitos:** RF003, RNF002 | **Nível:** Integração HTTP | **Prioridade:** P0 | **Execução:** MockMvc ou HTTP local  
+**Requisitos:** RF003, RN010, RNF002 | **Nível:** Integração HTTP | **Prioridade:** P0 | **Execução:** MockMvc ou HTTP local
 **Endpoint:** `POST /colaboradores` com `tipo=COMISSIONADO` e sem `percentualComissao`.
 
-**Variáveis sugeridas:** `matricula = "C116"`; `nome = "Hugo Paz"`; `salarioBase = 2000.00`; `valorVendas = 10000.00`; `percentualComissao = null`; `quantidadePersistidaEsperada = 0`.
+**Variáveis sugeridas:** `matricula = "C116"`; `nome = "Hugo Paz"`; `salarioBase = 2000.00`; `valorVendas = 10000.00`; `percentualComissao = null`; `quantidadePersistidaEsperada = 1`.
 
 ```gherkin
-Scenario: rejeitar cadastro comissionado sem percentual
+Scenario: tratar percentual em branco como zero no cadastro comissionado
 	Given que o formulário comissionado contém base 2000.00 e vendas 10000.00, mas percentual não informado
 	When a pessoa envia o formulário
-	Then a ausência do percentual deve ser indicada e os dados não devem ser persistidos
+	Then o cadastro deve ser concluído, o adicional (ou a comissão) deve aparecer como R$ 0,00 e o salário final deve ser igual à base
 ```
 
 ### CT-017 - Rejeitar valor de vendas negativo
@@ -277,32 +277,32 @@ Scenario: rejeitar percentual de comissão negativo
 	Then a resposta não deve ser 5xx, deve indicar a validação do campo e não deve persistir o colaborador
 ```
 
-### CT-019 - Rejeitar quantidade produzida ausente
+### CT-019 - Quantidade produzida em branco é tratada como zero (RN010)
 
-**Requisitos:** RF004, RNF002 | **Nível:** Integração HTTP | **Prioridade:** P0 | **Execução:** MockMvc ou HTTP local  
+**Requisitos:** RF004, RN010, RNF002 | **Nível:** Integração HTTP | **Prioridade:** P0 | **Execução:** MockMvc ou HTTP local
 **Endpoint:** `POST /colaboradores` com `tipo=PRODUCAO` e sem `quantidadeProduzida`.
 
-**Variáveis sugeridas:** `matricula = "P119"`; `nome = "Iara Costa"`; `salarioBase = 1800.00`; `quantidadeProduzida = null`; `valorPorUnidade = 2.50`; `quantidadePersistidaEsperada = 0`.
+**Variáveis sugeridas:** `matricula = "P119"`; `nome = "Iara Costa"`; `salarioBase = 1800.00`; `quantidadeProduzida = null`; `valorPorUnidade = 2.50`; `quantidadePersistidaEsperada = 1`.
 
 ```gherkin
-Scenario: rejeitar cadastro de produção sem quantidade
+Scenario: tratar quantidade produzida em branco como zero
 	Given que o formulário de produção contém base 1800.00 e valor unitário 2.50, mas quantidade não informada
 	When a pessoa envia o formulário
-	Then a quantidade obrigatória deve ser indicada e os dados não devem ser persistidos
+	Then o cadastro deve ser concluído, o adicional (ou a comissão) deve aparecer como R$ 0,00 e o salário final deve ser igual à base
 ```
 
-### CT-020 - Rejeitar valor por unidade ausente
+### CT-020 - Valor por unidade em branco é tratado como zero (RN010)
 
-**Requisitos:** RF004, RNF002 | **Nível:** Integração HTTP | **Prioridade:** P0 | **Execução:** MockMvc ou HTTP local  
+**Requisitos:** RF004, RN010, RNF002 | **Nível:** Integração HTTP | **Prioridade:** P0 | **Execução:** MockMvc ou HTTP local
 **Endpoint:** `POST /colaboradores` com `tipo=PRODUCAO` e sem `valorPorUnidade`.
 
-**Variáveis sugeridas:** `matricula = "P120"`; `nome = "Joao Luz"`; `salarioBase = 1800.00`; `quantidadeProduzida = 120.00`; `valorPorUnidade = null`; `quantidadePersistidaEsperada = 0`.
+**Variáveis sugeridas:** `matricula = "P120"`; `nome = "Joao Luz"`; `salarioBase = 1800.00`; `quantidadeProduzida = 120.00`; `valorPorUnidade = null`; `quantidadePersistidaEsperada = 1`.
 
 ```gherkin
-Scenario: rejeitar cadastro de produção sem valor unitário
+Scenario: tratar valor por unidade em branco como zero
 	Given que o formulário de produção contém base 1800.00 e quantidade 120, mas valor unitário não informado
 	When a pessoa envia o formulário
-	Then o valor unitário obrigatório deve ser indicado e os dados não devem ser persistidos
+	Then o cadastro deve ser concluído, o adicional (ou a comissão) deve aparecer como R$ 0,00 e o salário final deve ser igual à base
 ```
 
 ### CT-021 - Rejeitar quantidade produzida negativa
