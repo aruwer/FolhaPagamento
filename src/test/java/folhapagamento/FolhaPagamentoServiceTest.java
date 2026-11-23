@@ -1,13 +1,23 @@
 package folhapagamento;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -17,14 +27,18 @@ class FolhaPagamentoServiceTest {
     @Mock
     private RepositorioColaboradores repositorio;
 
+    @InjectMocks
+    private FolhaPagamentoService service;
+
     @Test
+    @DisplayName("CT-028 e CT-029 - Deve gerar total geral e totais por categoria")
     void gerarResumoCalculaTotalEValoresPorCategoria() {
         when(repositorio.listar()).thenReturn(List.of(
                 new ColaboradorPadrao("001", "Ana", 2_000),
                 new ColaboradorComissionado("002", "Bruno", 1_500, 10_000, 5),
                 new ColaboradorProducao("003", "Carla", 1_000, 100, 2)));
 
-        ResumoFolha resumo = new FolhaPagamentoService(repositorio).gerarResumo();
+        ResumoFolha resumo = service.gerarResumo();
 
         assertEquals(3, resumo.quantidadeColaboradores());
         assertEquals(5_200, resumo.totalFolha());
@@ -34,12 +48,76 @@ class FolhaPagamentoServiceTest {
     }
 
     @Test
+    @DisplayName("CT-031 - Deve gerar resumo vazio")
+    void gerarResumoVazio() {
+        when(repositorio.listar()).thenReturn(List.of());
+
+        ResumoFolha resumo = service.gerarResumo();
+
+        assertEquals(0, resumo.quantidadeColaboradores());
+        assertEquals(0, resumo.totalFolha());
+        assertTrue(resumo.totaisPorCategoria().isEmpty());
+    }
+
+    @Test
+    @DisplayName("Deve expor totais por categoria somente para leitura")
     void totaisPorCategoriaNaoPodeSerAlterado() {
         when(repositorio.listar()).thenReturn(List.of(new ColaboradorPadrao("001", "Ana", 2_000)));
 
-        ResumoFolha resumo = new FolhaPagamentoService(repositorio).gerarResumo();
+        ResumoFolha resumo = service.gerarResumo();
 
         assertThrows(UnsupportedOperationException.class,
                 () -> resumo.totaisPorCategoria().put("Outro", 100.0));
+    }
+
+    @Test
+    @DisplayName("CT-009 - Deve impedir matrícula duplicada e propagar erro do repositório")
+    void cadastrarPropagaDuplicidade() throws IOException {
+        Colaborador colaborador = new ColaboradorPadrao("001", "Ana", 2_000);
+        doThrow(new IllegalArgumentException("Já existe colaborador com essa matrícula."))
+                .when(repositorio).cadastrar(colaborador);
+
+        assertThrows(IllegalArgumentException.class, () -> service.cadastrar(colaborador));
+        verify(repositorio).cadastrar(colaborador);
+    }
+
+    @Test
+    @DisplayName("CT-023 - Deve delegar busca e listagem ao repositório")
+    void buscaEListaColaboradores() {
+        Colaborador colaborador = new ColaboradorPadrao("001", "Ana", 2_000);
+        when(repositorio.buscar("001")).thenReturn(Optional.of(colaborador));
+        when(repositorio.buscar("999")).thenReturn(Optional.empty());
+        when(repositorio.listar()).thenReturn(List.of(colaborador));
+
+        assertEquals(Optional.of(colaborador), service.buscar("001"));
+        assertFalse(service.buscar("999").isPresent());
+        assertEquals(List.of(colaborador), service.listar());
+        verify(repositorio).listar();
+    }
+
+    @Test
+    @DisplayName("Deve delegar atualização e exclusão")
+    void atualizaEExcluiColaboradores() throws IOException {
+        Colaborador colaborador = new ColaboradorPadrao("001", "Ana", 2_000);
+
+        service.atualizar(colaborador);
+        service.excluir("001");
+
+        verify(repositorio).atualizar(colaborador);
+        verify(repositorio).excluir("001");
+    }
+
+    @Test
+    @DisplayName("CT-030 - Deve integrar o serviço com repositório isolado em diretório temporário")
+    void integraServicoComRepositorioTemporario(@TempDir Path diretorio) throws IOException {
+        RepositorioColaboradores repositorioReal =
+                new RepositorioColaboradores(diretorio.resolve("dados").resolve("colaboradores.tsv"));
+        FolhaPagamentoService servicoReal = new FolhaPagamentoService(repositorioReal);
+        Colaborador colaborador = new ColaboradorPadrao("001", "Ana", 2_000);
+
+        servicoReal.cadastrar(colaborador);
+
+        assertEquals(Optional.of(colaborador), servicoReal.buscar("001"));
+        assertEquals(1, servicoReal.gerarResumo().quantidadeColaboradores());
     }
 }
