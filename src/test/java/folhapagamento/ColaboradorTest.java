@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.math.BigDecimal;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -22,12 +24,11 @@ class ColaboradorTest {
 
         assertEquals("001", colaborador.getMatricula());
         assertEquals("Ana", colaborador.getNome());
-        assertEquals(0, colaborador.getAdicional());
-        assertEquals(2_000, colaborador.getSalarioFinal());
+        assertEquals(new BigDecimal("0.00"), colaborador.getAdicional());
+        assertEquals(new BigDecimal("2000.00"), colaborador.getSalarioFinal());
         assertEquals("Padrão", colaborador.getTipo());
         assertEquals("PADRAO", colaborador.getCodigoPersistencia());
         assertEquals("Sem remuneração adicional", colaborador.getDetalhesRemuneracao());
-        assertEquals(0, colaborador.getDadosEspecificos().length);
     }
 
     @Test
@@ -35,14 +36,13 @@ class ColaboradorTest {
     void colaboradorComissionadoCalculaAdicionalSobreVendas() {
         ColaboradorComissionado colaborador = new ColaboradorComissionado("002", "Bruno", 2_000, 10_000, 5);
 
-        assertEquals(500, colaborador.getAdicional());
-        assertEquals(2_500, colaborador.getSalarioFinal());
-        assertEquals(10_000, colaborador.getValorVendas());
-        assertEquals(5, colaborador.getPercentualComissao());
+        assertEquals(new BigDecimal("500.00"), colaborador.getAdicional());
+        assertEquals(new BigDecimal("2500.00"), colaborador.getSalarioFinal());
+        assertEquals(new BigDecimal("10000.00"), colaborador.getValorVendas());
+        assertEquals(new BigDecimal("5.00"), colaborador.getPercentualComissao());
         assertEquals("Comissionado", colaborador.getTipo());
         assertEquals("COMISSIONADO", colaborador.getCodigoPersistencia());
-        assertArrayEquals(new String[] { "10000.0", "5.0" }, colaborador.getDadosEspecificos());
-        assertTrue(colaborador.getDetalhesRemuneracao().contains("Vendas: 10000.0"));
+        assertTrue(colaborador.getDetalhesRemuneracao().contains("Vendas: 10000.00"));
     }
 
     @Test
@@ -50,14 +50,13 @@ class ColaboradorTest {
     void colaboradorProducaoCalculaAdicionalPelaQuantidadeProduzida() {
         ColaboradorProducao colaborador = new ColaboradorProducao("003", "Carla", 1_800, 120, 2.5);
 
-        assertEquals(300, colaborador.getAdicional());
-        assertEquals(2_100, colaborador.getSalarioFinal());
-        assertEquals(120, colaborador.getQuantidadeProduzida());
-        assertEquals(2.5, colaborador.getValorPorUnidade());
+        assertEquals(new BigDecimal("300.00"), colaborador.getAdicional());
+        assertEquals(new BigDecimal("2100.00"), colaborador.getSalarioFinal());
+        assertEquals(new BigDecimal("120"), colaborador.getQuantidadeProduzida());
+        assertEquals(new BigDecimal("2.50"), colaborador.getValorPorUnidade());
         assertEquals("Por produção", colaborador.getTipo());
         assertEquals("PRODUCAO", colaborador.getCodigoPersistencia());
-        assertArrayEquals(new String[] { "120.0", "2.5" }, colaborador.getDadosEspecificos());
-        assertTrue(colaborador.getDetalhesRemuneracao().contains("Produção: 120.0 unidades"));
+        assertTrue(colaborador.getDetalhesRemuneracao().contains("Produção: 120 unidades"));
     }
 
     @ParameterizedTest
@@ -108,7 +107,7 @@ class ColaboradorTest {
     @DisplayName("CT-005 - Deve aceitar comissão de até 100% e rejeitar percentual acima do limite")
     void validaLimitesDeComissao() {
         ColaboradorComissionado noLimite = new ColaboradorComissionado("007", "Gabi", 0, 0, 100);
-        assertEquals(0, noLimite.getSalarioFinal());
+        assertEquals(new BigDecimal("0.00"), noLimite.getSalarioFinal());
         assertThrows(IllegalArgumentException.class,
                 () -> new ColaboradorComissionado("008", "Hugo", 1_000, 1, 100.01));
     }
@@ -116,9 +115,11 @@ class ColaboradorTest {
     @Test
     @DisplayName("CT-002, CT-004, CT-007 e CT-008 - Deve aceitar limites zero")
     void aceitaSalariosEAdicionaisZero() {
-        assertEquals(0, new ColaboradorPadrao("009", "Iara", 0).getSalarioFinal());
-        assertEquals(0, new ColaboradorComissionado("010", "João", 0, 0, 0).getSalarioFinal());
-        assertEquals(0, new ColaboradorProducao("011", "Katia", 0, 0, 0).getSalarioFinal());
+        assertEquals(new BigDecimal("0.00"), new ColaboradorPadrao("009", "Iara", 0).getSalarioFinal());
+        assertEquals(new BigDecimal("0.00"),
+                new ColaboradorComissionado("010", "João", 0, 0, 0).getSalarioFinal());
+        assertEquals(new BigDecimal("0.00"),
+                new ColaboradorProducao("011", "Katia", 0, 0, 0).getSalarioFinal());
     }
 
     @Test
@@ -129,8 +130,8 @@ class ColaboradorTest {
         ColaboradorProducao producao =
                 new ColaboradorProducao("013", "Mauro", 0.01, 0.1, 0.2);
 
-        assertEquals(2_234_568.65125, comissionado.getSalarioFinal(), 0.000001);
-        assertEquals(0.03, producao.getSalarioFinal(), 0.000001);
+        assertEquals(new BigDecimal("2234568.65"), comissionado.getSalarioFinal());
+        assertEquals(new BigDecimal("0.03"), producao.getSalarioFinal());
     }
 
     @Test

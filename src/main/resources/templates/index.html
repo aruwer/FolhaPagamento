@@ -15,7 +15,7 @@
 <main class="page-shell">
     <section class="page-heading reveal">
         <div>
-            <p class="eyebrow">GESTÃO DE PESSOAS <span></span> COMPETÊNCIA ATUAL</p>
+            <p class="eyebrow">GESTÃO DE PESSOAS <span></span> COMPETÊNCIA <span th:text="${mes} + '/' + ${ano}">MM/AAAA</span></p>
             <h1>Folha de pagamento</h1>
             <p class="heading-copy">Acompanhe colaboradores, remunerações e o custo total da equipe.</p>
         </div>
@@ -84,7 +84,7 @@
                 <tbody>
                 <tr th:each="colaborador : ${colaboradores}">
                     <td>
-                        <a class="person-link" th:href="@{/folha/{matricula}(matricula=${colaborador.matricula})}" th:text="${colaborador.nome}">Nome</a>
+                        <a class="person-link" th:href="@{/folha/{matricula}(matricula=${colaborador.matricula},mes=${mes},ano=${ano})}" th:text="${colaborador.nome}">Nome</a>
                         <span class="cell-subtext" th:text="${colaborador.detalhesRemuneracao}">Remuneração</span>
                     </td>
                     <td class="mono" th:text="${colaborador.matricula}">000</td>

@@ -3,6 +3,10 @@ target/
 dados/
 *.class
 oracleJdk-27/
+.env
+.env.*
+!.env.example
 LICENSE
 README
 release
+FolhaPagamento2.0/

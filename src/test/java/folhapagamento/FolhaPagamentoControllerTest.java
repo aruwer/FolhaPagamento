@@ -13,6 +13,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,12 +64,13 @@ class FolhaPagamentoControllerTest {
     @DisplayName("CT-023 - GET / deve exibir página inicial, colaboradores e resumo")
     void paginaInicial() throws Exception {
         when(service.listar()).thenReturn(List.of(new ColaboradorPadrao("001", "Ana", 1_000)));
-        when(service.gerarResumo()).thenReturn(new ResumoFolha(1, 1_000, java.util.Map.of("Padrão", 1_000.0)));
+        when(service.gerarResumo()).thenReturn(new ResumoFolha(1, new BigDecimal("1000.00"),
+                java.util.Map.of("Padrão", new BigDecimal("1000.00"))));
 
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("index"))
-                .andExpect(model().attributeExists("colaboradores", "resumo"));
+                .andExpect(model().attributeExists("colaboradores", "resumo", "mes", "ano"));
     }
 
     @Test
@@ -94,7 +97,7 @@ class FolhaPagamentoControllerTest {
 
         ArgumentCaptor<Colaborador> captor = ArgumentCaptor.forClass(Colaborador.class);
         verify(service).cadastrar(captor.capture());
-        assertEquals(1_000, captor.getValue().getSalarioFinal());
+        assertEquals(new BigDecimal("1000.00"), captor.getValue().getSalarioFinal());
     }
 
     @Test
@@ -113,30 +116,19 @@ class FolhaPagamentoControllerTest {
     }
 
     @Test
-    @DisplayName("CT-015 - Campo obrigatório de vendas ausente deve apontar para valorVendas")
-    void erroDeCampoVariavelAusenteDeveApontarParaVendas() throws Exception {
-        // A expectativa é o campo específico; o controller atual associa esta falha à matrícula.
+    @DisplayName("RN010 - Campos variáveis ausentes devem ser aceitos como zero")
+    void valoresVariaveisAusentesAceitosComoZero() throws Exception {
         mockMvc.perform(post("/colaboradores")
                         .param("matricula", "002")
                         .param("nome", "Bia")
                         .param("salarioBase", "1000")
-                        .param("tipo", "COMISSIONADO")
-                        .param("percentualComissao", "5"))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeHasFieldErrors("form", "valorVendas"));
-    }
+                        .param("tipo", "COMISSIONADO"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/"));
 
-    @Test
-    @DisplayName("CT-015 - Comportamento atual: erro de vendas ausente é associado à matrícula")
-    void erroDeCampoVariavelAusenteAssociadoIncorretamenteAMatricula() throws Exception {
-        mockMvc.perform(post("/colaboradores")
-                        .param("matricula", "002")
-                        .param("nome", "Bia")
-                        .param("salarioBase", "1000")
-                        .param("tipo", "COMISSIONADO")
-                        .param("percentualComissao", "5"))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeHasFieldErrors("form", "matricula"));
+        ArgumentCaptor<Colaborador> captor = ArgumentCaptor.forClass(Colaborador.class);
+        verify(service).cadastrar(captor.capture());
+        assertEquals(new BigDecimal("0.00"), captor.getValue().getAdicional());
     }
 
     @Test
@@ -158,21 +150,28 @@ class FolhaPagamentoControllerTest {
     @Test
     @DisplayName("CT-027 - GET /folha/{matricula} deve mostrar folha individual existente")
     void folhaIndividualExistente() throws Exception {
-        Colaborador colaborador = new ColaboradorPadrao("001", "Ana", 1_000);
-        when(service.buscar("001")).thenReturn(Optional.of(colaborador));
+        FolhaProcessada colaborador = new FolhaProcessada(1L, "001", "Ana", "PADRAO",
+                java.time.YearMonth.now().getMonthValue(), java.time.YearMonth.now().getYear(),
+                new BigDecimal("1000.00"), BigDecimal.ZERO.setScale(2),
+                new BigDecimal("1000.00"), OffsetDateTime.now());
+        when(service.buscar("001")).thenReturn(Optional.of(new ColaboradorPadrao("001", "Ana", 1_000)));
+        when(service.buscarFolha("001", colaborador.mes(), colaborador.ano()))
+                .thenReturn(Optional.of(colaborador));
 
-        mockMvc.perform(get("/folha/001"))
+        mockMvc.perform(get("/folha/001").param("mes", Integer.toString(colaborador.mes()))
+                        .param("ano", Integer.toString(colaborador.ano())))
                 .andExpect(status().isOk())
                 .andExpect(view().name("folha-individual"))
-                .andExpect(model().attribute("colaborador", colaborador));
+                .andExpect(model().attribute("folha", colaborador));
     }
 
     @Test
     @DisplayName("GET /folha/{matricula} inexistente deve redirecionar com mensagem")
     void folhaIndividualInexistente() throws Exception {
         when(service.buscar("999")).thenReturn(Optional.empty());
+        when(service.buscarFolha("999", 3, 2099)).thenReturn(Optional.empty());
 
-        mockMvc.perform(get("/folha/999"))
+        mockMvc.perform(get("/folha/999").param("mes", "3").param("ano", "2099"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"))
                 .andExpect(flash().attribute("erro", "Colaborador não encontrado."));
@@ -181,13 +180,34 @@ class FolhaPagamentoControllerTest {
     @Test
     @DisplayName("CT-026 - GET /folha deve mostrar lista consolidada e resumo")
     void folhaConsolidada() throws Exception {
-        when(service.listar()).thenReturn(List.of());
-        when(service.gerarResumo()).thenReturn(new ResumoFolha(0, 0, java.util.Map.of()));
+        when(service.consultarFolha(3, 2099)).thenReturn(List.of());
+        when(service.resumir(List.of())).thenReturn(
+                new ResumoFolha(0, BigDecimal.ZERO, java.util.Map.of()));
 
-        mockMvc.perform(get("/folha"))
+        mockMvc.perform(get("/folha").param("mes", "3").param("ano", "2099"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("folha"))
                 .andExpect(model().attributeExists("colaboradores", "resumo"));
+    }
+
+    @Test
+    @DisplayName("GET /folha deve rejeitar competência inválida sem erro interno")
+    void folhaComCompetenciaInvalida() throws Exception {
+        mockMvc.perform(get("/folha").param("mes", "13").param("ano", "2099"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("folha"))
+                .andExpect(model().attribute("erro", "Informe uma competência válida."));
+    }
+
+    @Test
+    @DisplayName("CT-036 - POST deve processar a folha e redirecionar para a competência")
+    void processarFolha() throws Exception {
+        mockMvc.perform(post("/folha/processar").param("mes", "3").param("ano", "2099"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/folha?mes=3&ano=2099"))
+                .andExpect(flash().attribute("sucesso", "Folha processada para 03/2099."));
+
+        verify(service).processarFolha(3, 2099);
     }
 
     @Test

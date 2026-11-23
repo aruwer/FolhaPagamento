@@ -5,16 +5,16 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.nio.file.Path;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -41,10 +41,11 @@ class FolhaPagamentoServiceTest {
         ResumoFolha resumo = service.gerarResumo();
 
         assertEquals(3, resumo.quantidadeColaboradores());
-        assertEquals(5_200, resumo.totalFolha());
-        assertEquals(2_000, resumo.totaisPorCategoria().get("Padrão"));
-        assertEquals(2_000, resumo.totaisPorCategoria().get("Comissionado"));
-        assertEquals(1_200, resumo.totaisPorCategoria().get("Por produção"));
+        assertEquals(new BigDecimal("5200.00"), resumo.totalFolha());
+        assertEquals(new BigDecimal("2000.00"), resumo.totaisPorCategoria().get("Padrão"));
+        assertEquals(new BigDecimal("2000.00"), resumo.totaisPorCategoria().get("Comissionado"));
+        assertEquals(new BigDecimal("1200.00"), resumo.totaisPorCategoria().get("Por produção"));
+        assertEquals(1, resumo.quantidadePorCategoria().get("Padrão"));
     }
 
     @Test
@@ -55,7 +56,7 @@ class FolhaPagamentoServiceTest {
         ResumoFolha resumo = service.gerarResumo();
 
         assertEquals(0, resumo.quantidadeColaboradores());
-        assertEquals(0, resumo.totalFolha());
+        assertEquals(BigDecimal.ZERO, resumo.totalFolha());
         assertTrue(resumo.totaisPorCategoria().isEmpty());
     }
 
@@ -67,7 +68,7 @@ class FolhaPagamentoServiceTest {
         ResumoFolha resumo = service.gerarResumo();
 
         assertThrows(UnsupportedOperationException.class,
-                () -> resumo.totaisPorCategoria().put("Outro", 100.0));
+                () -> resumo.totaisPorCategoria().put("Outro", BigDecimal.TEN));
     }
 
     @Test
@@ -108,16 +109,19 @@ class FolhaPagamentoServiceTest {
     }
 
     @Test
-    @DisplayName("CT-030 - Deve integrar o serviço com repositório isolado em diretório temporário")
-    void integraServicoComRepositorioTemporario(@TempDir Path diretorio) throws IOException {
-        RepositorioColaboradores repositorioReal =
-                new RepositorioColaboradores(diretorio.resolve("dados").resolve("colaboradores.tsv"));
-        FolhaPagamentoService servicoReal = new FolhaPagamentoService(repositorioReal);
-        Colaborador colaborador = new ColaboradorPadrao("001", "Ana", 2_000);
+    @DisplayName("Deve delegar processamento, consulta e resumo de competência")
+    void delegaOperacoesDaFolhaProcessada() {
+        FolhaProcessada item = new FolhaProcessada(1L, "001", "Ana", "PADRAO",
+                3, 2099, new BigDecimal("2000.00"), BigDecimal.ZERO.setScale(2),
+                new BigDecimal("2000.00"), java.time.OffsetDateTime.now());
+        when(repositorio.processarFolha(3, 2099)).thenReturn(List.of(item));
+        when(repositorio.consultarFolha(3, 2099)).thenReturn(List.of(item));
+        when(repositorio.buscarFolha("001", 3, 2099)).thenReturn(Optional.of(item));
 
-        servicoReal.cadastrar(colaborador);
-
-        assertEquals(Optional.of(colaborador), servicoReal.buscar("001"));
-        assertEquals(1, servicoReal.gerarResumo().quantidadeColaboradores());
+        assertEquals(List.of(item), service.processarFolha(3, 2099));
+        assertEquals(List.of(item), service.consultarFolha(3, 2099));
+        assertEquals(Optional.of(item), service.buscarFolha("001", 3, 2099));
+        assertEquals(new BigDecimal("2000.00"), service.gerarResumo(3, 2099).totalFolha());
+        verify(repositorio, times(2)).consultarFolha(3, 2099);
     }
 }

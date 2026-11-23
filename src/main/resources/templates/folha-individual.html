@@ -15,15 +15,15 @@
 <main class="page-shell individual-shell">
     <a class="back-link" th:href="@{/}"><span aria-hidden="true">←</span> Voltar aos colaboradores</a>
     <section class="page-heading reveal">
-        <div><p class="eyebrow">DEMONSTRATIVO INDIVIDUAL <span></span> <span th:text="${colaborador.matricula}">MATRÍCULA</span></p><h1 th:text="${colaborador.nome}">Nome do colaborador</h1><p class="heading-copy" th:text="${colaborador.tipo} + ' · ' + ${colaborador.detalhesRemuneracao}">Tipo de remuneração</p></div>
+        <div><p class="eyebrow">DEMONSTRATIVO INDIVIDUAL <span></span> <span th:text="${folha.matricula}">MATRÍCULA</span></p><h1 th:text="${folha.nome}">Nome do colaborador</h1><p class="heading-copy"><span th:text="${folha.tipoDescricao}">Tipo de remuneração</span> · Competência <span th:text="${folha.mes} + '/' + ${folha.ano}">MM/AAAA</span></p></div>
         <button class="button button-outline print-button" type="button" onclick="window.print()">Imprimir demonstrativo</button>
     </section>
     <section class="individual-report reveal">
-        <div class="individual-line"><span>Salário base</span><strong th:text="${@formatadorMoeda.formatar(colaborador.salarioBase)}">R$ 0,00</strong></div>
-        <div class="individual-line"><span>Adicionais</span><strong th:text="${@formatadorMoeda.formatar(colaborador.adicional)}">R$ 0,00</strong></div>
-        <div class="individual-total"><span>Salário final</span><strong th:text="${@formatadorMoeda.formatar(colaborador.salarioFinal)}">R$ 0,00</strong></div>
+        <div class="individual-line"><span>Salário base</span><strong th:text="${@formatadorMoeda.formatar(folha.salarioBase)}">R$ 0,00</strong></div>
+        <div class="individual-line"><span>Adicionais</span><strong th:text="${@formatadorMoeda.formatar(folha.adicional)}">R$ 0,00</strong></div>
+        <div class="individual-total"><span>Salário final</span><strong th:text="${@formatadorMoeda.formatar(folha.salarioFinal)}">R$ 0,00</strong></div>
     </section>
-    <div class="individual-actions"><a class="button button-quiet" th:href="@{/}">Fechar</a><a class="button button-primary" th:href="@{/colaboradores/{matricula}/editar(matricula=${colaborador.matricula})}">Editar cadastro</a></div>
+    <div class="individual-actions"><a class="button button-quiet" th:href="@{/}">Fechar</a><a class="button button-primary" th:if="${colaboradorAtivo}" th:href="@{/colaboradores/{matricula}/editar(matricula=${folha.matricula})}">Editar cadastro</a></div>
 </main>
 <footer class="site-footer"><span>Folha Clara</span><span>Demonstrativo individual</span></footer>
 </body>

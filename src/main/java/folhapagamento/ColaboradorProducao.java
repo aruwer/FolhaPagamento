@@ -1,16 +1,30 @@
 package folhapagamento;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public final class ColaboradorProducao extends Colaborador {
-    private final double quantidadeProduzida;
-    private final double valorPorUnidade;
+    private final BigDecimal quantidadeProduzida;
+    private final BigDecimal valorPorUnidade;
 
     public ColaboradorProducao(String matricula, String nome, double salarioBase,
             double quantidadeProduzida, double valorPorUnidade) {
+        this(matricula, nome, BigDecimal.valueOf(salarioBase),
+                BigDecimal.valueOf(quantidadeProduzida), BigDecimal.valueOf(valorPorUnidade));
+    }
+
+    public ColaboradorProducao(String matricula, String nome, BigDecimal salarioBase,
+            BigDecimal quantidadeProduzida, BigDecimal valorPorUnidade) {
         super(matricula, nome, salarioBase);
+        quantidadeProduzida = valorOuZero(quantidadeProduzida);
+        valorPorUnidade = valorOuZero(valorPorUnidade);
         validarNaoNegativo(quantidadeProduzida, "A quantidade produzida");
         validarNaoNegativo(valorPorUnidade, "O valor por unidade");
-        this.quantidadeProduzida = quantidadeProduzida;
-        this.valorPorUnidade = valorPorUnidade;
+        BigDecimal quantidadeNormalizada = quantidadeProduzida.stripTrailingZeros();
+        this.quantidadeProduzida = quantidadeNormalizada.scale() < 0
+                ? quantidadeNormalizada.setScale(0)
+                : quantidadeNormalizada;
+        this.valorPorUnidade = valorMonetario(valorPorUnidade);
     }
 
     @Override
@@ -24,25 +38,21 @@ public final class ColaboradorProducao extends Colaborador {
     }
 
     @Override
-    public double getAdicional() {
-        return quantidadeProduzida * valorPorUnidade;
+    public BigDecimal getAdicional() {
+        return quantidadeProduzida.multiply(valorPorUnidade).setScale(2, RoundingMode.HALF_UP);
     }
 
-    public double getQuantidadeProduzida() {
+    public BigDecimal getQuantidadeProduzida() {
         return quantidadeProduzida;
     }
 
-    public double getValorPorUnidade() {
+    public BigDecimal getValorPorUnidade() {
         return valorPorUnidade;
     }
 
     @Override
     public String getDetalhesRemuneracao() {
-        return "Produção: " + quantidadeProduzida + " unidades | Valor/unidade: " + valorPorUnidade;
-    }
-
-    @Override
-    public String[] getDadosEspecificos() {
-        return new String[] { Double.toString(quantidadeProduzida), Double.toString(valorPorUnidade) };
+        return "Produção: " + quantidadeProduzida.toPlainString() + " unidades | Valor/unidade: "
+                + valorPorUnidade.toPlainString();
     }
 }
