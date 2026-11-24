@@ -214,6 +214,27 @@ class FolhaPagamentoWebCasosDeTesteTest {
     }
 
     @Test
+    @DisplayName("CT-039: resumo por categoria considera só a competência selecionada (ACE-4, ACE-5)")
+    void ct039ResumePorCategoriaECompetencia() throws Exception {
+        cadastra(formulario("W039A", "Iris Padrão", "2500", "PADRAO"));
+        cadastra(comissionado("W039B", "Jonas Comissão", "2000", "10000", "5"));
+        cadastra(producao("W039C", "Kelly Produção", "1800", "120", "2.50"));
+        processa(3, ANO);
+        cadastra(formulario("W039D", "Lia Distratora", "9000", "PADRAO"));
+        processa(4, ANO);
+        processa(3, ANO - 1);
+
+        ResumoFolha resumo = resumoDaFolha(3, ANO);
+        assertEquals(3, resumo.quantidadeColaboradores());
+        assertDinheiro(resumo.totalFolha(), "7100.00");
+        assertDinheiro(resumo.totaisPorCategoria().get("Padrão"), "2500.00");
+        assertDinheiro(resumo.totaisPorCategoria().get("Comissionado"), "2500.00");
+        assertDinheiro(resumo.totaisPorCategoria().get("Por produção"), "2100.00");
+        assertDinheiro(resumoDaFolha(4, ANO).totalFolha(), "16100.00");
+        assertEquals(4, resumoDaFolha(3, ANO - 1).quantidadeColaboradores());
+    }
+
+    @Test
     @DisplayName("CT-031: resumo de folha sem colaboradores é vazio (ACE-5)")
     void ct031ResumoVazio() throws Exception {
         ResumoFolha resumo = resumoDaFolha(1, ANO);
