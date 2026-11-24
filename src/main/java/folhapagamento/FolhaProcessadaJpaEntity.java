@@ -2,6 +2,7 @@ package folhapagamento;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 
 import jakarta.persistence.Column;
@@ -76,6 +77,16 @@ public class FolhaProcessadaJpaEntity {
 
     FolhaProcessada paraDominio() {
         return new FolhaProcessada(id, matriculaSnapshot, nomeSnapshot, tipoSnapshot,
-                mes, ano, salarioBaseSnapshot, adicionalCalculado, salarioFinal, dataProcessamento);
+                mes, ano, salarioBaseSnapshot, adicionalCalculado, salarioFinal,
+                noFusoDoSistema(dataProcessamento));
+    }
+
+    /**
+     * O PostgreSQL devolve TIMESTAMP WITH TIME ZONE em UTC. Normalizar para o fuso
+     * do sistema mantém o snapshot igual antes e depois de persistido (BUG-005).
+     */
+    static OffsetDateTime noFusoDoSistema(OffsetDateTime instante) {
+        return instante == null ? null
+                : instante.atZoneSameInstant(ZoneId.systemDefault()).toOffsetDateTime();
     }
 }
