@@ -1,99 +1,81 @@
-# Sistema de Folha de Pagamento - Grupo 11
+# Sistema de Folha de Pagamento — Grupo 11
 
-**Versão Atual:** `2.0.0`
+**Versão:** `2.0.0` · **Unidade Curricular:** Garantia da Qualidade de Software · **Entrega:** A3 (01/12/2026)
 
 **Equipe:** Amanda Ruwer, Ana Luísa Lopes e Rafaela Acosta
 
-Aplicação web Java para cadastrar colaboradores, calcular remunerações e emitir relatórios individuais e consolidados.
+Aplicação web Java (Spring Boot + PostgreSQL) para cadastrar colaboradores, calcular remunerações (padrão, comissionada e por produção), processar a folha por competência (mês/ano) e emitir relatórios individuais e consolidados.
 
-## 🔗 Repositório e Rastreabilidade
+**Repositório:** <https://github.com/aruwer/FolhaPagamentoA3> — histórico de commits, Pull Requests e Issues (KAN-01 a KAN-16).
 
-- **URL do Repositório (GitHub):** `https://github.com/aruwer/folhapagamento`
-- Todo o histórico de commits, revisões de código via Pull Requests e gestão de tarefas (Quadro KANBAN/Issues) pode ser verificado integralmente no link acima, garantindo a rastreabilidade da EAP e do cronograma.
+## Situação da entrega A3
 
-## 📂 Índice de Equivalência Documental
+| Indicador | Resultado | Meta (PGQ) |
+| :--- | :--- | :--- |
+| Build `.\mvnw.cmd clean verify` | **BUILD SUCCESS** | sucesso |
+| Testes automatizados (unitários + integração) | **105 executados, 105 aprovados, 0 falhas, 0 ignorados** | 100% |
+| Cobertura de linhas / branches (JaCoCo) | **96,97% / 95,96%** | ≥ 80% (verificado automaticamente no build) |
+| Casos de teste especificados executados e aprovados | **40 / 40** | 100% |
+| Requisitos funcionais atendidos | **11 / 11 (100%)** | 100% |
+| Defeitos S1/S2 abertos | **0** | 0 |
 
-Para manter a integridade dos links internos do repositório, os artefatos foram mantidos na pasta `docs/`. Abaixo encontra-se o índice inequívoco mapeando nossos arquivos para a estrutura de pastas documentais exigida (01 a 11):
+Detalhes em [10_Qualidade/Relatorio_Final_Qualidade.md](10_Qualidade/Relatorio_Final_Qualidade.md).
 
-- **01 - Visão do Sistema e ERS:** `docs/VisaoDeSistema+ERSRastreavel.pdf`
-- **02 - Matriz de Rastreabilidade:** `docs/VisaoDeSistema+ERSRastreavel.pdf` (pág. 4) e detalhamento na Seção 5 de `docs/CASOS_TESTE_RASTREAVEIS_A1.md`
-- **03 - Modelagem UML e Arquitetura:** `docs/Arquitetura.md`
-- **04 - Plano de Garantia da Qualidade (PGQ):** `docs/PGQ.md`
-- **05 - Plano de Testes:** `docs/PLANO_ESTRATEGIA_TESTES_A1.md`
-- **06 - Casos de Teste (Especificação):** `docs/CASOS_TESTE_RASTREAVEIS_A1.md`
-- **07 - EAP, Cronograma e Responsabilidades:** `docs/Consolidar EAP, cronograma e responsabilidades.pdf`
-- **08 a 11 - Artefatos da Fase A3:** [relatório de execução](docs/Relatorio_Execucao_Testes_Unitarios.md), [registro de defeitos](docs/Registro_Defeitos.md), [métricas](docs/Metricas_Qualidade.md), [revisão técnica](docs/Relatorio_Revisao_Tecnica.md), [manual do usuário](docs/Manual_Usuario.md), [manual técnico](docs/Manual_Tecnico.md), [termo de homologação](docs/Termo_Homologacao.md), [relatório final de qualidade](docs/Relatorio_Final_Qualidade.md) e evidências em `09_Homologacao/evidencias/`.
+## Estrutura de entrega (seção 7 do enunciado)
 
-## Requisitos
+| Pasta | Conteúdo |
+| :--- | :--- |
+| [01_Requisitos](01_Requisitos/) | Documento de Visão e ERS (RF, RN, RNF, critérios de aceitação, matriz de rastreabilidade), matriz de conformidade e baseline A1 em PDF |
+| [02_Analise](02_Analise/) | Modelagem UML: casos de uso, classes e sequência |
+| [03_Projeto](03_Projeto/) | Documento de Arquitetura; EAP, cronograma e responsabilidades |
+| [04_Testes](04_Testes/) | Plano de testes, 40 casos de teste rastreáveis, relatórios de execução (unitários e integração), log e relatórios Surefire |
+| [05_Codigo_Fonte](05_Codigo_Fonte/) | Guia do código-fonte (o projeto Maven fica na raiz: `pom.xml`, `src/`) |
+| [06_Banco_Dados](06_Banco_Dados/) | Modelo de dados, migrations Flyway e script de carga de demonstração |
+| [07_Executavel](07_Executavel/) | Como gerar e executar o JAR |
+| [08_Manuais](08_Manuais/) | Manual do Usuário e Manual Técnico |
+| [09_Homologacao](09_Homologacao/) | Critérios e testes de aceitação, roteiro manual, evidências e Termo de Homologação |
+| [10_Qualidade](10_Qualidade/) | PGQ, registro de defeitos, métricas, revisão técnica, relatório final e relatório JaCoCo |
+| [11_Apresentacao](11_Apresentacao/) | Slides (`.pptx`) e roteiro da apresentação |
+
+> O projeto Maven permanece na raiz do repositório (`pom.xml`, `src/`, `mvnw.cmd`, `docker-compose.yml`) para que os comandos de build funcionem sem configuração adicional. As pastas `05_Codigo_Fonte`, `06_Banco_Dados` e `07_Executavel` explicam onde está cada item.
+
+## Requisitos de ambiente
 
 - JDK 17 ou superior
-- PowerShell no Windows para usar o Maven Wrapper incluído
+- Docker Desktop (PostgreSQL 17 e pgAdmin via Docker Compose; também usado pelos testes Testcontainers)
+- Windows PowerShell (o Maven Wrapper `mvnw.cmd` está incluído; em Linux/macOS use `./mvnw`)
 
-## Executar
-
-O PostgreSQL é a persistência padrão. Prepare as variáveis locais e inicie o banco:
+## Instalação e execução
 
 ```powershell
-if (-not (Test-Path .env)) {
-    Copy-Item .env.example .env
-}
+# 1. Variáveis locais (o .env não é versionado)
+if (-not (Test-Path .env)) { Copy-Item .env.example .env }
+
+# 2. Mesma senha do banco para a aplicação
 $passwordLine = Get-Content .env | Where-Object { $_ -match '^POSTGRES_PASSWORD=' } | Select-Object -First 1
-if (-not $passwordLine) { throw "POSTGRES_PASSWORD não definido em .env." }
 $env:DATABASE_PASSWORD = $passwordLine.Substring("POSTGRES_PASSWORD=".Length)
-if (-not $env:DATABASE_PASSWORD) { throw "POSTGRES_PASSWORD está vazio em .env." }
+
+# 3. Banco de dados e aplicação
 docker compose up -d
-docker compose ps
 .\mvnw.cmd spring-boot:run
 ```
 
-O Docker Compose publica o banco em `localhost:5433` e o pgAdmin em `http://localhost:5050`. O Flyway aplica as migrações e o Hibernate valida o esquema ao iniciar a aplicação. Acesse [http://localhost:8081](http://localhost:8081).
+Acesse <http://localhost:8081>. O PostgreSQL fica em `localhost:5433` e o pgAdmin em <http://localhost:5050>. O Flyway aplica as migrations e o Hibernate valida o esquema na inicialização. Passo a passo completo no [Manual do Usuário](08_Manuais/Manual_Usuario.md).
 
-O comando carrega `DATABASE_PASSWORD` do mesmo `POSTGRES_PASSWORD` que o Compose lê do `.env`. Se o volume do PostgreSQL já foi inicializado, alterar a senha no `.env` não altera a senha gravada no banco: restaure a senha usada na primeira inicialização ou altere a senha do usuário dentro do PostgreSQL. Os valores de exemplo são apenas para desenvolvimento local; não use essas senhas em ambientes compartilhados ou de produção.
-
-Para gerar um JAR executável:
-
-```powershell
-.\mvnw.cmd clean package
-java -jar target\folha-pagamento-2.0.0.jar
-```
+Os valores de `.env.example` servem apenas para desenvolvimento local. Se o volume do PostgreSQL já foi inicializado, alterar a senha no `.env` não altera a senha gravada no banco.
 
 ## Testes
 
-Os testes usam JUnit 5, Mockito e H2. Para executar os testes unitários e de integração:
-
 ```powershell
-.\mvnw.cmd test
+.\mvnw.cmd clean verify
 ```
 
-Os testes de integração PostgreSQL usam Testcontainers e são executados quando o Docker está disponível; sem Docker, eles são ignorados.
-
-Para executar os testes e gerar o relatório de cobertura JaCoCo:
-
-```powershell
-.\mvnw.cmd verify
-```
-
-O relatório HTML é gerado em `target/site/jacoco/index.html`.
-
-## Banco de dados
-
-O esquema é versionado em `src/main/resources/db/migration` e aplicado pelo Flyway. Configure `DATABASE_URL`, `DATABASE_USERNAME` e `DATABASE_PASSWORD` para usar outra instância. A porta local padrão do Compose é `5433`.
-
-Para parar os serviços sem apagar o volume de dados:
-
-```powershell
-docker compose down
-```
-
-O arquivo legado `dados/colaboradores.tsv` não é importado automaticamente para o PostgreSQL.
+Executa os testes unitários (JUnit 5, Mockito), de integração com H2 e MockMvc, e de integração com PostgreSQL 17 real via Testcontainers (requer Docker em execução). O JaCoCo gera o relatório em `target/site/jacoco/index.html` e **o build falha se a cobertura de linhas ou de branches ficar abaixo de 80%**.
 
 ## Funcionalidades
 
-- Cadastro, consulta, alteração e exclusão de colaboradores.
-- Remuneração padrão, comissionada e por produção, calculada por tipo.
-- Folha individual e consolidada, com opção de impressão pelo navegador.
-- Processamento idempotente da folha por competência (mês/ano), com snapshots históricos.
-- Resumo com quantidade de colaboradores, custo total e valores por categoria.
-- Exclusão lógica que mantém colaboradores e folhas processadas no banco.
-- Validação de dados e matrícula única.
-- Páginas Thymeleaf e backend Spring Boot no mesmo repositório.
+- Cadastro, consulta, alteração e exclusão lógica de colaboradores, com matrícula única.
+- Remuneração padrão, comissionada (vendas × percentual) e por produção (quantidade × valor unitário).
+- Processamento idempotente da folha por competência, com snapshots históricos preservados após alteração ou exclusão do cadastro.
+- Folha consolidada com total geral e totais por categoria; demonstrativo individual com adicionais zerados explícitos (R$ 0,00).
+- Impressão/geração de PDF da folha e do demonstrativo pelo navegador.

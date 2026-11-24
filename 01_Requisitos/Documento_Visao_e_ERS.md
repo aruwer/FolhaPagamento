@@ -91,17 +91,17 @@ O sistema poderá ser considerado conforme quando:
 
 ## 3. Matriz de Rastreabilidade
 
-A matriz abaixo relaciona requisitos, casos de uso, componentes e casos de teste. Os CTs são agrupadores de alto nível. O status reflete a implementação atual; ele não indica que os testes foram executados. A matriz detalhada está em `Matriz_Conformidades_Requisitos.md`.
+A matriz abaixo relaciona requisitos, casos de uso, componentes e casos de teste. Os IDs `CT001`–`CT010` são agrupadores de alto nível; a correspondência com os 40 casos detalhados (`CT-001`–`CT-040`) está em [Casos_Teste_Rastreaveis.md](../04_Testes/Casos_Teste_Rastreaveis.md#correspondência-com-os-ids-da-matriz-da-ers). O status reflete a execução registrada em 23/11/2026 (suíte automatizada e evidências de homologação). A matriz detalhada requisito × implementação × teste está em [Matriz_Conformidade_Requisitos.md](Matriz_Conformidade_Requisitos.md).
 
-| Requisito / Regra | Caso de Uso | Componente / Classe UML | Caso de Teste | Status atual (A3) |
+| Requisito / Regra | Caso de Uso | Componente / Classe UML | Caso de Teste | Status (A3, 23/11/2026) |
 | :--- | :--- | :--- | :---: | :--- |
-| `RF001`, `RF009`, `RN001`, `RN002`, `RN009` | `UC01` — Cadastrar Colaborador | `Colaborador` | `CT001` | Implementado |
-| `RF002`, `RN003` | `UC01` — Cadastrar Colaborador | `ColaboradorPadrao` | `CT002` | Implementado |
-| `RF003`, `RN004`, `RN005` | `UC01` — Cadastrar Colaborador | `ColaboradorComissionado` | `CT003` | Implementado |
-| `RF004`, `RN006`, `RN007` | `UC01` — Cadastrar Colaborador | `ColaboradorProducao` | `CT004` | Implementado |
-| `RF005`, `RF009`, `RN009` | `UC02` — Consultar Colaboradores | `Colaborador` | `CT005` | Implementado |
-| `RF006`, `RF007`, `RF010`, `RN008`, `RN010` | `UC03` — Gerar Folha de Pagamento | `FolhaPagamentoService`, `Colaborador` | `CT006` | Implementado |
-| `RF008`, `RF011` | `UC04` — Emitir Resumo da Folha | `ResumoFolha`, `FolhaPagamentoService` | `CT007` | Implementado |
-| `RNF002` | `UC01`, `UC03` | Interface / Backend Service | `CT008` | Implementado |
-| `RNF003` | `UC01`, `UC02`, `UC03`, `UC04` | Banco de Dados (PostgreSQL) | `CT009` | Implementado com ressalva (execução pendente) |
-| `RNF004` | Todos | Arquitetura (`Colaborador`) | `CT010` | Implementado com ressalva |
+| `RF001`, `RF009`, `RN001`, `RN002`, `RN009` | `UC01` — Cadastrar Colaborador | `Colaborador` | `CT001` | Verificado — aprovado |
+| `RF002`, `RN003` | `UC01` — Cadastrar Colaborador | `ColaboradorPadrao` | `CT002` | Verificado — aprovado |
+| `RF003`, `RN004`, `RN005` | `UC01` — Cadastrar Colaborador | `ColaboradorComissionado` | `CT003` | Verificado — aprovado |
+| `RF004`, `RN006`, `RN007` | `UC01` — Cadastrar Colaborador | `ColaboradorProducao` | `CT004` | Verificado — aprovado |
+| `RF005`, `RF009`, `RN009` | `UC02` — Consultar Colaboradores | `Colaborador` | `CT005` | Verificado — aprovado |
+| `RF006`, `RF007`, `RF010`, `RN008`, `RN010` | `UC03` — Gerar Folha de Pagamento | `FolhaPagamentoService`, `Colaborador` | `CT006` | Verificado — aprovado |
+| `RF008`, `RF011` | `UC04` — Emitir Resumo da Folha | `ResumoFolha`, `FolhaPagamentoService` | `CT007` | Verificado — aprovado |
+| `RNF002` | `UC01`, `UC03` | Interface / Backend Service | `CT008` | Verificado — aprovado |
+| `RNF003` | `UC01`, `UC02`, `UC03`, `UC04` | Banco de Dados (PostgreSQL) | `CT009` | Verificado — aprovado (PostgreSQL real via Testcontainers e CT-030-D) |
+| `RNF004` | Todos | Arquitetura (`Colaborador`) | `CT010` | Verificado — aprovado (CT-033 automatizado) |

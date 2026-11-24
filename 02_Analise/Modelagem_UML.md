@@ -1,4 +1,4 @@
-# Documento de Arquitetura e Modelagem UML
+# Modelagem UML (Análise e Projeto)
 **Projeto:** Folha de Pagamento  
 **Versão do artefato Maven:** 2.0.0<br>
 **Equipe:** Amanda Ruwer, Ana Luísa Lopes e Rafaela Acosta<br>
@@ -6,9 +6,9 @@
 
 ---
 
-# 4. DIAGRAMAS UML
+# 1. Diagramas UML
 
-### 4.1. Diagrama de Casos de Uso
+### 1.1. Diagrama de Casos de Uso
 O diagrama abaixo representa as interações do ator principal (**Administrador / RH**) dentro da fronteira do Sistema de Folha de Pagamento. Os rótulos foram dimensionados para garantir legibilidade integral na exportação para PDF.
 
 ```mermaid
@@ -37,7 +37,7 @@ flowchart LR
 
 ---
 
-### 4.2. Diagrama de Classes (Arquitetura Implementada)
+### 1.2. Diagrama de Classes (Arquitetura Implementada)
 O diagrama apresenta as principais classes e responsabilidades da implementação atual:
 * **Identificação e Base Herdada:** A classe abstrata `Colaborador` utiliza `matricula` (String) como identificador de negócio e define o `salarioBase` como atributo comum herdado por todas as modalidades.
 * **Regras de Cálculo por Modalidade:**
@@ -238,7 +238,7 @@ classDiagram
 
 ---
 
-### 4.3. Diagramas de Sequência
+### 1.3. Diagramas de Sequência
 
 **Fluxo 1: Cadastro de Colaborador (Persistência PostgreSQL e Validação por Matrícula)**
 ```mermaid
@@ -300,47 +300,87 @@ sequenceDiagram
     View-->>Admin: Exibe folha consolidada e links para demonstrativos
 ```
 
+
 ---
 
-# 5. DOCUMENTO DE ARQUITETURA
+### 1.4. Outros diagramas relevantes
 
-### 5.1. Visão Geral e Estilo Arquitetural
-O sistema adota o padrão **MVC (Model-View-Controller)** combinado com uma arquitetura em camadas (*Layered Architecture*), garantindo baixo acoplamento, alta coesão e facilidade de manutenção evolutiva.
+**Diagrama de estados — ciclo de vida do colaborador e da folha da competência.** A exclusão é lógica (RN009) e o snapshot de uma competência, depois de criado, não é recalculado: alterações cadastrais só afetam competências processadas depois delas.
+
+```mermaid
+stateDiagram-v2
+    [*] --> Ativo: cadastrar (POST /colaboradores)
+    Ativo --> Ativo: alterar cadastro (POST /colaboradores/{matricula})
+    Ativo --> ExcluidoLogicamente: excluir (ativo = false, excluido_em = agora)
+    ExcluidoLogicamente --> [*]
+    note right of ExcluidoLogicamente
+        Sai da lista ativa, mas os snapshots já
+        processados continuam consultáveis.
+    end note
+
+    state "Folha da competência (mês/ano)" as Folha {
+        [*] --> NaoProcessada
+        NaoProcessada --> Processada: processar (cria snapshots)
+        Processada --> Processada: reprocessar (idempotente: só inclui quem não tem snapshot)
+    }
+```
+
+**Diagrama de implantação — ambiente local de execução e de testes.**
 
 ```mermaid
 flowchart LR
-    Usuario["👤 Administrador / RH"] --> View["Interface Web<br/>(Thymeleaf + HTML/CSS)"]
-    View --> Controller["Camada de Controle<br/>(FolhaPagamentoController)"]
-    Controller --> Service["Camada de Negócio<br/>(FolhaPagamentoService + Domínio)"]
-    Service --> Repository["Contrato de persistência<br/>(RepositorioColaboradores)"]
-    Repository --> Adapter["Adaptador JPA<br/>(RepositorioColaboradoresJpa)"]
-    Adapter --> Database[("PostgreSQL<br/>colaboradores + folhas_processadas")]
+    subgraph Host["Estação de trabalho (Windows)"]
+        Browser["Navegador<br/>(Edge/Chrome)"]
+        App["folha-pagamento-2.0.0.jar<br/>Spring Boot + Tomcat :8081"]
+        subgraph Docker["Docker Desktop (docker compose)"]
+            PG[("postgres:17-alpine<br/>:5433 → 5432")]
+            PGA["pgAdmin 4<br/>:5050"]
+        end
+        subgraph Testes["mvnw clean verify"]
+            H2[("H2 em memória<br/>testes rápidos")]
+            TC[("PostgreSQL 17<br/>Testcontainers")]
+        end
+    end
+    Browser -- HTTP --> App
+    App -- JDBC / Flyway --> PG
+    PGA -- administração --> PG
 ```
 
-1. **Camada de Apresentação (Interface e Controle):** Composta pelos templates `Thymeleaf` e pelo `FolhaPagamentoController`. Recebe os formulários HTTP (`ColaboradorForm`) e encaminha comandos para a camada de serviço. Os templates usam o bean `FormatadorMoeda` para exibir valores em BRL.
-2. **Camada de Negócio e Domínio:** Centralizada em `FolhaPagamentoService`, `ResumoFolha` e na hierarquia polimórfica de `Colaborador`. Isola todas as fórmulas de remuneração (Padrão, Comissionado por vendas/percentual e Produção por quantidade/valor unitário).
-3. **Camada de Persistência (Infraestrutura de Dados):** `RepositorioColaboradores` define o contrato, implementado por `RepositorioColaboradoresJpa` com Spring Data JPA. Flyway versiona o esquema PostgreSQL; H2 e Testcontainers suportam os testes.
+**Modelo entidade-relacionamento** — detalhado em [06_Banco_Dados](../06_Banco_Dados/README.md).
+
+```mermaid
+erDiagram
+    COLABORADORES ||--o{ FOLHAS_PROCESSADAS : "gera snapshots"
+    COLABORADORES {
+        bigint id PK
+        varchar matricula UK
+        varchar nome
+        varchar tipo_colaborador "PADRAO | COMISSIONADO | PRODUCAO"
+        numeric salario_base
+        numeric valor_vendas "nulo se não comissionado"
+        numeric percentual_comissao "0 a 100"
+        numeric quantidade_produzida "nulo se não produção"
+        numeric valor_por_unidade
+        boolean ativo
+        timestamptz criado_em
+        timestamptz atualizado_em
+        timestamptz excluido_em "V2 - exclusão lógica"
+    }
+    FOLHAS_PROCESSADAS {
+        bigint id PK
+        bigint colaborador_id FK
+        varchar matricula_snapshot
+        varchar nome_snapshot
+        varchar tipo_snapshot
+        int mes "1 a 12"
+        int ano "2000 a 9999"
+        numeric salario_base_snapshot
+        numeric adicional_calculado
+        numeric salario_final
+        timestamptz data_processamento
+    }
+```
 
 ---
 
-### 5.2. Tecnologias e Justificativas Arquiteturais
-
-| Camada | Tecnologia | Versão / Papel | Justificativa Técnica da Escolha |
-| :--- | :--- | :--- | :--- |
-| **Front-end** | Thymeleaf + HTML5 / CSS3 / JS | Renderização Server-Side (SSR) | Integração nativa com o Spring MVC, permitindo bind direto de objetos Java (`ColaboradorForm` e `ResumoFolha`) no HTML sem necessidade de manter um projeto SPA separado, reduzindo a complexidade operacional. |
-| **Back-end** | Java + Spring Boot | Java 17 LTS / Spring Boot 3.5.5 | Java 17 garante suporte de longo prazo (LTS), tipagem forte e segurança aritmética com `BigDecimal` para cálculos financeiros. O Spring Boot fornece injeção de dependências (`@Service`, `@Controller`) e configuração simplificada via Maven (`pom.xml`). |
-| **Persistência** | PostgreSQL + Spring Data JPA | SGBD relacional / ORM | Transações, integridade referencial e restrições `CHECK`/`UNIQUE`; valores monetários persistidos em `NUMERIC(12,2)`. |
-| **Migrações** | Flyway | V1 e V2 em `src/main/resources/db/migration` | Evolução versionada do esquema; Hibernate executa validação (`ddl-auto=validate`) na inicialização. |
-| **Testes de persistência** | H2 + Testcontainers | H2 para integração rápida; PostgreSQL 17 em container | H2 cobre os testes de integração rápidos. Testcontainers está configurado para validar PostgreSQL; nesta máquina os 3 testes foram ignorados porque o cliente Java não reconheceu o endpoint Docker Desktop. |
-
-### 5.3. Modelo de Dados e Histórico da Folha
-
-As migrations Flyway `V1__schema.sql` e `V2__colaboradores_data_exclusao.sql` criam e evoluem as tabelas `colaboradores` e `folhas_processadas`.
-
-- `colaboradores` armazena os campos das três categorias em uma tabela, com `tipo_colaborador`, dados variáveis nullable, restrições de valores não negativos e matrícula única. A coluna `ativo` e o timestamp `excluido_em` implementam exclusão lógica.
-- `folhas_processadas` mantém snapshots dos dados cadastrais e remuneratórios por matrícula e competência. A chave única (`colaborador_id`, `mes`, `ano`) impede snapshots duplicados da mesma folha.
-- O processamento é transacional e idempotente: cria snapshots somente para colaboradores elegíveis sem registro naquela competência. Consultas e demonstrativos leem os snapshots e não recalculam folhas processadas.
-- Colaboradores desligados continuam disponíveis nos snapshots já processados; sua elegibilidade para novas competências considera a data de cadastro e a data de exclusão.
-- A aplicação usa PostgreSQL por padrão, `spring.jpa.hibernate.ddl-auto=validate` e Flyway para validar e versionar o esquema. `docker-compose.yml` fornece PostgreSQL e pgAdmin locais; os testes rápidos usam H2. A execução Testcontainers com PostgreSQL 17 está configurada, mas permanece pendente neste ambiente devido à conexão do cliente Java com o Docker Desktop.
-- `scripts/seed-colaboradores.sql` é uma carga opcional e idempotente de dez colaboradores fictícios para demonstração; não é migration Flyway e não cria folhas processadas.
-- O arquivo legado `dados/colaboradores.tsv` não é importado automaticamente. Qualquer migração de dados existentes deve ser planejada e validada separadamente antes de remover a fonte original.
+A arquitetura em camadas, as tecnologias e a estratégia de persistência estão no [Documento de Arquitetura](../03_Projeto/Documento_Arquitetura.md).
