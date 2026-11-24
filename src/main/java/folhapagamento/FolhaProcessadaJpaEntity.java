@@ -21,6 +21,9 @@ import jakarta.persistence.UniqueConstraint;
         name = "uq_folha_colaborador_competencia",
         columnNames = { "colaborador_id", "mes", "ano" }))
 public class FolhaProcessadaJpaEntity {
+    /** Fuso das competências e das datas de processamento (mesmo usado na elegibilidade da folha). */
+    static final ZoneId FUSO_FOLHA = ZoneId.of("America/Sao_Paulo");
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -71,22 +74,23 @@ public class FolhaProcessadaJpaEntity {
         folha.salarioBaseSnapshot = dominio.getSalarioBase();
         folha.adicionalCalculado = dominio.getAdicional();
         folha.salarioFinal = dominio.getSalarioFinal();
-        folha.dataProcessamento = OffsetDateTime.now().truncatedTo(ChronoUnit.MICROS);
+        folha.dataProcessamento = OffsetDateTime.now(FUSO_FOLHA).truncatedTo(ChronoUnit.MICROS);
         return folha;
     }
 
     FolhaProcessada paraDominio() {
         return new FolhaProcessada(id, matriculaSnapshot, nomeSnapshot, tipoSnapshot,
                 mes, ano, salarioBaseSnapshot, adicionalCalculado, salarioFinal,
-                noFusoDoSistema(dataProcessamento));
+                noFusoDaFolha(dataProcessamento));
     }
 
     /**
-     * O PostgreSQL devolve TIMESTAMP WITH TIME ZONE em UTC. Normalizar para o fuso
-     * do sistema mantém o snapshot igual antes e depois de persistido (BUG-005).
+     * O PostgreSQL devolve TIMESTAMP WITH TIME ZONE em UTC. Gravar e ler sempre em
+     * {@link #FUSO_FOLHA} mantém o snapshot igual antes e depois de persistido, qualquer
+     * que seja o fuso da máquina (BUG-005).
      */
-    static OffsetDateTime noFusoDoSistema(OffsetDateTime instante) {
+    static OffsetDateTime noFusoDaFolha(OffsetDateTime instante) {
         return instante == null ? null
-                : instante.atZoneSameInstant(ZoneId.systemDefault()).toOffsetDateTime();
+                : instante.atZoneSameInstant(FUSO_FOLHA).toOffsetDateTime();
     }
 }

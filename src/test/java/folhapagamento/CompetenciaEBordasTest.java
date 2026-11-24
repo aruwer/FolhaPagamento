@@ -17,7 +17,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 
 import org.junit.jupiter.api.DisplayName;
@@ -29,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -170,13 +170,27 @@ class CompetenciaEBordasTest {
         }
 
         @Test
-        @DisplayName("BUG-005: data de processamento é normalizada para o fuso do sistema")
-        void normalizaDataDeProcessamento() {
+        @DisplayName("BUG-005: snapshot lido em UTC (como no PostgreSQL) é igual ao gravado, em qualquer fuso")
+        void snapshotLidoEmUtcEhIgualAoGravado() {
+            ColaboradorJpaEntity colaborador = ColaboradorJpaEntity.de(
+                    new ColaboradorPadrao("S1", "Snapshot", new BigDecimal("1000.00")));
+            FolhaProcessadaJpaEntity entidade = FolhaProcessadaJpaEntity.criar(colaborador, 1, 2099);
+            FolhaProcessada gravado = entidade.paraDominio();
+
+            // Simula o que o PostgreSQL devolve: o mesmo instante, com offset UTC.
+            ReflectionTestUtils.setField(entidade, "dataProcessamento",
+                    gravado.processadaEm().withOffsetSameInstant(ZoneOffset.UTC));
+
+            assertEquals(gravado, entidade.paraDominio());
+            assertEquals(FolhaProcessadaJpaEntity.FUSO_FOLHA.getRules()
+                    .getOffset(gravado.processadaEm().toInstant()), gravado.processadaEm().getOffset());
+
             OffsetDateTime utc = OffsetDateTime.of(2099, 1, 1, 12, 0, 0, 0, ZoneOffset.UTC);
-            OffsetDateTime local = FolhaProcessadaJpaEntity.noFusoDoSistema(utc);
+            OffsetDateTime local = FolhaProcessadaJpaEntity.noFusoDaFolha(utc);
             assertTrue(local.isEqual(utc));
-            assertEquals(ZoneId.systemDefault().getRules().getOffset(utc.toInstant()), local.getOffset());
-            assertNull(FolhaProcessadaJpaEntity.noFusoDoSistema(null));
+            assertEquals(ZoneOffset.ofHours(-3), local.getOffset());
+            assertNull(FolhaProcessadaJpaEntity.noFusoDaFolha(null));
         }
+
     }
 }

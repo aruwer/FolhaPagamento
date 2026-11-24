@@ -107,7 +107,8 @@
                         </goals>
                     </execution>
                     <execution>
-                        <!-- Critério de aprovação do PGQ: cobertura mínima de 80% (linhas e branches). -->
+                        <!-- Critério de aprovação do PGQ: cobertura mínima de 80% (linhas e branches).
+                             Aplicado na fase verify; `mvnw test` não executa esta regra. -->
                         <id>check</id>
                         <phase>verify</phase>
                         <goals>
