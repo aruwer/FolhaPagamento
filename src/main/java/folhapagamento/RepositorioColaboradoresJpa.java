@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class RepositorioColaboradoresJpa implements RepositorioColaboradores {
-    private static final ZoneId FUSO_FOLHA = ZoneId.of("America/Sao_Paulo");
+    private static final ZoneId FUSO_FOLHA = FolhaProcessadaJpaEntity.FUSO_FOLHA;
 
     private final ColaboradorJpaRepository colaboradores;
     private final FolhaProcessadaJpaRepository folhas;

@@ -1,0 +1,16 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+Folha de Pagamento,folhapagamento,FormatadorMoeda,0,28,0,4,0,5,0,6,0,4
+Folha de Pagamento,folhapagamento,ColaboradorComissionado,0,76,0,2,0,21,0,9,0,8
+Folha de Pagamento,folhapagamento,FolhaPagamentoWebApplication,5,3,0,0,2,1,1,1,1,1
+Folha de Pagamento,folhapagamento,Colaborador,0,113,1,19,0,27,1,19,0,10
+Folha de Pagamento,folhapagamento,ResumoFolha,0,22,0,0,0,3,0,2,0,2
+Folha de Pagamento,folhapagamento,FolhaPagamentoController,26,436,0,26,6,94,0,31,0,18
+Folha de Pagamento,folhapagamento,FolhaPagamentoService,0,169,0,4,0,36,0,14,0,12
+Folha de Pagamento,folhapagamento,ColaboradorJpaEntity,3,173,0,7,1,44,1,17,1,13
+Folha de Pagamento,folhapagamento,ColaboradorForm,0,180,0,10,0,39,0,25,0,19
+Folha de Pagamento,folhapagamento,FolhaProcessadaJpaEntity,0,90,0,2,0,20,0,6,0,5
+Folha de Pagamento,folhapagamento,ColaboradorProducao,0,73,0,2,0,21,0,9,0,8
+Folha de Pagamento,folhapagamento,ColaboradorPadrao,0,22,0,0,0,8,0,6,0,6
+Folha de Pagamento,folhapagamento,ColaboradorJpaEntity.TipoColaborador,0,21,0,0,0,4,0,1,0,1
+Folha de Pagamento,folhapagamento,FolhaProcessada,0,56,0,4,0,7,0,6,0,3
+Folha de Pagamento,folhapagamento,RepositorioColaboradoresJpa,11,218,3,15,3,55,3,20,0,14

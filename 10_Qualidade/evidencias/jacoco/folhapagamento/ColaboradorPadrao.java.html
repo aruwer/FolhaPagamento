@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ColaboradorPadrao.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Folha de Pagamento</a> &gt; <a href="index.source.html" class="el_package">folhapagamento</a> &gt; <span class="el_source">ColaboradorPadrao.java</span></div><h1>ColaboradorPadrao.java</h1><pre class="source lang-java linenums">package folhapagamento;
+
+import java.math.BigDecimal;
+
+public final class ColaboradorPadrao extends Colaborador {
+    public ColaboradorPadrao(String matricula, String nome, double salarioBase) {
+<span class="fc" id="L7">        super(matricula, nome, salarioBase);</span>
+<span class="fc" id="L8">    }</span>
+
+    public ColaboradorPadrao(String matricula, String nome, BigDecimal salarioBase) {
+<span class="fc" id="L11">        super(matricula, nome, salarioBase);</span>
+<span class="fc" id="L12">    }</span>
+
+    @Override
+    public String getTipo() {
+<span class="fc" id="L16">        return &quot;Padrão&quot;;</span>
+    }
+
+    @Override
+    public String getCodigoPersistencia() {
+<span class="fc" id="L21">        return &quot;PADRAO&quot;;</span>
+    }
+
+    @Override
+    public BigDecimal getAdicional() {
+<span class="fc" id="L26">        return BigDecimal.ZERO.setScale(2);</span>
+    }
+
+    @Override
+    public String getDetalhesRemuneracao() {
+<span class="fc" id="L31">        return &quot;Sem remuneração adicional&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

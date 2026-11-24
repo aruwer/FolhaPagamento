@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Colaborador.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Folha de Pagamento</a> &gt; <a href="index.source.html" class="el_package">folhapagamento</a> &gt; <span class="el_source">Colaborador.java</span></div><h1>Colaborador.java</h1><pre class="source lang-java linenums">package folhapagamento;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Objects;
+
+public abstract class Colaborador {
+    private final String matricula;
+    private final String nome;
+    private final BigDecimal salarioBase;
+
+    protected Colaborador(String matricula, String nome, double salarioBase) {
+<span class="fc" id="L13">        this(matricula, nome, BigDecimal.valueOf(salarioBase));</span>
+<span class="fc" id="L14">    }</span>
+
+<span class="fc" id="L16">    protected Colaborador(String matricula, String nome, BigDecimal salarioBase) {</span>
+<span class="fc bfc" id="L17" title="All 4 branches covered.">        if (matricula == null || matricula.isBlank()) {</span>
+<span class="fc" id="L18">            throw new IllegalArgumentException(&quot;A matrícula é obrigatória.&quot;);</span>
+        }
+<span class="fc bfc" id="L20" title="All 4 branches covered.">        if (nome == null || nome.isBlank()) {</span>
+<span class="fc" id="L21">            throw new IllegalArgumentException(&quot;O nome é obrigatório.&quot;);</span>
+        }
+<span class="fc" id="L23">        validarNaoNegativo(salarioBase, &quot;O salário base&quot;);</span>
+<span class="fc" id="L24">        this.matricula = matricula.trim();</span>
+<span class="fc" id="L25">        this.nome = nome.trim();</span>
+<span class="fc" id="L26">        this.salarioBase = valorMonetario(salarioBase);</span>
+<span class="fc" id="L27">    }</span>
+
+    protected static void validarNaoNegativo(double valor, String campo) {
+<span class="fc bfc" id="L30" title="All 4 branches covered.">        if (!Double.isFinite(valor) || valor &lt; 0) {</span>
+<span class="fc" id="L31">            throw new IllegalArgumentException(campo + &quot; não pode ser negativo.&quot;);</span>
+        }
+<span class="fc" id="L33">    }</span>
+
+    protected static void validarNaoNegativo(BigDecimal valor, String campo) {
+<span class="pc bpc" id="L36" title="1 of 4 branches missed.">        if (valor == null || valor.signum() &lt; 0) {</span>
+<span class="fc" id="L37">            throw new IllegalArgumentException(campo + &quot; não pode ser negativo.&quot;);</span>
+        }
+<span class="fc" id="L39">    }</span>
+
+    protected static BigDecimal valorOuZero(BigDecimal valor) {
+<span class="fc bfc" id="L42" title="All 2 branches covered.">        return valor == null ? BigDecimal.ZERO : valor;</span>
+    }
+
+    protected static BigDecimal valorMonetario(BigDecimal valor) {
+<span class="fc" id="L46">        Objects.requireNonNull(valor);</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        if (valor.stripTrailingZeros().scale() &gt; 2) {</span>
+<span class="fc" id="L48">            throw new IllegalArgumentException(&quot;Valores monetários devem ter no máximo duas casas decimais.&quot;);</span>
+        }
+<span class="fc" id="L50">        return valor.setScale(2, RoundingMode.UNNECESSARY);</span>
+    }
+
+    public String getMatricula() {
+<span class="fc" id="L54">        return matricula;</span>
+    }
+
+    public String getNome() {
+<span class="fc" id="L58">        return nome;</span>
+    }
+
+    public BigDecimal getSalarioBase() {
+<span class="fc" id="L62">        return salarioBase;</span>
+    }
+
+    public abstract String getTipo();
+
+    public abstract String getCodigoPersistencia();
+
+    public abstract BigDecimal getAdicional();
+
+    public abstract String getDetalhesRemuneracao();
+
+    public final BigDecimal getSalarioFinal() {
+<span class="fc" id="L74">        return salarioBase.add(getAdicional()).setScale(2, RoundingMode.HALF_UP);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

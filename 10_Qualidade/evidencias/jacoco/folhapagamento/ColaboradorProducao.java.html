@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ColaboradorProducao.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Folha de Pagamento</a> &gt; <a href="index.source.html" class="el_package">folhapagamento</a> &gt; <span class="el_source">ColaboradorProducao.java</span></div><h1>ColaboradorProducao.java</h1><pre class="source lang-java linenums">package folhapagamento;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+public final class ColaboradorProducao extends Colaborador {
+    private final BigDecimal quantidadeProduzida;
+    private final BigDecimal valorPorUnidade;
+
+    public ColaboradorProducao(String matricula, String nome, double salarioBase,
+            double quantidadeProduzida, double valorPorUnidade) {
+<span class="fc" id="L12">        this(matricula, nome, BigDecimal.valueOf(salarioBase),</span>
+<span class="fc" id="L13">                BigDecimal.valueOf(quantidadeProduzida), BigDecimal.valueOf(valorPorUnidade));</span>
+<span class="fc" id="L14">    }</span>
+
+    public ColaboradorProducao(String matricula, String nome, BigDecimal salarioBase,
+            BigDecimal quantidadeProduzida, BigDecimal valorPorUnidade) {
+<span class="fc" id="L18">        super(matricula, nome, salarioBase);</span>
+<span class="fc" id="L19">        quantidadeProduzida = valorOuZero(quantidadeProduzida);</span>
+<span class="fc" id="L20">        valorPorUnidade = valorOuZero(valorPorUnidade);</span>
+<span class="fc" id="L21">        validarNaoNegativo(quantidadeProduzida, &quot;A quantidade produzida&quot;);</span>
+<span class="fc" id="L22">        validarNaoNegativo(valorPorUnidade, &quot;O valor por unidade&quot;);</span>
+<span class="fc" id="L23">        BigDecimal quantidadeNormalizada = quantidadeProduzida.stripTrailingZeros();</span>
+<span class="fc bfc" id="L24" title="All 2 branches covered.">        this.quantidadeProduzida = quantidadeNormalizada.scale() &lt; 0</span>
+<span class="fc" id="L25">                ? quantidadeNormalizada.setScale(0)</span>
+<span class="fc" id="L26">                : quantidadeNormalizada;</span>
+<span class="fc" id="L27">        this.valorPorUnidade = valorMonetario(valorPorUnidade);</span>
+<span class="fc" id="L28">    }</span>
+
+    @Override
+    public String getTipo() {
+<span class="fc" id="L32">        return &quot;Por produção&quot;;</span>
+    }
+
+    @Override
+    public String getCodigoPersistencia() {
+<span class="fc" id="L37">        return &quot;PRODUCAO&quot;;</span>
+    }
+
+    @Override
+    public BigDecimal getAdicional() {
+<span class="fc" id="L42">        return quantidadeProduzida.multiply(valorPorUnidade).setScale(2, RoundingMode.HALF_UP);</span>
+    }
+
+    public BigDecimal getQuantidadeProduzida() {
+<span class="fc" id="L46">        return quantidadeProduzida;</span>
+    }
+
+    public BigDecimal getValorPorUnidade() {
+<span class="fc" id="L50">        return valorPorUnidade;</span>
+    }
+
+    @Override
+    public String getDetalhesRemuneracao() {
+<span class="fc" id="L55">        return &quot;Produção: &quot; + quantidadeProduzida.toPlainString() + &quot; unidades | Valor/unidade: &quot;</span>
+<span class="fc" id="L56">                + valorPorUnidade.toPlainString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -1,0 +1,43 @@
+CT-030-D — Persistência após reinício da aplicação (evidência A3)
+Data/hora: 23/11/2026 21:34:44 -0300
+Banco: PostgreSQL 17 (docker compose, serviço postgres), database dedicada folha_evidencias
+Aplicação: target/folha-pagamento-2.0.0.jar, porta 8090
+
+1) Dados cadastrados via HTTP (formulário) e folhas processadas para 11/2026 e 12/2026.
+2) Processo Java finalizado (taskkill PID 31728); http://localhost:8090 respondeu 000 (indisponível).
+3) Aplicação reiniciada. Log de inicialização:
+   2026-11-23T21:34:38.820-03:00  INFO 25144 --- [           main] o.f.core.internal.command.DbValidate     : Successfully validated 2 migrations (execution time 00:00.054s)
+   2026-11-23T21:34:38.854-03:00  INFO 25144 --- [           main] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+   2026-11-23T21:34:41.438-03:00  INFO 25144 --- [           main] f.FolhaPagamentoWebApplication           : Started FolhaPagamentoWebApplication in 5.531 seconds (process running for 6.138)
+
+4) Consulta direta ao banco após o reinício:
+ matricula |    nome     | tipo_colaborador | salario_base | valor_vendas | percentual_comissao | quantidade_produzida | valor_por_unidade | ativo | excluido 
+-----------+-------------+------------------+--------------+--------------+---------------------+----------------------+-------------------+-------+----------
+ E001      | Ana Souza   | PADRAO           |      3200.00 |              |                     |                      |                   | t     | f
+ E002      | Bruno Lima  | COMISSIONADO     |      2000.00 |     10000.00 |                5.00 |                      |                   | t     | f
+ E003      | Carla Dias  | PRODUCAO         |      1800.00 |              |                     |              120.000 |              2.50 | t     | f
+ E004      | Diego Rocha | COMISSIONADO     |      2000.00 |         0.00 |                0.00 |                      |                   | f     | t
+(4 rows)
+
+ matricula_snapshot | mes | ano  | salario_base_snapshot | adicional_calculado | salario_final 
+--------------------+-----+------+-----------------------+---------------------+---------------
+ E001               |  11 | 2026 |               3000.00 |                0.00 |       3000.00
+ E002               |  11 | 2026 |               2000.00 |              500.00 |       2500.00
+ E003               |  11 | 2026 |               1800.00 |              300.00 |       2100.00
+ E004               |  11 | 2026 |               2000.00 |                0.00 |       2000.00
+ E001               |  12 | 2026 |               3200.00 |                0.00 |       3200.00
+ E002               |  12 | 2026 |               2000.00 |              500.00 |       2500.00
+ E003               |  12 | 2026 |               1800.00 |              300.00 |       2100.00
+(7 rows)
+
+ version |         description         | success 
+---------+-----------------------------+---------
+ 1       | schema                      | t
+ 2       | colaboradores data exclusao | t
+(2 rows)
+
+5) Verificação HTTP após o reinício:
+   GET / -> 200  (contém 'Ana Souza': 1 ocorrência(s); contém 'Diego Rocha' (excluído): 0)
+   GET /folha?mes=11&ano=2026 -> total exibido: R$ 9.600,00
+
+Resultado: dados e snapshots históricos preservados após o reinício. Situação: APROVADO.

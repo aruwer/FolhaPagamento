@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: folhapagamento.CompetenciaEBordasTest
+-------------------------------------------------------------------------------
+Tests run: 0, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 9.366 s -- in folhapagamento.CompetenciaEBordasTest

@@ -64,7 +64,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="empty-state" th:if="${colaboradores.isEmpty()}"><h3>Folha sem registros</h3><p>Cadastre colaboradores para gerar o demonstrativo.</p><a class="button button-primary" th:href="@{/colaboradores/novo}">Cadastrar colaborador</a></div>
+        <div class="empty-state" th:if="${colaboradores.isEmpty()}"><h3>Folha sem registros</h3><p th:text="${aviso != null} ? 'Esta competência ainda não tem folha processada. Use “Processar folha desta competência” acima; entram os colaboradores ativos cadastrados até o fim do mês.' : 'Selecione um mês e um ano válidos para consultar a folha.'">Esta competência ainda não tem folha processada.</p><a class="button button-quiet" th:if="${aviso != null}" th:href="@{/colaboradores/novo}">Cadastrar colaborador</a></div>
     </section>
     <section class="category-summary" th:if="${!resumo.totaisPorCategoria.isEmpty()}">
         <h2>Totais por categoria</h2>

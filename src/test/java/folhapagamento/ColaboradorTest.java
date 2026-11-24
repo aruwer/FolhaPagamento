@@ -123,7 +123,7 @@ class ColaboradorTest {
     }
 
     @Test
-    @DisplayName("Deve calcular valores decimais e altos sem perda intencional de precisão")
+    @DisplayName("RN008: calcula valores decimais e altos com precisão monetária")
     void calculaValoresDecimaisEAltos() {
         ColaboradorComissionado comissionado =
                 new ColaboradorComissionado("012", "Lia", 1_000_000.75, 9_876_543.21, 12.5);
@@ -135,7 +135,7 @@ class ColaboradorTest {
     }
 
     @Test
-    @DisplayName("Deve verificar identidade, hash estável e representação textual herdados")
+    @DisplayName("RN001: mantém identidade, hash e representação textual do colaborador")
     void usaSemanticaDeIdentidadeHerdadaDeObject() {
         Colaborador primeira = new ColaboradorPadrao("014", "Nina", 1_000);
         Colaborador igualEmDados = new ColaboradorPadrao("014", "Nina", 1_000);

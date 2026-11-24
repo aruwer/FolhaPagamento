@@ -74,7 +74,7 @@ class FolhaPagamentoControllerTest {
     }
 
     @Test
-    @DisplayName("GET /colaboradores/novo deve exibir formulário padrão de cadastro")
+    @DisplayName("CT-001, RF001: GET /colaboradores/novo exibe formulário de cadastro")
     void formularioNovo() throws Exception {
         mockMvc.perform(get("/colaboradores/novo"))
                 .andExpect(status().isOk())
@@ -166,7 +166,7 @@ class FolhaPagamentoControllerTest {
     }
 
     @Test
-    @DisplayName("GET /folha/{matricula} inexistente deve redirecionar com mensagem")
+    @DisplayName("CT-027, RF010: demonstrativo inexistente redireciona com mensagem")
     void folhaIndividualInexistente() throws Exception {
         when(service.buscar("999")).thenReturn(Optional.empty());
         when(service.buscarFolha("999", 3, 2099)).thenReturn(Optional.empty());
@@ -191,7 +191,7 @@ class FolhaPagamentoControllerTest {
     }
 
     @Test
-    @DisplayName("GET /folha deve rejeitar competência inválida sem erro interno")
+    @DisplayName("CT-036, RNF002: competência inválida não gera erro interno")
     void folhaComCompetenciaInvalida() throws Exception {
         mockMvc.perform(get("/folha").param("mes", "13").param("ano", "2099"))
                 .andExpect(status().isOk())
@@ -222,7 +222,7 @@ class FolhaPagamentoControllerTest {
     }
 
     @Test
-    @DisplayName("POST de exclusão inexistente deve redirecionar com erro")
+    @DisplayName("CT-025, RF009: exclusão inexistente redireciona com erro")
     void excluirColaboradorInexistente() throws Exception {
         org.mockito.Mockito.doThrow(new IllegalArgumentException("Matrícula não encontrada."))
                 .when(service).excluir("999");
@@ -233,7 +233,7 @@ class FolhaPagamentoControllerTest {
     }
 
     @Test
-    @DisplayName("GET de edição deve carregar formulário ou redirecionar se ausente")
+    @DisplayName("CT-024, RF009: GET de edição carrega formulário ou redireciona")
     void editarColaborador() throws Exception {
         when(service.buscar("001")).thenReturn(Optional.of(new ColaboradorPadrao("001", "Ana", 1_000)));
         when(service.buscar("999")).thenReturn(Optional.empty());
@@ -248,7 +248,7 @@ class FolhaPagamentoControllerTest {
     }
 
     @Test
-    @DisplayName("POST de edição válida deve atualizar cadastro existente")
+    @DisplayName("CT-024, RF009: POST de edição atualiza cadastro existente")
     void atualizarColaborador() throws Exception {
         mockMvc.perform(post("/colaboradores/001")
                         .param("matricula", "999")
@@ -264,7 +264,7 @@ class FolhaPagamentoControllerTest {
     }
 
     @Test
-    @DisplayName("POST de edição deve exibir erro de negócio sem redirecionar")
+    @DisplayName("RF009: POST de edição exibe erro de negócio")
     void erroDeNegocioAoAtualizar() throws Exception {
         org.mockito.Mockito.doThrow(new IllegalArgumentException("Matrícula não encontrada."))
                 .when(service).atualizar(any(Colaborador.class));
@@ -280,7 +280,7 @@ class FolhaPagamentoControllerTest {
     }
 
     @Test
-    @DisplayName("POST de edição inválida deve retornar formulário com erro no campo correspondente")
+    @DisplayName("RNF002: POST de edição inválida indica o campo com erro")
     void atualizarComErroDeValidacao() throws Exception {
         mockMvc.perform(post("/colaboradores/001")
                         .param("matricula", "001")
