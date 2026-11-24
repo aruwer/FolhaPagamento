@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RepositorioColaboradoresJpa.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Folha de Pagamento</a> &gt; <a href="index.source.html" class="el_package">folhapagamento</a> &gt; <span class="el_source">RepositorioColaboradoresJpa.java</span></div><h1>RepositorioColaboradoresJpa.java</h1><pre class="source lang-java linenums">package folhapagamento;
+
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.ZoneId;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+@Component
+public class RepositorioColaboradoresJpa implements RepositorioColaboradores {
+<span class="fc" id="L16">    private static final ZoneId FUSO_FOLHA = ZoneId.of(&quot;America/Sao_Paulo&quot;);</span>
+
+    private final ColaboradorJpaRepository colaboradores;
+    private final FolhaProcessadaJpaRepository folhas;
+
+    public RepositorioColaboradoresJpa(
+            ColaboradorJpaRepository colaboradores,
+<span class="fc" id="L23">            FolhaProcessadaJpaRepository folhas) {</span>
+<span class="fc" id="L24">        this.colaboradores = colaboradores;</span>
+<span class="fc" id="L25">        this.folhas = folhas;</span>
+<span class="fc" id="L26">    }</span>
+
+    @Override
+    @Transactional
+    public void cadastrar(Colaborador colaborador) throws IOException {
+<span class="fc bfc" id="L31" title="All 2 branches covered.">        if (colaboradores.findByMatriculaAndAtivoTrue(colaborador.getMatricula()).isPresent()) {</span>
+<span class="fc" id="L32">            throw new IllegalArgumentException(&quot;Já existe colaborador com essa matrícula.&quot;);</span>
+        }
+        try {
+<span class="fc" id="L35">            colaboradores.save(ColaboradorJpaEntity.de(colaborador));</span>
+<span class="nc" id="L36">        } catch (DataIntegrityViolationException erro) {</span>
+<span class="nc" id="L37">            throw new IllegalArgumentException(&quot;Já existe colaborador com essa matrícula.&quot;, erro);</span>
+<span class="fc" id="L38">        }</span>
+<span class="fc" id="L39">    }</span>
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional&lt;Colaborador&gt; buscar(String matricula) {
+<span class="fc" id="L44">        return colaboradores.findByMatriculaAndAtivoTrue(matricula).map(ColaboradorJpaEntity::paraDominio);</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;Colaborador&gt; listar() {
+<span class="fc" id="L50">        return colaboradores.findAllByAtivoTrueOrderByMatricula().stream()</span>
+<span class="fc" id="L51">                .map(ColaboradorJpaEntity::paraDominio)</span>
+<span class="fc" id="L52">                .toList();</span>
+    }
+
+    @Override
+    @Transactional
+    public void atualizar(Colaborador colaborador) throws IOException {
+<span class="fc" id="L58">        ColaboradorJpaEntity existente = colaboradores.findByMatriculaAndAtivoTrue(colaborador.getMatricula())</span>
+<span class="fc" id="L59">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Matrícula não encontrada.&quot;));</span>
+<span class="fc" id="L60">        existente.atualizarCom(colaborador);</span>
+<span class="fc" id="L61">    }</span>
+
+    @Override
+    @Transactional
+    public void excluir(String matricula) throws IOException {
+<span class="fc" id="L66">        ColaboradorJpaEntity existente = colaboradores.findByMatriculaAndAtivoTrue(matricula)</span>
+<span class="fc" id="L67">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Matrícula não encontrada.&quot;));</span>
+<span class="fc" id="L68">        existente.excluirLogicamente();</span>
+<span class="fc" id="L69">    }</span>
+
+    @Override
+    @Transactional
+    public List&lt;FolhaProcessada&gt; processarFolha(int mes, int ano) {
+<span class="fc" id="L74">        validarCompetencia(mes, ano);</span>
+<span class="fc" id="L75">        YearMonth competencia = YearMonth.of(ano, mes);</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">        for (ColaboradorJpaEntity colaborador : colaboradores.findAll()) {</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">            if (!participaDaCompetencia(colaborador, competencia)) {</span>
+<span class="fc" id="L78">                continue;</span>
+            }
+<span class="fc bfc" id="L80" title="All 2 branches covered.">            if (!folhas.existsByColaborador_IdAndAnoAndMes(colaborador.getId(), ano, mes)) {</span>
+<span class="fc" id="L81">                folhas.save(FolhaProcessadaJpaEntity.criar(colaborador, mes, ano));</span>
+            }
+<span class="fc" id="L83">        }</span>
+<span class="fc" id="L84">        return folhas.findAllByAnoAndMesOrderByMatriculaSnapshot(ano, mes).stream()</span>
+<span class="fc" id="L85">                .map(FolhaProcessadaJpaEntity::paraDominio)</span>
+<span class="fc" id="L86">                .toList();</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;FolhaProcessada&gt; consultarFolha(int mes, int ano) {
+<span class="fc" id="L92">        validarCompetencia(mes, ano);</span>
+<span class="fc" id="L93">        return folhas.findAllByAnoAndMesOrderByMatriculaSnapshot(ano, mes).stream()</span>
+<span class="fc" id="L94">                .map(FolhaProcessadaJpaEntity::paraDominio)</span>
+<span class="fc" id="L95">                .toList();</span>
+    }
+
+    private static boolean participaDaCompetencia(ColaboradorJpaEntity colaborador, YearMonth competencia) {
+<span class="fc" id="L99">        LocalDate inicio = competencia.atDay(1);</span>
+<span class="fc" id="L100">        LocalDate fim = competencia.atEndOfMonth();</span>
+<span class="fc" id="L101">        LocalDate cadastro = colaborador.getCriadoEm().atZoneSameInstant(FUSO_FOLHA).toLocalDate();</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">        if (cadastro.isAfter(fim)) {</span>
+<span class="nc" id="L103">            return false;</span>
+        }
+<span class="fc bfc" id="L105" title="All 2 branches covered.">        if (colaborador.getExcluidoEm() == null) {</span>
+<span class="fc" id="L106">            return true;</span>
+        }
+<span class="fc" id="L108">        LocalDate exclusao = colaborador.getExcluidoEm().atZoneSameInstant(FUSO_FOLHA).toLocalDate();</span>
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">        return !exclusao.isBefore(inicio);</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional&lt;FolhaProcessada&gt; buscarFolha(String matricula, int mes, int ano) {
+<span class="fc" id="L115">        validarCompetencia(mes, ano);</span>
+<span class="fc" id="L116">        return folhas.findByMatriculaSnapshotAndAnoAndMes(matricula, ano, mes)</span>
+<span class="fc" id="L117">                .map(FolhaProcessadaJpaEntity::paraDominio);</span>
+    }
+
+    private void validarCompetencia(int mes, int ano) {
+<span class="pc bpc" id="L121" title="1 of 4 branches missed.">        if (ano &lt; 2000 || ano &gt; 9999) {</span>
+<span class="fc" id="L122">            throw new IllegalArgumentException(&quot;O ano da competência deve estar entre 2000 e 9999.&quot;);</span>
+        }
+        try {
+<span class="fc" id="L125">            YearMonth.of(ano, mes);</span>
+<span class="fc" id="L126">        } catch (java.time.DateTimeException erro) {</span>
+<span class="fc" id="L127">            throw new IllegalArgumentException(&quot;Informe uma competência válida (mês de 1 a 12 e ano válido).&quot;, erro);</span>
+<span class="fc" id="L128">        }</span>
+<span class="fc" id="L129">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

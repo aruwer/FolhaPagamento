@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FolhaPagamentoService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Folha de Pagamento</a> &gt; <a href="index.source.html" class="el_package">folhapagamento</a> &gt; <span class="el_source">FolhaPagamentoService.java</span></div><h1>FolhaPagamentoService.java</h1><pre class="source lang-java linenums">package folhapagamento;
+
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class FolhaPagamentoService {
+    private final RepositorioColaboradores repositorio;
+
+<span class="fc" id="L17">    public FolhaPagamentoService(RepositorioColaboradores repositorio) {</span>
+<span class="fc" id="L18">        this.repositorio = repositorio;</span>
+<span class="fc" id="L19">    }</span>
+
+    public List&lt;Colaborador&gt; listar() {
+<span class="fc" id="L22">        return repositorio.listar();</span>
+    }
+
+    public Optional&lt;Colaborador&gt; buscar(String matricula) {
+<span class="fc" id="L26">        return repositorio.buscar(matricula);</span>
+    }
+
+    public void cadastrar(Colaborador colaborador) throws IOException {
+<span class="fc" id="L30">        repositorio.cadastrar(colaborador);</span>
+<span class="fc" id="L31">    }</span>
+
+    public void atualizar(Colaborador colaborador) throws IOException {
+<span class="fc" id="L34">        repositorio.atualizar(colaborador);</span>
+<span class="fc" id="L35">    }</span>
+
+    public void excluir(String matricula) throws IOException {
+<span class="fc" id="L38">        repositorio.excluir(matricula);</span>
+<span class="fc" id="L39">    }</span>
+
+    public List&lt;FolhaProcessada&gt; processarFolha(int mes, int ano) {
+<span class="fc" id="L42">        return repositorio.processarFolha(mes, ano);</span>
+    }
+
+    public List&lt;FolhaProcessada&gt; consultarFolha(int mes, int ano) {
+<span class="fc" id="L46">        return repositorio.consultarFolha(mes, ano);</span>
+    }
+
+    public Optional&lt;FolhaProcessada&gt; buscarFolha(String matricula, int mes, int ano) {
+<span class="fc" id="L50">        return repositorio.buscarFolha(matricula, mes, ano);</span>
+    }
+
+    public ResumoFolha gerarResumo(int mes, int ano) {
+<span class="fc" id="L54">        return resumir(consultarFolha(mes, ano));</span>
+    }
+
+    public ResumoFolha resumir(List&lt;FolhaProcessada&gt; folha) {
+<span class="fc" id="L58">        Map&lt;String, BigDecimal&gt; totaisPorCategoria = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L59">        Map&lt;String, Integer&gt; quantidadePorCategoria = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        for (FolhaProcessada item : folha) {</span>
+<span class="fc" id="L61">            totaisPorCategoria.merge(item.tipoDescricao(), item.salarioFinal(), BigDecimal::add);</span>
+<span class="fc" id="L62">            quantidadePorCategoria.merge(item.tipoDescricao(), 1, Integer::sum);</span>
+<span class="fc" id="L63">        }</span>
+<span class="fc" id="L64">        BigDecimal total = folha.stream().map(FolhaProcessada::salarioFinal)</span>
+<span class="fc" id="L65">                .reduce(BigDecimal.ZERO, BigDecimal::add);</span>
+<span class="fc" id="L66">        return new ResumoFolha(folha.size(), total, Collections.unmodifiableMap(totaisPorCategoria),</span>
+<span class="fc" id="L67">                Collections.unmodifiableMap(quantidadePorCategoria));</span>
+    }
+
+    public ResumoFolha gerarResumo() {
+<span class="fc" id="L71">        List&lt;Colaborador&gt; colaboradores = listar();</span>
+<span class="fc" id="L72">        Map&lt;String, BigDecimal&gt; totaisPorCategoria = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L73">        Map&lt;String, Integer&gt; quantidadePorCategoria = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">        for (Colaborador colaborador : colaboradores) {</span>
+<span class="fc" id="L75">            totaisPorCategoria.merge(colaborador.getTipo(), colaborador.getSalarioFinal(), BigDecimal::add);</span>
+<span class="fc" id="L76">            quantidadePorCategoria.merge(colaborador.getTipo(), 1, Integer::sum);</span>
+<span class="fc" id="L77">        }</span>
+<span class="fc" id="L78">        BigDecimal total = colaboradores.stream().map(Colaborador::getSalarioFinal)</span>
+<span class="fc" id="L79">                .reduce(BigDecimal.ZERO, BigDecimal::add);</span>
+<span class="fc" id="L80">        return new ResumoFolha(colaboradores.size(), total, Collections.unmodifiableMap(totaisPorCategoria),</span>
+<span class="fc" id="L81">                Collections.unmodifiableMap(quantidadePorCategoria));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
