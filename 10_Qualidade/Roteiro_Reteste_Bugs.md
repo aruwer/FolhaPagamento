@@ -8,6 +8,31 @@
 
 ---
 
+## Execução automatizada já realizada (Bruno CLI + Cypress)
+
+Em 24/11/2026 (01:17), a aplicação real (JAR 2.0.0 + PostgreSQL 17, database limpa `folha_reteste`) foi exercitada por `tests-e2e/scripts/run-all.ps1` ([como executar](../tests-e2e/README.md)). **Esta execução gera as evidências; ela não valida os defeitos.** Quem valida é a pessoa que revisar as evidências abaixo e preencher a seção 4.
+
+| Resultado da execução | Bruno CLI (backend) | Cypress (frontend) |
+| :--- | :--- | :--- |
+| Situação | 31 de 31 requisições aprovadas, 106 asserções | 3 specs, 9 testes, 9 aprovados |
+| Onde | [`bruno/relatorio.html`](../09_Homologacao/evidencias-auto/bruno/relatorio.html), [`resultado.json`](../09_Homologacao/evidencias-auto/bruno/resultado.json) (respostas completas), [`saida.txt`](../09_Homologacao/evidencias-auto/bruno/saida.txt) | [`screenshots/`](../09_Homologacao/evidencias-auto/cypress/screenshots/) e [`videos/`](../09_Homologacao/evidencias-auto/cypress/videos/) |
+
+**O que revisar por defeito** (as pastas dentro de `cypress/screenshots/` têm o nome do spec):
+
+| Defeito | Evidência automatizada | O que conferir |
+| :--- | :--- | :--- |
+| BUG-001 | Bruno `04 CT-015 campos variaveis em branco valem zero (BUG-001)`; Cypress `reteste-bugs.cy.js/BUG-001/` | Cadastro concluído com vendas e comissão em branco; `RT001` aparece no painel com R$ 2.000,00 |
+| BUG-002 | só JUnit (seção 1) | 3 testes PostgreSQL executados, 0 ignorados |
+| BUG-003 | os 31 requests do Bruno, via HTTP real | Todos aprovados |
+| BUG-004 | Cypress `reteste-bugs.cy.js/BUG-004/` e [PDF de impressão](../09_Homologacao/evidencias-auto/impressao/demonstrativo-BR002.pdf) | Adicionais R$ 0,00 no demonstrativo; o PDF traz só os dados, sem menu nem botões |
+| BUG-005 | Bruno `24 BUG-005 reprocessar nao duplica`; Cypress `reteste-bugs.cy.js/BUG-005/`; JUnit em PostgreSQL | Uma linha por colaborador; total inalterado |
+| BUG-006 | Bruno `17 CT-036 competencia nao processada ...`; Cypress `reteste-bugs.cy.js/BUG-006/` | Texto novo "Esta competência ainda não tem folha processada…"; sem o texto antigo |
+| Regressão CT-036/037 | Bruno `27` a `31`; Cypress `regressao-ct036-ct037.cy.js/` | Outra competência vazia; excluído some do painel e o demonstrativo continua sem "Editar cadastro" |
+
+**Limites desta automação:** a impressão (diálogo do navegador) é coberta pelo PDF gerado pelo Edge e pela checagem das regras `@media print` do CSS, não pelo diálogo nativo. A seção 3, passo 3, abaixo também vale para a tela: depois de processada, a competência não oferece mais o botão de processamento.
+
+---
+
 ## 0. Preparação (uma vez)
 
 Use uma database separada para não misturar com os dados de desenvolvimento da equipe.
@@ -86,7 +111,7 @@ Em outro PowerShell, na raiz do projeto (com o Docker ligado):
    ```
 2. Recarregue o demonstrativo de `RT002` duas vezes e consulte o SQL de novo.
 
-**Esperado:** a consulta mostra uma única linha para `RT002` na competência; os valores do demonstrativo são os mesmos antes e depois de recarregar. Reprocessar a mesma competência **não** cria outra linha.
+**Esperado:** a consulta mostra uma única linha para `RT002` na competência; os valores do demonstrativo são os mesmos antes e depois de recarregar. Depois de processada, a tela deixa de oferecer o botão de processamento; a ausência de duplicidade em reprocessamentos é conferida pelos testes automatizados (JUnit e Bruno).
 
 - Comprovação principal (automatizada): `RepositorioColaboradoresPostgresTest.congelaFolhaPorCompetenciaEPreservaHistoricoNoSoftDelete` e `CompetenciaEBordasTest.snapshotLidoEmUtcEhIgualAoGravado` (item 1).
 - [ ] Aprovado  [ ] Reprovado — Obtido: ______________________________________
@@ -107,7 +132,7 @@ Em outro PowerShell, na raiz do projeto (com o Docker ligado):
 
 1. Com `RT002` processado na competência atual (BUG-004), cadastre `RT003`, nome `Reteste Tres`, salário `1500`, tipo **Salário base**.
 2. Em **Folha de pagamento**, consulte um **outro** mês e ano (por exemplo `1` / `2099`). **Esperado:** nenhuma linha de `RT002` nem de `RT003` (CT-036: filtro por mês e ano).
-3. Volte à competência atual e processe novamente. **Esperado:** `RT002` continua com **uma** linha; `RT003` passa a aparecer; o total soma os dois.
+3. Volte à competência atual. **Esperado:** `RT002` continua com **uma** linha e o botão de processamento **não** é mais exibido; `RT003`, cadastrado depois do processamento, **não** aparece nessa folha (a tela só oferece processar competências sem folha). Para ver `RT003`, processe uma competência ainda não processada, como o mês seguinte.
 4. No painel, **Excluir** `RT002`. **Esperado:** `RT002` some da lista de colaboradores ativos.
 5. Abra de novo a folha da competência atual e clique em `Reteste Dois`. **Esperado:** o demonstrativo continua disponível, sem o botão **Editar cadastro** (CT-037: histórico preservado após exclusão lógica).
 

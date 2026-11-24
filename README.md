@@ -72,6 +72,10 @@ Os valores de `.env.example` servem apenas para desenvolvimento local. Se o volu
 
 Executa os testes unitários (JUnit 5, Mockito), de integração com H2 e MockMvc, e de integração com PostgreSQL 17 real via Testcontainers (requer Docker em execução). O JaCoCo gera o relatório em `target/site/jacoco/index.html` e **o build falha se a cobertura de linhas ou de branches ficar abaixo de 80%** (regra aplicada na fase `verify`; `mvnw test` e `mvnw package -DskipTests` não a executam).
 
+## Testes de backend e de frontend (Bruno e Cypress)
+
+Além do JUnit, a pasta [tests-e2e/](tests-e2e/README.md) tem uma coleção Bruno CLI (31 requisições, 106 asserções) e specs Cypress (9 testes) que exercitam a aplicação real e salvam evidências em [09_Homologacao/evidencias-auto/](09_Homologacao/evidencias-auto/). Execução: `cd tests-e2e; npm install; .\scripts\run-all.ps1`.
+
 ## Funcionalidades
 
 - Cadastro, consulta, alteração e exclusão lógica de colaboradores, com matrícula única.

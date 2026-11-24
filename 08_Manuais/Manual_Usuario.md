@@ -104,7 +104,7 @@ O painel lista os colaboradores **ativos** com matrícula, nome, tipo, detalhes 
 3. Se a competência ainda não foi processada, o sistema avisa. Clique em **Processar folha desta competência**.
 4. A folha é gerada com os colaboradores elegíveis: entram os ativos cadastrados até o fim do mês e os excluídos durante o próprio mês.
 
-Processar novamente a mesma competência **não duplica** valores: apenas inclui colaboradores que ainda não tinham folha naquele mês.
+O botão **Processar folha desta competência** só aparece enquanto a competência ainda **não tem folha**. Depois de processada, a folha daquela competência fica fechada na tela: colaboradores cadastrados depois não entram nela por esta interface. (O processamento é idempotente: se a mesma requisição for repetida, não duplica valores.)
 
 ![Competência ainda não processada](../09_Homologacao/evidencias/CT-036/CT-036-A3-competencia-nao-processada-01-2027.png)
 
