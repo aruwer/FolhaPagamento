@@ -1,7 +1,7 @@
 # Relatório de Execução dos Testes Automatizados
 
 **Projeto:** Sistema de Folha de Pagamento · **Versão:** 2.0.0 · **Branch:** `feat/QDS_2.0.0/fechamento-a3`  
-**Data/hora:** 23/11/2026, 21:49 (-03:00)  
+**Data/hora:** 23/11/2026, 22:55 (-03:00)  
 **Comando:** `.\mvnw.cmd clean verify` (saída integral em [log-verify.txt](log-verify.txt))  
 **Ambiente:** Windows 11 Home, JDK 23.0.1 (compilação com `release 17`), Maven 3.9.9 (wrapper), Docker Desktop (Engine 29.9.3), Testcontainers 1.21.4, PostgreSQL 17-alpine  
 **Relatórios brutos:** [surefire-reports/](surefire-reports/) (TXT/XML por classe) e [relatório JaCoCo](../10_Qualidade/evidencias/jacoco/index.html)
@@ -16,7 +16,7 @@
 | Falhas / erros | **0 / 0** |
 | Ignorados | **0** |
 | Verificação de cobertura (`jacoco:check`, mínimo 80%) | **All coverage checks have been met** |
-| Tempo total do build | 36,9 s |
+| Tempo total do build | 35,7 s |
 
 ## 2. Testes unitários (seção 6.3 do enunciado)
 
@@ -54,10 +54,10 @@ Escopo: todas as classes de produção do pacote `folhapagamento` (15 classes), 
 
 | Métrica | Cobertos / total | Resultado | Meta PGQ |
 | :--- | ---: | ---: | :---: |
-| Linhas | 384 / 396 | **96,97%** | ≥ 80% ✔ |
+| Linhas | 385 / 397 | **96,98%** | ≥ 80% ✔ |
 | Branches | 95 / 99 | **95,96%** | ≥ 80% ✔ |
-| Instruções | 1676 / 1721 | **97,39%** | — |
-| Métodos | 123 / 125 | **98,40%** | — |
+| Instruções | 1680 / 1725 | **97,39%** | — |
+| Métodos | 124 / 126 | **98,41%** | — |
 
 ### Por classe
 
@@ -70,11 +70,11 @@ Escopo: todas as classes de produção do pacote `folhapagamento` (15 classes), 
 | `ColaboradorForm` | 39/39 | 10/10 | 180/180 |
 | `ColaboradorJpaEntity` (+ enum `TipoColaborador`) | 48/49 | 7/7 | 194/197 |
 | `FolhaProcessada` | 7/7 | 4/4 | 56/56 |
-| `FolhaProcessadaJpaEntity` | 19/19 | 2/2 | 85/85 |
+| `FolhaProcessadaJpaEntity` | 20/20 | 2/2 | 90/90 |
 | `FolhaPagamentoController` | 94/100 | 26/26 | 436/462 |
 | `FolhaPagamentoService` | 36/36 | 4/4 | 169/169 |
 | `FormatadorMoeda` | 5/5 | 4/4 | 28/28 |
-| `RepositorioColaboradoresJpa` | 55/58 | 15/18 | 219/230 |
+| `RepositorioColaboradoresJpa` | 55/58 | 15/18 | 218/229 |
 | `ResumoFolha` | 3/3 | — | 22/22 |
 | `FolhaPagamentoWebApplication` | 1/3 | — | 3/8 |
 
@@ -85,7 +85,7 @@ As linhas não cobertas são: o método `main` (a aplicação é iniciada pelo c
 | Indicador | Antes | Agora |
 | :--- | :---: | :---: |
 | Testes executados / ignorados | 84 / 3 | 105 / 0 |
-| Linhas | 93,38% | 96,97% |
+| Linhas | 93,38% | 96,98% |
 | Branches | 77,32% (abaixo da meta) | 95,96% |
 | Limite automático de cobertura | não havia | `jacoco:check` ≥ 80% |
 

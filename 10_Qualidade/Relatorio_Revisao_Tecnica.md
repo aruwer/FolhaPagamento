@@ -48,7 +48,7 @@ Observações sem defeito:
 | Evidências | 15 novos arquivos: capturas de CT-023, 026, 027, 030, 032, 036, 038, 040, PDF de impressão e 2 logs de reinício com consultas SQL | `09_Homologacao/evidencias/` |
 | Documentação | Estrutura 01–11; matrizes com status verificado; registro de execução dos 40 casos; relatórios de execução, integração e aceitação; manuais reescritos; métricas; termo de homologação; apresentação | todas as pastas |
 
-**Resultado da verificação após as correções:** `clean verify` — BUILD SUCCESS, 105 testes, 0 falhas, 0 erros, 0 ignorados; cobertura 96,97% (linhas) e 95,96% (branches).
+**Resultado da verificação após as correções:** `clean verify` — BUILD SUCCESS, 105 testes, 0 falhas, 0 erros, 0 ignorados; cobertura 96,98% (linhas) e 95,96% (branches).
 
 ## 4. Lições aprendidas
 

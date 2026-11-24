@@ -8,9 +8,9 @@ Folha de Pagamento,folhapagamento,FolhaPagamentoController,26,436,0,26,6,94,0,31
 Folha de Pagamento,folhapagamento,FolhaPagamentoService,0,169,0,4,0,36,0,14,0,12
 Folha de Pagamento,folhapagamento,ColaboradorJpaEntity,3,173,0,7,1,44,1,17,1,13
 Folha de Pagamento,folhapagamento,ColaboradorForm,0,180,0,10,0,39,0,25,0,19
-Folha de Pagamento,folhapagamento,FolhaProcessadaJpaEntity,0,85,0,2,0,19,0,5,0,4
+Folha de Pagamento,folhapagamento,FolhaProcessadaJpaEntity,0,90,0,2,0,20,0,6,0,5
 Folha de Pagamento,folhapagamento,ColaboradorProducao,0,73,0,2,0,21,0,9,0,8
 Folha de Pagamento,folhapagamento,ColaboradorPadrao,0,22,0,0,0,8,0,6,0,6
 Folha de Pagamento,folhapagamento,ColaboradorJpaEntity.TipoColaborador,0,21,0,0,0,4,0,1,0,1
 Folha de Pagamento,folhapagamento,FolhaProcessada,0,56,0,4,0,7,0,6,0,3
-Folha de Pagamento,folhapagamento,RepositorioColaboradoresJpa,11,219,3,15,3,55,3,20,0,14
+Folha de Pagamento,folhapagamento,RepositorioColaboradoresJpa,11,218,3,15,3,55,3,20,0,14

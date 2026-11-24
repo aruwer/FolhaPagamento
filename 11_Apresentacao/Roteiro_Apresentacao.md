@@ -46,4 +46,4 @@ Deixar abertos: <http://localhost:8081>, o relatório `10_Qualidade/evidencias/j
 | Como incluir um novo tipo de remuneração? | Nova subclasse de `Colaborador` com seu `getAdicional()`; o resto é aditivo (enum, formulário, migration). Demonstrado em CT-033 com `BONUS_FIXO`. |
 | Por que Testcontainers se já há H2? | O H2 não reproduz o PostgreSQL: o BUG-005 (fuso de `data_processamento`) só apareceu no banco real. |
 | Por que "homologado com ressalvas"? | O produto atende a 100% dos requisitos; as ressalvas são de processo (revisões de PR e defeitos fora das Issues), com ações corretivas definidas. |
-| Como a cobertura é garantida? | `jacoco:check` no `pom.xml`: o build falha abaixo de 80% de linhas ou de branches. |
+| Como a cobertura é garantida? | `jacoco:check` no `pom.xml`: o `mvnw verify` falha abaixo de 80% de linhas ou de branches (o `mvnw test` não aplica o limite). |

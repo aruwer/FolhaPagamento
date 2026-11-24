@@ -55,7 +55,7 @@ Build: `.\mvnw.cmd clean verify` → **BUILD SUCCESS**, "All coverage checks hav
 
 | Métrica | Resultado | Meta PGQ | Situação |
 | :--- | :---: | :---: | :---: |
-| Cobertura de linhas | 96,97% | ≥ 80% | ✔ |
+| Cobertura de linhas | 96,98% | ≥ 80% | ✔ |
 | Cobertura de branches | 95,96% | ≥ 80% | ✔ |
 | Defeitos encontrados / corrigidos | 6 / 6 | — | ✔ |
 | Defeitos críticos (S1) e altos (S2) abertos | 0 / 0 | 0 | ✔ |
@@ -79,7 +79,7 @@ Detalhamento e fórmulas: [Metricas_Qualidade.md](Metricas_Qualidade.md).
 ## 6. Conclusões
 
 1. **O produto está conforme.** Todos os 11 RF, 4 RNF e 10 RN estão implementados e verificados por casos executados, com evidência objetiva; os 6 critérios de aceitação da ERS foram aprovados.
-2. **A suíte é completa e confiável.** 105 testes sem falhas e sem testes ignorados, incluindo persistência no mesmo SGBD de produção. A cobertura (96,97% / 95,96%) supera a meta e passou a ser verificada automaticamente a cada build.
+2. **A suíte é completa e confiável.** 105 testes sem falhas e sem testes ignorados, incluindo persistência no mesmo SGBD de produção. A cobertura (96,98% / 95,96%) supera a meta e passou a ser verificada automaticamente a cada build.
 3. **Os defeitos foram tratados.** Seis defeitos encontrados, todos corrigidos e validados, nenhum S1/S2. A execução em PostgreSQL real e a revisão visual das evidências encontraram problemas que a suíte em H2 não mostrava (BUG-005 e BUG-006).
 4. **Há ressalvas de processo, não de produto.** O registro formal de revisão dos PRs (NC-01) e o registro dos defeitos nas Issues (NC-06) não seguiram o PGQ; as ações corretivas estão definidas no [Relatório de Revisão Técnica](Relatorio_Revisao_Tecnica.md).
 5. **Recomendação:** homologar a versão 2.0.0 **com ressalvas de processo** — parecer formal no [Termo de Homologação](../09_Homologacao/Termo_Homologacao.md).

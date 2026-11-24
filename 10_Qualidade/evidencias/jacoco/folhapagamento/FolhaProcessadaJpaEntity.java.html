@@ -21,6 +21,9 @@ import jakarta.persistence.UniqueConstraint;
         name = &quot;uq_folha_colaborador_competencia&quot;,
         columnNames = { &quot;colaborador_id&quot;, &quot;mes&quot;, &quot;ano&quot; }))
 public class FolhaProcessadaJpaEntity {
+    /** Fuso das competências e das datas de processamento (mesmo usado na elegibilidade da folha). */
+<span class="fc" id="L25">    static final ZoneId FUSO_FOLHA = ZoneId.of(&quot;America/Sao_Paulo&quot;);</span>
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -56,38 +59,39 @@ public class FolhaProcessadaJpaEntity {
     @Column(name = &quot;data_processamento&quot;, nullable = false)
     private OffsetDateTime dataProcessamento;
 
-<span class="fc" id="L59">    protected FolhaProcessadaJpaEntity() {</span>
-<span class="fc" id="L60">    }</span>
+<span class="fc" id="L62">    protected FolhaProcessadaJpaEntity() {</span>
+<span class="fc" id="L63">    }</span>
 
     static FolhaProcessadaJpaEntity criar(ColaboradorJpaEntity colaborador, int mes, int ano) {
-<span class="fc" id="L63">        Colaborador dominio = colaborador.paraDominio();</span>
-<span class="fc" id="L64">        FolhaProcessadaJpaEntity folha = new FolhaProcessadaJpaEntity();</span>
-<span class="fc" id="L65">        folha.colaborador = colaborador;</span>
-<span class="fc" id="L66">        folha.matriculaSnapshot = colaborador.getMatricula();</span>
-<span class="fc" id="L67">        folha.nomeSnapshot = colaborador.getNome();</span>
-<span class="fc" id="L68">        folha.tipoSnapshot = colaborador.getTipoColaborador().name();</span>
-<span class="fc" id="L69">        folha.mes = mes;</span>
-<span class="fc" id="L70">        folha.ano = ano;</span>
-<span class="fc" id="L71">        folha.salarioBaseSnapshot = dominio.getSalarioBase();</span>
-<span class="fc" id="L72">        folha.adicionalCalculado = dominio.getAdicional();</span>
-<span class="fc" id="L73">        folha.salarioFinal = dominio.getSalarioFinal();</span>
-<span class="fc" id="L74">        folha.dataProcessamento = OffsetDateTime.now().truncatedTo(ChronoUnit.MICROS);</span>
-<span class="fc" id="L75">        return folha;</span>
+<span class="fc" id="L66">        Colaborador dominio = colaborador.paraDominio();</span>
+<span class="fc" id="L67">        FolhaProcessadaJpaEntity folha = new FolhaProcessadaJpaEntity();</span>
+<span class="fc" id="L68">        folha.colaborador = colaborador;</span>
+<span class="fc" id="L69">        folha.matriculaSnapshot = colaborador.getMatricula();</span>
+<span class="fc" id="L70">        folha.nomeSnapshot = colaborador.getNome();</span>
+<span class="fc" id="L71">        folha.tipoSnapshot = colaborador.getTipoColaborador().name();</span>
+<span class="fc" id="L72">        folha.mes = mes;</span>
+<span class="fc" id="L73">        folha.ano = ano;</span>
+<span class="fc" id="L74">        folha.salarioBaseSnapshot = dominio.getSalarioBase();</span>
+<span class="fc" id="L75">        folha.adicionalCalculado = dominio.getAdicional();</span>
+<span class="fc" id="L76">        folha.salarioFinal = dominio.getSalarioFinal();</span>
+<span class="fc" id="L77">        folha.dataProcessamento = OffsetDateTime.now(FUSO_FOLHA).truncatedTo(ChronoUnit.MICROS);</span>
+<span class="fc" id="L78">        return folha;</span>
     }
 
     FolhaProcessada paraDominio() {
-<span class="fc" id="L79">        return new FolhaProcessada(id, matriculaSnapshot, nomeSnapshot, tipoSnapshot,</span>
+<span class="fc" id="L82">        return new FolhaProcessada(id, matriculaSnapshot, nomeSnapshot, tipoSnapshot,</span>
                 mes, ano, salarioBaseSnapshot, adicionalCalculado, salarioFinal,
-<span class="fc" id="L81">                noFusoDoSistema(dataProcessamento));</span>
+<span class="fc" id="L84">                noFusoDaFolha(dataProcessamento));</span>
     }
 
     /**
-     * O PostgreSQL devolve TIMESTAMP WITH TIME ZONE em UTC. Normalizar para o fuso
-     * do sistema mantém o snapshot igual antes e depois de persistido (BUG-005).
+     * O PostgreSQL devolve TIMESTAMP WITH TIME ZONE em UTC. Gravar e ler sempre em
+     * {@link #FUSO_FOLHA} mantém o snapshot igual antes e depois de persistido, qualquer
+     * que seja o fuso da máquina (BUG-005).
      */
-    static OffsetDateTime noFusoDoSistema(OffsetDateTime instante) {
-<span class="fc bfc" id="L89" title="All 2 branches covered.">        return instante == null ? null</span>
-<span class="fc" id="L90">                : instante.atZoneSameInstant(ZoneId.systemDefault()).toOffsetDateTime();</span>
+    static OffsetDateTime noFusoDaFolha(OffsetDateTime instante) {
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        return instante == null ? null</span>
+<span class="fc" id="L94">                : instante.atZoneSameInstant(FUSO_FOLHA).toOffsetDateTime();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

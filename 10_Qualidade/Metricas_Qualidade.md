@@ -8,7 +8,7 @@
 
 | # | Métrica (PGQ 6.4) | Fórmula | Resultado | Meta | Situação |
 | :---: | :--- | :--- | :---: | :---: | :---: |
-| 1 | Cobertura de testes (linhas) | 384 / 396 × 100 | **96,97%** | ≥ 80% | ✔ Atingida |
+| 1 | Cobertura de testes (linhas) | 385 / 397 × 100 | **96,98%** | ≥ 80% | ✔ Atingida |
 | — | Cobertura de branches (complementar) | 95 / 99 × 100 | **95,96%** | ≥ 80% | ✔ Atingida |
 | 2 | Defeitos críticos abertos (S1) | Σ S1 com status ≠ Validado/Fechado | **0** | 0 | ✔ Atingida |
 | 3 | Requisitos funcionais atendidos | 11 RF aprovados / 11 RF na ERS × 100 | **100%** | 100% | ✔ Atingida |
@@ -19,14 +19,14 @@
 
 | Medida | Cobertos / total | Resultado |
 | :--- | ---: | ---: |
-| Linhas | 384 / 396 | **96,97%** |
+| Linhas | 385 / 397 | **96,98%** |
 | Branches | 95 / 99 | **95,96%** |
-| Instruções | 1676 / 1721 | **97,39%** |
-| Métodos | 123 / 125 | **98,40%** |
+| Instruções | 1680 / 1725 | **97,39%** |
+| Métodos | 124 / 126 | **98,41%** |
 
-Escopo: 15 classes de produção, sem exclusões. O build aplica `jacoco:check` (linhas e branches ≥ 80%) e falha se a meta não for atingida. Cobertura por classe no [relatório de execução](../04_Testes/Relatorio_Execucao_Testes.md#por-classe).
+Escopo: 15 classes de produção, sem exclusões. O `verify` aplica `jacoco:check` (linhas e branches ≥ 80%; `mvnw test` não o aplica) e falha se a meta não for atingida. Cobertura por classe no [relatório de execução](../04_Testes/Relatorio_Execucao_Testes.md#por-classe).
 
-**Evolução:** linhas 93,38% → 96,97%; branches 77,32% → 95,96% (a cobertura de branches estava abaixo da meta antes da revisão de fechamento — NC-02).
+**Evolução:** linhas 93,38% → 96,98%; branches 77,32% → 95,96% (a cobertura de branches estava abaixo da meta antes da revisão de fechamento — NC-02).
 
 ## 2. Testes
 

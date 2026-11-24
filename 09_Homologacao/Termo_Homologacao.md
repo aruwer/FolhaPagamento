@@ -20,7 +20,7 @@ Declaramos, para os devidos fins, que a versão 2.0.0 do Sistema de Folha de Pag
 | Cenários de aceitação | 15/15 aprovados ([Relatorio_Testes_Aceitacao.md](Relatorio_Testes_Aceitacao.md)) |
 | Casos de teste CT-001 a CT-040 | 40/40 executados e aprovados |
 | Testes automatizados | 105/105 aprovados, 0 ignorados |
-| Cobertura de código | 96,97% linhas · 95,96% branches (meta ≥ 80%) |
+| Cobertura de código | 96,98% linhas · 95,96% branches (meta ≥ 80%) |
 | Defeitos | 6 encontrados, 6 corrigidos e validados; 0 abertos; 0 críticos/altos |
 
 ## 2. Critérios de aprovação do PGQ (seção 6.6)

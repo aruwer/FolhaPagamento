@@ -55,7 +55,7 @@ Detalhado, com diagrama ER e regras do banco, em [06_Banco_Dados/README.md](../0
 
 - `colaboradores`: matrícula única, nome, `tipo_colaborador`, salário base e campos variáveis por tipo (restrição `ck_colaborador_campos_por_tipo`), `ativo`, `criado_em`, `atualizado_em`, `excluido_em`.
 - `folhas_processadas`: snapshot (matrícula, nome, tipo, base, adicional, final, `data_processamento`) por colaborador/mês/ano, com FK para `colaboradores`.
-- Valores monetários em `NUMERIC(12,2)` no banco e `BigDecimal` com escala 2 no Java; datas em `TIMESTAMP WITH TIME ZONE`. Ao ler, `FolhaProcessadaJpaEntity` normaliza a data para o fuso do sistema (correção do BUG-005).
+- Valores monetários em `NUMERIC(12,2)` no banco e `BigDecimal` com escala 2 no Java; datas em `TIMESTAMP WITH TIME ZONE`. Ao ler, `FolhaProcessadaJpaEntity` normaliza a data para o fuso da folha (America/Sao_Paulo) (correção do BUG-005).
 
 ---
 
@@ -140,7 +140,7 @@ Passo a passo verificado em CT-033 ([roteiro](../09_Homologacao/Roteiro_Testes_M
 
 ### 6.3. Qualidade antes de integrar (PGQ)
 - Branch `feat|fix|docs|test/QDS_2.0.0/<descricao>` e commit semântico.
-- `.\mvnw.cmd clean verify` sem falhas; cobertura ≥ 80% (o build falha abaixo disso).
+- `.\mvnw.cmd clean verify` sem falhas; cobertura ≥ 80% (o `verify` falha abaixo disso; `mvnw test` não aplica o limite).
 - Pull Request com revisão aprovada no GitHub antes do *merge* (ver não conformidade NC-01 no [Relatório de Revisão Técnica](../10_Qualidade/Relatorio_Revisao_Tecnica.md)).
 - Defeitos registrados em [Registro_Defeitos.md](../10_Qualidade/Registro_Defeitos.md) e nas Issues.
 

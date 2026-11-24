@@ -25,7 +25,7 @@
 | `RepositorioColaboradoresTest.processamentoELeituraSaoIdempotentesERejeitamCompetenciaInvalida` | Processar a mesma competência duas vezes | Nenhum snapshot duplicado; competência inválida rejeitada | Aprovado |
 | `FolhaPagamentoWebApplicationTest.iniciaRepositorioJPA` | Inicializar o contexto completo | Contexto sobe com JPA e injeta `RepositorioColaboradores` | Aprovado |
 
-**Defeito encontrado:** a primeira execução real em PostgreSQL revelou o **BUG-005** — o `data_processamento` voltava do banco em UTC e o snapshot lido deixava de ser igual ao gravado. Corrigido em `FolhaProcessadaJpaEntity.noFusoDoSistema` e coberto por `CompetenciaEBordasTest.Dominio.normalizaDataDeProcessamento`. Esse defeito não aparecia com H2, o que justifica a execução em PostgreSQL real.
+**Defeito encontrado:** a primeira execução real em PostgreSQL revelou o **BUG-005** — o `data_processamento` voltava do banco em UTC e o snapshot lido deixava de ser igual ao gravado. Corrigido em `FolhaProcessadaJpaEntity.noFusoDaFolha` e coberto por `CompetenciaEBordasTest.Dominio.normalizaDataDeProcessamento`. Esse defeito não aparecia com H2, o que justifica a execução em PostgreSQL real.
 
 ## 3. Fluxos de negócio (HTTP ponta a ponta)
 

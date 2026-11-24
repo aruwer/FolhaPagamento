@@ -46,7 +46,7 @@ Toda entrega passa por inspeção técnica cruzada antes do *merge* na branch `m
 - [ ] Código aderente ao padrão MVC, sem duplicação de regras de negócio.
 - [ ] Validações de entrada (`ColaboradorForm` / domínio) e tratamento de exceções verificados.
 - [ ] Build e suíte de testes (`.\mvnw.cmd clean verify` ou `./mvnw clean verify`) executados sem falhas ou erros; testes ignorados devem ter justificativa e plano de execução.
-- [ ] Relatório de cobertura JaCoCo verificado em relação à meta de 80%; desde a A3 o `pom.xml` aplica `jacoco:check` (linhas e branches ≥ 80%) e o build falha abaixo disso.
+- [ ] Relatório de cobertura JaCoCo verificado em relação à meta de 80%; desde a A3 o `pom.xml` aplica `jacoco:check` (linhas e branches ≥ 80%) na fase `verify`, que falha abaixo disso.
 - [ ] Documentação e diagramas UML atualizados caso haja mudança estrutural.
 - [ ] Zero defeitos críticos (S1) ou altos (S2) abertos vinculados à funcionalidade.
 

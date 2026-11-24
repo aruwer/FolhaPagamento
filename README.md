@@ -14,7 +14,7 @@ Aplicação web Java (Spring Boot + PostgreSQL) para cadastrar colaboradores, ca
 | :--- | :--- | :--- |
 | Build `.\mvnw.cmd clean verify` | **BUILD SUCCESS** | sucesso |
 | Testes automatizados (unitários + integração) | **105 executados, 105 aprovados, 0 falhas, 0 ignorados** | 100% |
-| Cobertura de linhas / branches (JaCoCo) | **96,97% / 95,96%** | ≥ 80% (verificado automaticamente no build) |
+| Cobertura de linhas / branches (JaCoCo) | **96,98% / 95,96%** | ≥ 80% (verificado automaticamente no build) |
 | Casos de teste especificados executados e aprovados | **40 / 40** | 100% |
 | Requisitos funcionais atendidos | **11 / 11 (100%)** | 100% |
 | Defeitos S1/S2 abertos | **0** | 0 |
@@ -70,7 +70,7 @@ Os valores de `.env.example` servem apenas para desenvolvimento local. Se o volu
 .\mvnw.cmd clean verify
 ```
 
-Executa os testes unitários (JUnit 5, Mockito), de integração com H2 e MockMvc, e de integração com PostgreSQL 17 real via Testcontainers (requer Docker em execução). O JaCoCo gera o relatório em `target/site/jacoco/index.html` e **o build falha se a cobertura de linhas ou de branches ficar abaixo de 80%**.
+Executa os testes unitários (JUnit 5, Mockito), de integração com H2 e MockMvc, e de integração com PostgreSQL 17 real via Testcontainers (requer Docker em execução). O JaCoCo gera o relatório em `target/site/jacoco/index.html` e **o build falha se a cobertura de linhas ou de branches ficar abaixo de 80%** (regra aplicada na fase `verify`; `mvnw test` e `mvnw package -DskipTests` não a executam).
 
 ## Funcionalidades
 
