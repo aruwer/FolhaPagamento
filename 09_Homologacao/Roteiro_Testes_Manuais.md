@@ -30,9 +30,9 @@ Para reiniciar com dados limpos, pare a aplicação e rode `docker compose down 
 
 | Caso | Título | Executor | Data | Navegador | Resultado | Defeito |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| CT-030 (A/B/C) | Persistência, histórico e regras no PostgreSQL | Equipe (vídeos anexados no commit `9674717`) | 23/11/2026 | Opera | Aprovado (vídeos da equipe + 3 testes Testcontainers aprovados) | - |
+| CT-030 (A/B/C) | Persistência, histórico e regras no PostgreSQL | Amanda Ruwer (revisão dos vídeos A, B e C) | 23/11/2026 | Opera | Aprovado (vídeos revisados + 3 testes Testcontainers aprovados) | - |
 | CT-030 (T130) e CT-030-D | Recuperar dados após reinício | Revisão de fechamento A3 | 23/11/2026 | Edge 158 (headless) | Aprovado | - |
-| CT-032 | Fluxo de usabilidade | Equipe (observação registrada abaixo; vídeos CT-032-01 a 05) | 23/11/2026 | Opera | Aprovado | - |
+| CT-032 | Fluxo de usabilidade | Pessoa externa ao projeto (observação registrada abaixo); vídeos CT-032-01 a 05 revisados por Amanda Ruwer | 23/11/2026 | Opera | Aprovado | - |
 | CT-033 | Extensibilidade do domínio (inspeção) | Revisão de fechamento A3 + teste automatizado | 23/11/2026 | - | Aprovado (sujeito à assinatura da revisora) | - |
 | CT-034 | Campos conforme a categoria | Amanda Ruwer | 23/11/2026 | Opera | Aprovado | - |
 | CT-035 | Validação compreensível | Amanda Ruwer | 23/11/2026 | Opera | Aprovado | - |
@@ -137,6 +137,7 @@ Este roteiro verifica manualmente, pela aplicação ligada ao PostgreSQL do Dock
 Preencha após executar todos os passos. Se algum passo falhar, marque **Reprovado**, guarde a evidência e registre um defeito; se não puder executar, marque **Bloqueado** e explique o motivo.
 
 - **Resultado geral:** [X] Aprovado [ ] Reprovado [ ] Bloqueado
+- **Revisão dos vídeos:** vídeos revisados por Amanda Ruwer em 23/11/2026, todos os passos aprovados; conferência complementar por amostragem de quadros (IA) apontou diferenças de dados em relação ao roteiro, sem alterar o resultado. Diferenças observadas: no vídeo A o cadastro usa nome "Teste" e tipo Padrão (o roteiro cita "Teste PostgreSQL" e Comissionado); no vídeo B a exclusão e o demonstrativo posterior não foram localizados na amostra de quadros (os dois snapshots e a ausência do colaborador na lista aparecem); no vídeo C o valor final R$ 1,01 aparece na lista e não no demonstrativo individual.
 - **Resultado obtido:** vídeos CT-030-A, CT-030-B e CT-030-C registrados pela equipe com os passos acima. Os mesmos comportamentos (duplicidade, congelamento da competência, histórico após exclusão, arredondamento e competência inválida) foram confirmados de forma automatizada em PostgreSQL 17 real: `RepositorioColaboradoresPostgresTest` — 3 testes, 0 falhas ([log](../04_Testes/log-verify.txt)).
 - **Executor:** equipe (vídeos) e suíte automatizada
 - **Data:** 23/11/2026
@@ -250,7 +251,8 @@ Esse caso é observado com uma pessoa que não participou do desenvolvimento. El
 - **Resultado esperado:** todas as tarefas concluídas, com as dificuldades registradas.
 - **Evidência:** anotações da observação (tabela acima) e vídeos [CT-032-01 a CT-032-05](evidencias/CT-032/); captura complementar do [formulário de cadastro](evidencias/CT-032/CT-032-A3-formulario-cadastro.png)
 - **Situação:** [X] Aprovado  [ ] Reprovado  [ ] Bloqueado
-- **Observações:** __
+- **Quem executou:** pessoa que não participou do desenvolvimento (informado por Amanda Ruwer; nome e data da execução: ______________________). O resultado foi o mesmo da gravação anterior e, por isso, **os vídeos anexados são os da gravação anterior**, não necessariamente da execução dessa pessoa.
+- **Observações da revisão dos vídeos:** o roteiro aparece aberto no editor durante a gravação e os dados das tarefas são copiados dele. As cinco tarefas aparecem concluídas (FP132, FP133, FP134, edição de nome e abertura da folha). Na tarefa 4 o vídeo edita um cadastro existente em vez de corrigir um formulário em branco, o que coincide com a dificuldade descrita na tabela. Os tempos do vídeo (20, 34, 32, 20 e 41 s) são próximos dos registrados.
 
 ---
 
