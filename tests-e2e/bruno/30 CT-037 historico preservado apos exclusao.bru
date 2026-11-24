@@ -1,0 +1,26 @@
+meta {
+  name: 30 CT-037 historico preservado apos exclusao
+  type: http
+  seq: 30
+}
+
+get {
+  url: {{baseUrl}}/folha/BR004?mes={{mes}}&ano={{ano}}
+  body: none
+  auth: none
+}
+
+tests {
+  test("HTTP 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("corpo contém \"Diego Sem Vendas\"", function() {
+    expect(String(res.getBody())).to.include("Diego Sem Vendas");
+  });
+  test("snapshot R$ 2.000,00", function() {
+    expect(String(res.getBody())).to.match(/R\$\s*2\.000,00/);
+  });
+  test("sem botão Editar para colaborador inativo", function() {
+    expect(String(res.getBody())).to.not.include("Editar cadastro");
+  });
+}

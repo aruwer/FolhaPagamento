@@ -1,0 +1,171 @@
+<?xml version="1.0"?>
+<testsuites>
+  <testsuite name="01 CT-001 cadastra padrao" file="01 CT-001 cadastra padrao.bru" errors="0" failures="0" skipped="0" tests="2" timestamp="2026-11-24T04:17:09.221" hostname="DESKTOP-NK7VCHL" time="0.337">
+    <testcase name="HTTP 200" status="pass" classname="01 CT-001 cadastra padrao" time="0.169"/>
+    <testcase name="cadastro aceito (sem erros de formulário)" status="pass" classname="01 CT-001 cadastra padrao" time="0.169"/>
+  </testsuite>
+  <testsuite name="02 CT-003 cadastra comissionado" file="02 CT-003 cadastra comissionado.bru" errors="0" failures="0" skipped="0" tests="2" timestamp="2026-11-24T04:17:09.223" hostname="DESKTOP-NK7VCHL" time="0.118">
+    <testcase name="HTTP 200" status="pass" classname="02 CT-003 cadastra comissionado" time="0.059"/>
+    <testcase name="cadastro aceito (sem erros de formulário)" status="pass" classname="02 CT-003 cadastra comissionado" time="0.059"/>
+  </testsuite>
+  <testsuite name="03 CT-006 cadastra producao" file="03 CT-006 cadastra producao.bru" errors="0" failures="0" skipped="0" tests="2" timestamp="2026-11-24T04:17:09.223" hostname="DESKTOP-NK7VCHL" time="0.123">
+    <testcase name="HTTP 200" status="pass" classname="03 CT-006 cadastra producao" time="0.061"/>
+    <testcase name="cadastro aceito (sem erros de formulário)" status="pass" classname="03 CT-006 cadastra producao" time="0.061"/>
+  </testsuite>
+  <testsuite name="04 CT-015 campos variaveis em branco valem zero (BUG-001)" file="04 CT-015 campos variaveis em branco valem zero (BUG-001).bru" errors="0" failures="0" skipped="0" tests="2" timestamp="2026-11-24T04:17:09.223" hostname="DESKTOP-NK7VCHL" time="0.139">
+    <testcase name="HTTP 200" status="pass" classname="04 CT-015 campos variaveis em branco valem zero (BUG-001)" time="0.069"/>
+    <testcase name="cadastro aceito (sem erros de formulário)" status="pass" classname="04 CT-015 campos variaveis em branco valem zero (BUG-001)" time="0.069"/>
+  </testsuite>
+  <testsuite name="05 CT-009 matricula duplicada" file="05 CT-009 matricula duplicada.bru" errors="0" failures="0" skipped="0" tests="3" timestamp="2026-11-24T04:17:09.223" hostname="DESKTOP-NK7VCHL" time="0.109">
+    <testcase name="HTTP 200" status="pass" classname="05 CT-009 matricula duplicada" time="0.036"/>
+    <testcase name="formulário devolvido com erros" status="pass" classname="05 CT-009 matricula duplicada" time="0.036"/>
+    <testcase name="corpo contém &quot;Já existe colaborador com essa matrícula.&quot;" status="pass" classname="05 CT-009 matricula duplicada" time="0.036"/>
+  </testsuite>
+  <testsuite name="06 CT-010 matricula com pontuacao" file="06 CT-010 matricula com pontuacao.bru" errors="0" failures="0" skipped="0" tests="3" timestamp="2026-11-24T04:17:09.223" hostname="DESKTOP-NK7VCHL" time="0.093">
+    <testcase name="HTTP 200" status="pass" classname="06 CT-010 matricula com pontuacao" time="0.031"/>
+    <testcase name="formulário devolvido com erros" status="pass" classname="06 CT-010 matricula com pontuacao" time="0.031"/>
+    <testcase name="corpo contém &quot;A matrícula deve conter apenas letras sem acento e números.&quot;" status="pass" classname="06 CT-010 matricula com pontuacao" time="0.031"/>
+  </testsuite>
+  <testsuite name="07 CT-011 matricula em branco" file="07 CT-011 matricula em branco.bru" errors="0" failures="0" skipped="0" tests="3" timestamp="2026-11-24T04:17:09.223" hostname="DESKTOP-NK7VCHL" time="0.092">
+    <testcase name="HTTP 200" status="pass" classname="07 CT-011 matricula em branco" time="0.031"/>
+    <testcase name="formulário devolvido com erros" status="pass" classname="07 CT-011 matricula em branco" time="0.031"/>
+    <testcase name="corpo contém &quot;Informe a matrícula.&quot;" status="pass" classname="07 CT-011 matricula em branco" time="0.031"/>
+  </testsuite>
+  <testsuite name="08 CT-012 nome em branco" file="08 CT-012 nome em branco.bru" errors="0" failures="0" skipped="0" tests="3" timestamp="2026-11-24T04:17:09.223" hostname="DESKTOP-NK7VCHL" time="0.093">
+    <testcase name="HTTP 200" status="pass" classname="08 CT-012 nome em branco" time="0.031"/>
+    <testcase name="formulário devolvido com erros" status="pass" classname="08 CT-012 nome em branco" time="0.031"/>
+    <testcase name="corpo contém &quot;Informe o nome.&quot;" status="pass" classname="08 CT-012 nome em branco" time="0.031"/>
+  </testsuite>
+  <testsuite name="09 CT-013 salario em branco" file="09 CT-013 salario em branco.bru" errors="0" failures="0" skipped="0" tests="3" timestamp="2026-11-24T04:17:09.223" hostname="DESKTOP-NK7VCHL" time="0.094">
+    <testcase name="HTTP 200" status="pass" classname="09 CT-013 salario em branco" time="0.031"/>
+    <testcase name="formulário devolvido com erros" status="pass" classname="09 CT-013 salario em branco" time="0.031"/>
+    <testcase name="corpo contém &quot;Informe o salário base.&quot;" status="pass" classname="09 CT-013 salario em branco" time="0.031"/>
+  </testsuite>
+  <testsuite name="10 CT-014 salario negativo" file="10 CT-014 salario negativo.bru" errors="0" failures="0" skipped="0" tests="3" timestamp="2026-11-24T04:17:09.223" hostname="DESKTOP-NK7VCHL" time="0.080">
+    <testcase name="HTTP 200" status="pass" classname="10 CT-014 salario negativo" time="0.027"/>
+    <testcase name="formulário devolvido com erros" status="pass" classname="10 CT-014 salario negativo" time="0.027"/>
+    <testcase name="corpo contém &quot;O salário base não pode ser negativo.&quot;" status="pass" classname="10 CT-014 salario negativo" time="0.027"/>
+  </testsuite>
+  <testsuite name="11 CT-017 vendas negativas" file="11 CT-017 vendas negativas.bru" errors="0" failures="0" skipped="0" tests="3" timestamp="2026-11-24T04:17:09.224" hostname="DESKTOP-NK7VCHL" time="0.089">
+    <testcase name="HTTP 200" status="pass" classname="11 CT-017 vendas negativas" time="0.030"/>
+    <testcase name="formulário devolvido com erros" status="pass" classname="11 CT-017 vendas negativas" time="0.030"/>
+    <testcase name="corpo contém &quot;O valor de vendas não pode ser negativo.&quot;" status="pass" classname="11 CT-017 vendas negativas" time="0.030"/>
+  </testsuite>
+  <testsuite name="12 CT-018 percentual negativo" file="12 CT-018 percentual negativo.bru" errors="0" failures="0" skipped="0" tests="3" timestamp="2026-11-24T04:17:09.224" hostname="DESKTOP-NK7VCHL" time="0.081">
+    <testcase name="HTTP 200" status="pass" classname="12 CT-018 percentual negativo" time="0.027"/>
+    <testcase name="formulário devolvido com erros" status="pass" classname="12 CT-018 percentual negativo" time="0.027"/>
+    <testcase name="corpo contém &quot;A comissão não pode ser negativa.&quot;" status="pass" classname="12 CT-018 percentual negativo" time="0.027"/>
+  </testsuite>
+  <testsuite name="13 CT-018b percentual acima de 100" file="13 CT-018b percentual acima de 100.bru" errors="0" failures="0" skipped="0" tests="3" timestamp="2026-11-24T04:17:09.224" hostname="DESKTOP-NK7VCHL" time="0.090">
+    <testcase name="HTTP 200" status="pass" classname="13 CT-018b percentual acima de 100" time="0.030"/>
+    <testcase name="formulário devolvido com erros" status="pass" classname="13 CT-018b percentual acima de 100" time="0.030"/>
+    <testcase name="corpo contém &quot;A comissão não pode ser maior que 100%.&quot;" status="pass" classname="13 CT-018b percentual acima de 100" time="0.030"/>
+  </testsuite>
+  <testsuite name="14 CT-021 quantidade negativa" file="14 CT-021 quantidade negativa.bru" errors="0" failures="0" skipped="0" tests="3" timestamp="2026-11-24T04:17:09.224" hostname="DESKTOP-NK7VCHL" time="0.078">
+    <testcase name="HTTP 200" status="pass" classname="14 CT-021 quantidade negativa" time="0.026"/>
+    <testcase name="formulário devolvido com erros" status="pass" classname="14 CT-021 quantidade negativa" time="0.026"/>
+    <testcase name="corpo contém &quot;A quantidade produzida não pode ser negativa.&quot;" status="pass" classname="14 CT-021 quantidade negativa" time="0.026"/>
+  </testsuite>
+  <testsuite name="15 CT-022 valor por unidade negativo" file="15 CT-022 valor por unidade negativo.bru" errors="0" failures="0" skipped="0" tests="3" timestamp="2026-11-24T04:17:09.224" hostname="DESKTOP-NK7VCHL" time="0.093">
+    <testcase name="HTTP 200" status="pass" classname="15 CT-022 valor por unidade negativo" time="0.031"/>
+    <testcase name="formulário devolvido com erros" status="pass" classname="15 CT-022 valor por unidade negativo" time="0.031"/>
+    <testcase name="corpo contém &quot;O valor por unidade não pode ser negativo.&quot;" status="pass" classname="15 CT-022 valor por unidade negativo" time="0.031"/>
+  </testsuite>
+  <testsuite name="16 CT-023 lista as tres categorias" file="16 CT-023 lista as tres categorias.bru" errors="0" failures="0" skipped="0" tests="10" timestamp="2026-11-24T04:17:09.224" hostname="DESKTOP-NK7VCHL" time="0.126">
+    <testcase name="HTTP 200" status="pass" classname="16 CT-023 lista as tres categorias" time="0.013"/>
+    <testcase name="corpo contém &quot;BR001&quot;" status="pass" classname="16 CT-023 lista as tres categorias" time="0.013"/>
+    <testcase name="corpo contém &quot;BR002&quot;" status="pass" classname="16 CT-023 lista as tres categorias" time="0.013"/>
+    <testcase name="corpo contém &quot;BR003&quot;" status="pass" classname="16 CT-023 lista as tres categorias" time="0.013"/>
+    <testcase name="corpo contém &quot;BR004&quot;" status="pass" classname="16 CT-023 lista as tres categorias" time="0.013"/>
+    <testcase name="corpo contém &quot;Padrão&quot;" status="pass" classname="16 CT-023 lista as tres categorias" time="0.013"/>
+    <testcase name="corpo contém &quot;Comissionado&quot;" status="pass" classname="16 CT-023 lista as tres categorias" time="0.013"/>
+    <testcase name="corpo contém &quot;Por produção&quot;" status="pass" classname="16 CT-023 lista as tres categorias" time="0.013"/>
+    <testcase name="registros inválidos não foram gravados" status="pass" classname="16 CT-023 lista as tres categorias" time="0.013"/>
+    <testcase name="corpo NÃO contém &quot;BR-010&quot;" status="pass" classname="16 CT-023 lista as tres categorias" time="0.013"/>
+  </testsuite>
+  <testsuite name="17 CT-036 competencia nao processada orienta processar (BUG-006)" file="17 CT-036 competencia nao processada orienta processar (BUG-006).bru" errors="0" failures="0" skipped="0" tests="5" timestamp="2026-11-24T04:17:09.224" hostname="DESKTOP-NK7VCHL" time="0.104">
+    <testcase name="HTTP 200" status="pass" classname="17 CT-036 competencia nao processada orienta processar (BUG-006)" time="0.021"/>
+    <testcase name="corpo contém &quot;ainda não foi processada&quot;" status="pass" classname="17 CT-036 competencia nao processada orienta processar (BUG-006)" time="0.021"/>
+    <testcase name="corpo contém &quot;Esta competência ainda não tem folha processada&quot;" status="pass" classname="17 CT-036 competencia nao processada orienta processar (BUG-006)" time="0.021"/>
+    <testcase name="texto antigo (BUG-006) não aparece" status="pass" classname="17 CT-036 competencia nao processada orienta processar (BUG-006)" time="0.021"/>
+    <testcase name="total R$ 0,00" status="pass" classname="17 CT-036 competencia nao processada orienta processar (BUG-006)" time="0.021"/>
+  </testsuite>
+  <testsuite name="18 CT-036 competencia invalida mes 13" file="18 CT-036 competencia invalida mes 13.bru" errors="0" failures="0" skipped="0" tests="3" timestamp="2026-11-24T04:17:09.224" hostname="DESKTOP-NK7VCHL" time="0.092">
+    <testcase name="HTTP 200" status="pass" classname="18 CT-036 competencia invalida mes 13" time="0.031"/>
+    <testcase name="corpo contém &quot;Informe uma competência válida.&quot;" status="pass" classname="18 CT-036 competencia invalida mes 13" time="0.031"/>
+    <testcase name="corpo contém &quot;Selecione um mês e um ano válidos&quot;" status="pass" classname="18 CT-036 competencia invalida mes 13" time="0.031"/>
+  </testsuite>
+  <testsuite name="19 CT-036 processar competencia invalida" file="19 CT-036 processar competencia invalida.bru" errors="0" failures="0" skipped="0" tests="2" timestamp="2026-11-24T04:17:09.224" hostname="DESKTOP-NK7VCHL" time="0.107">
+    <testcase name="HTTP 200" status="pass" classname="19 CT-036 processar competencia invalida" time="0.053"/>
+    <testcase name="corpo contém &quot;Informe uma competência válida.&quot;" status="pass" classname="19 CT-036 processar competencia invalida" time="0.053"/>
+  </testsuite>
+  <testsuite name="20 CT-026 processa a competencia" file="20 CT-026 processa a competencia.bru" errors="0" failures="0" skipped="0" tests="2" timestamp="2026-11-24T04:17:09.224" hostname="DESKTOP-NK7VCHL" time="0.152">
+    <testcase name="HTTP 200" status="pass" classname="20 CT-026 processa a competencia" time="0.076"/>
+    <testcase name="total geral R$ 9.100,00" status="pass" classname="20 CT-026 processa a competencia" time="0.076"/>
+  </testsuite>
+  <testsuite name="21 CT-026 folha consolidada e resumo por categoria" file="21 CT-026 folha consolidada e resumo por categoria.bru" errors="0" failures="0" skipped="0" tests="9" timestamp="2026-11-24T04:17:09.224" hostname="DESKTOP-NK7VCHL" time="0.094">
+    <testcase name="HTTP 200" status="pass" classname="21 CT-026 folha consolidada e resumo por categoria" time="0.010"/>
+    <testcase name="corpo contém &quot;BR001&quot;" status="pass" classname="21 CT-026 folha consolidada e resumo por categoria" time="0.010"/>
+    <testcase name="corpo contém &quot;BR004&quot;" status="pass" classname="21 CT-026 folha consolidada e resumo por categoria" time="0.010"/>
+    <testcase name="corpo contém &quot;4 colaboradores&quot;" status="pass" classname="21 CT-026 folha consolidada e resumo por categoria" time="0.010"/>
+    <testcase name="total geral R$ 9.100,00" status="pass" classname="21 CT-026 folha consolidada e resumo por categoria" time="0.010"/>
+    <testcase name="Padrão R$ 2.500,00 (total da categoria)" status="pass" classname="21 CT-026 folha consolidada e resumo por categoria" time="0.010"/>
+    <testcase name="Comissionado R$ 4.500,00 (BR002 + BR004)" status="pass" classname="21 CT-026 folha consolidada e resumo por categoria" time="0.010"/>
+    <testcase name="Por produção R$ 2.100,00" status="pass" classname="21 CT-026 folha consolidada e resumo por categoria" time="0.010"/>
+    <testcase name="corpo NÃO contém &quot;BR012&quot;" status="pass" classname="21 CT-026 folha consolidada e resumo por categoria" time="0.010"/>
+  </testsuite>
+  <testsuite name="22 CT-027 demonstrativo individual comissionado" file="22 CT-027 demonstrativo individual comissionado.bru" errors="0" failures="0" skipped="0" tests="6" timestamp="2026-11-24T04:17:09.224" hostname="DESKTOP-NK7VCHL" time="0.090">
+    <testcase name="HTTP 200" status="pass" classname="22 CT-027 demonstrativo individual comissionado" time="0.015"/>
+    <testcase name="corpo contém &quot;BR002&quot;" status="pass" classname="22 CT-027 demonstrativo individual comissionado" time="0.015"/>
+    <testcase name="salário base R$ 2.000,00" status="pass" classname="22 CT-027 demonstrativo individual comissionado" time="0.015"/>
+    <testcase name="adicional R$ 500,00" status="pass" classname="22 CT-027 demonstrativo individual comissionado" time="0.015"/>
+    <testcase name="salário final R$ 2.500,00" status="pass" classname="22 CT-027 demonstrativo individual comissionado" time="0.015"/>
+    <testcase name="corpo contém &quot;Imprimir demonstrativo&quot;" status="pass" classname="22 CT-027 demonstrativo individual comissionado" time="0.015"/>
+  </testsuite>
+  <testsuite name="23 CT-038 adicional zerado explicito (RN010)" file="23 CT-038 adicional zerado explicito (RN010).bru" errors="0" failures="0" skipped="0" tests="4" timestamp="2026-11-24T04:17:09.224" hostname="DESKTOP-NK7VCHL" time="0.091">
+    <testcase name="HTTP 200" status="pass" classname="23 CT-038 adicional zerado explicito (RN010)" time="0.023"/>
+    <testcase name="corpo contém &quot;Adicionais&quot;" status="pass" classname="23 CT-038 adicional zerado explicito (RN010)" time="0.023"/>
+    <testcase name="Adicionais exibido como R$ 0,00" status="pass" classname="23 CT-038 adicional zerado explicito (RN010)" time="0.023"/>
+    <testcase name="salário final R$ 2.000,00" status="pass" classname="23 CT-038 adicional zerado explicito (RN010)" time="0.023"/>
+  </testsuite>
+  <testsuite name="24 BUG-005 reprocessar nao duplica" file="24 BUG-005 reprocessar nao duplica.bru" errors="0" failures="0" skipped="0" tests="3" timestamp="2026-11-24T04:17:09.224" hostname="DESKTOP-NK7VCHL" time="0.123">
+    <testcase name="HTTP 200" status="pass" classname="24 BUG-005 reprocessar nao duplica" time="0.041"/>
+    <testcase name="corpo contém &quot;4 colaboradores&quot;" status="pass" classname="24 BUG-005 reprocessar nao duplica" time="0.041"/>
+    <testcase name="total continua R$ 9.100,00" status="pass" classname="24 BUG-005 reprocessar nao duplica" time="0.041"/>
+  </testsuite>
+  <testsuite name="25 CT-024 atualiza cadastro" file="25 CT-024 atualiza cadastro.bru" errors="0" failures="0" skipped="0" tests="2" timestamp="2026-11-24T04:17:09.224" hostname="DESKTOP-NK7VCHL" time="0.124">
+    <testcase name="HTTP 200" status="pass" classname="25 CT-024 atualiza cadastro" time="0.062"/>
+    <testcase name="corpo NÃO contém &quot;Confira os campos destacados&quot;" status="pass" classname="25 CT-024 atualiza cadastro" time="0.062"/>
+  </testsuite>
+  <testsuite name="26 CT-024 painel mostra o cadastro atualizado" file="26 CT-024 painel mostra o cadastro atualizado.bru" errors="0" failures="0" skipped="0" tests="3" timestamp="2026-11-24T04:17:09.224" hostname="DESKTOP-NK7VCHL" time="0.089">
+    <testcase name="HTTP 200" status="pass" classname="26 CT-024 painel mostra o cadastro atualizado" time="0.030"/>
+    <testcase name="corpo contém &quot;Ana Atualizada&quot;" status="pass" classname="26 CT-024 painel mostra o cadastro atualizado" time="0.030"/>
+    <testcase name="novo salário R$ 3.200,00" status="pass" classname="26 CT-024 painel mostra o cadastro atualizado" time="0.030"/>
+  </testsuite>
+  <testsuite name="27 CT-037 snapshot antigo preservado apos alteracao" file="27 CT-037 snapshot antigo preservado apos alteracao.bru" errors="0" failures="0" skipped="0" tests="4" timestamp="2026-11-24T04:17:09.224" hostname="DESKTOP-NK7VCHL" time="0.093">
+    <testcase name="HTTP 200" status="pass" classname="27 CT-037 snapshot antigo preservado apos alteracao" time="0.023"/>
+    <testcase name="corpo contém &quot;Ana Padrao&quot;" status="pass" classname="27 CT-037 snapshot antigo preservado apos alteracao" time="0.023"/>
+    <testcase name="demonstrativo continua R$ 2.500,00" status="pass" classname="27 CT-037 snapshot antigo preservado apos alteracao" time="0.023"/>
+    <testcase name="corpo NÃO contém &quot;Ana Atualizada&quot;" status="pass" classname="27 CT-037 snapshot antigo preservado apos alteracao" time="0.023"/>
+  </testsuite>
+  <testsuite name="28 CT-025 exclui logicamente" file="28 CT-025 exclui logicamente.bru" errors="0" failures="0" skipped="0" tests="1" timestamp="2026-11-24T04:17:09.224" hostname="DESKTOP-NK7VCHL" time="0.106">
+    <testcase name="HTTP 200" status="pass" classname="28 CT-025 exclui logicamente" time="0.106"/>
+  </testsuite>
+  <testsuite name="29 CT-025 excluido some da lista ativa" file="29 CT-025 excluido some da lista ativa.bru" errors="0" failures="0" skipped="0" tests="3" timestamp="2026-11-24T04:17:09.224" hostname="DESKTOP-NK7VCHL" time="0.094">
+    <testcase name="HTTP 200" status="pass" classname="29 CT-025 excluido some da lista ativa" time="0.031"/>
+    <testcase name="corpo NÃO contém &quot;Diego Sem Vendas&quot;" status="pass" classname="29 CT-025 excluido some da lista ativa" time="0.031"/>
+    <testcase name="corpo contém &quot;BR001&quot;" status="pass" classname="29 CT-025 excluido some da lista ativa" time="0.031"/>
+  </testsuite>
+  <testsuite name="30 CT-037 historico preservado apos exclusao" file="30 CT-037 historico preservado apos exclusao.bru" errors="0" failures="0" skipped="0" tests="4" timestamp="2026-11-24T04:17:09.224" hostname="DESKTOP-NK7VCHL" time="0.093">
+    <testcase name="HTTP 200" status="pass" classname="30 CT-037 historico preservado apos exclusao" time="0.023"/>
+    <testcase name="corpo contém &quot;Diego Sem Vendas&quot;" status="pass" classname="30 CT-037 historico preservado apos exclusao" time="0.023"/>
+    <testcase name="snapshot R$ 2.000,00" status="pass" classname="30 CT-037 historico preservado apos exclusao" time="0.023"/>
+    <testcase name="sem botão Editar para colaborador inativo" status="pass" classname="30 CT-037 historico preservado apos exclusao" time="0.023"/>
+  </testsuite>
+  <testsuite name="31 CT-037 folha do mes ainda lista o excluido" file="31 CT-037 folha do mes ainda lista o excluido.bru" errors="0" failures="0" skipped="0" tests="4" timestamp="2026-11-24T04:17:09.224" hostname="DESKTOP-NK7VCHL" time="0.090">
+    <testcase name="HTTP 200" status="pass" classname="31 CT-037 folha do mes ainda lista o excluido" time="0.022"/>
+    <testcase name="corpo contém &quot;BR004&quot;" status="pass" classname="31 CT-037 folha do mes ainda lista o excluido" time="0.022"/>
+    <testcase name="corpo contém &quot;4 colaboradores&quot;" status="pass" classname="31 CT-037 folha do mes ainda lista o excluido" time="0.022"/>
+    <testcase name="total do mês continua R$ 9.100,00" status="pass" classname="31 CT-037 folha do mes ainda lista o excluido" time="0.022"/>
+  </testsuite>
+</testsuites>

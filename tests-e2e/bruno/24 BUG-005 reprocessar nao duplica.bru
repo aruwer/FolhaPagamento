@@ -1,0 +1,28 @@
+meta {
+  name: 24 BUG-005 reprocessar nao duplica
+  type: http
+  seq: 24
+}
+
+post {
+  url: {{baseUrl}}/folha/processar
+  body: formUrlEncoded
+  auth: none
+}
+
+body:form-urlencoded {
+  mes: {{mes}}
+  ano: {{ano}}
+}
+
+tests {
+  test("HTTP 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("corpo contém \"4 colaboradores\"", function() {
+    expect(String(res.getBody())).to.include("4 colaboradores");
+  });
+  test("total continua R$ 9.100,00", function() {
+    expect(String(res.getBody())).to.match(/R\$\s*9\.100,00/);
+  });
+}

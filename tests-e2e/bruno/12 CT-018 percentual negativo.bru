@@ -1,0 +1,32 @@
+meta {
+  name: 12 CT-018 percentual negativo
+  type: http
+  seq: 12
+}
+
+post {
+  url: {{baseUrl}}/colaboradores
+  body: formUrlEncoded
+  auth: none
+}
+
+body:form-urlencoded {
+  matricula: BR018
+  nome: Perc Neg
+  salarioBase: 1000
+  tipo: COMISSIONADO
+  valorVendas: 100
+  percentualComissao: -1
+}
+
+tests {
+  test("HTTP 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("formulário devolvido com erros", function() {
+    expect(String(res.getBody())).to.include("Confira os campos destacados");
+  });
+  test("corpo contém \"A comissão não pode ser negativa.\"", function() {
+    expect(String(res.getBody())).to.include("A comissão não pode ser negativa.");
+  });
+}

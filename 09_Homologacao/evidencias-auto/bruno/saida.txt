@@ -1,0 +1,186 @@
+﻿01 CT-001 cadastra padrao (200 ) - 185 ms
+Tests
+   Ô£ô HTTP 200
+   Ô£ô cadastro aceito (sem erros de formul├írio)
+02 CT-003 cadastra comissionado (200 ) - 39 ms
+Tests
+   Ô£ô HTTP 200
+   Ô£ô cadastro aceito (sem erros de formul├írio)
+03 CT-006 cadastra producao (200 ) - 37 ms
+Tests
+   Ô£ô HTTP 200
+   Ô£ô cadastro aceito (sem erros de formul├írio)
+04 CT-015 campos variaveis em branco valem zero (BUG-001) (200 ) - 37 ms
+Tests
+   Ô£ô HTTP 200
+   Ô£ô cadastro aceito (sem erros de formul├írio)
+05 CT-009 matricula duplicada (200 ) - 32 ms
+Tests
+   Ô£ô HTTP 200
+   Ô£ô formul├írio devolvido com erros
+   Ô£ô corpo cont├®m "J├í existe colaborador com essa matr├¡cula."
+06 CT-010 matricula com pontuacao (200 ) - 15 ms
+Tests
+   Ô£ô HTTP 200
+   Ô£ô formul├írio devolvido com erros
+   Ô£ô corpo cont├®m "A matr├¡cula deve conter apenas letras sem acento e n├║meros."
+07 CT-011 matricula em branco (200 ) - 12 ms
+Tests
+   Ô£ô HTTP 200
+   Ô£ô formul├írio devolvido com erros
+   Ô£ô corpo cont├®m "Informe a matr├¡cula."
+08 CT-012 nome em branco (200 ) - 10 ms
+Tests
+   Ô£ô HTTP 200
+   Ô£ô formul├írio devolvido com erros
+   Ô£ô corpo cont├®m "Informe o nome."
+09 CT-013 salario em branco (200 ) - 12 ms
+Tests
+   Ô£ô HTTP 200
+   Ô£ô formul├írio devolvido com erros
+   Ô£ô corpo cont├®m "Informe o sal├írio base."
+10 CT-014 salario negativo (200 ) - 11 ms
+Tests
+   Ô£ô HTTP 200
+   Ô£ô formul├írio devolvido com erros
+   Ô£ô corpo cont├®m "O sal├írio base n├úo pode ser negativo."
+11 CT-017 vendas negativas (200 ) - 10 ms
+Tests
+   Ô£ô HTTP 200
+   Ô£ô formul├írio devolvido com erros
+   Ô£ô corpo cont├®m "O valor de vendas n├úo pode ser negativo."
+12 CT-018 percentual negativo (200 ) - 8 ms
+Tests
+   Ô£ô HTTP 200
+   Ô£ô formul├írio devolvido com erros
+   Ô£ô corpo cont├®m "A comiss├úo n├úo pode ser negativa."
+13 CT-018b percentual acima de 100 (200 ) - 12 ms
+Tests
+   Ô£ô HTTP 200
+   Ô£ô formul├írio devolvido com erros
+   Ô£ô corpo cont├®m "A comiss├úo n├úo pode ser maior que 100%."
+14 CT-021 quantidade negativa (200 ) - 8 ms
+Tests
+   Ô£ô HTTP 200
+   Ô£ô formul├írio devolvido com erros
+   Ô£ô corpo cont├®m "A quantidade produzida n├úo pode ser negativa."
+15 CT-022 valor por unidade negativo (200 ) - 10 ms
+Tests
+   Ô£ô HTTP 200
+   Ô£ô formul├írio devolvido com erros
+   Ô£ô corpo cont├®m "O valor por unidade n├úo pode ser negativo."
+16 CT-023 lista as tres categorias (200 ) - 23 ms
+Tests
+   Ô£ô HTTP 200
+   Ô£ô corpo cont├®m "BR001"
+   Ô£ô corpo cont├®m "BR002"
+   Ô£ô corpo cont├®m "BR003"
+   Ô£ô corpo cont├®m "BR004"
+   Ô£ô corpo cont├®m "Padr├úo"
+   Ô£ô corpo cont├®m "Comissionado"
+   Ô£ô corpo cont├®m "Por produ├º├úo"
+   Ô£ô registros inv├ílidos n├úo foram gravados
+   Ô£ô corpo N├âO cont├®m "BR-010"
+17 CT-036 competencia nao processada orienta processar (BUG-006) (200 ) - 24 ms
+Tests
+   Ô£ô HTTP 200
+   Ô£ô corpo cont├®m "ainda n├úo foi processada"
+   Ô£ô corpo cont├®m "Esta compet├¬ncia ainda n├úo tem folha processada"
+   Ô£ô texto antigo (BUG-006) n├úo aparece
+   Ô£ô total R$ 0,00
+18 CT-036 competencia invalida mes 13 (200 ) - 7 ms
+Tests
+   Ô£ô HTTP 200
+   Ô£ô corpo cont├®m "Informe uma compet├¬ncia v├ílida."
+   Ô£ô corpo cont├®m "Selecione um m├¬s e um ano v├ílidos"
+19 CT-036 processar competencia invalida (200 ) - 16 ms
+Tests
+   Ô£ô HTTP 200
+   Ô£ô corpo cont├®m "Informe uma compet├¬ncia v├ílida."
+20 CT-026 processa a competencia (200 ) - 69 ms
+Tests
+   Ô£ô HTTP 200
+   Ô£ô total geral R$ 9.100,00
+21 CT-026 folha consolidada e resumo por categoria (200 ) - 15 ms
+Tests
+   Ô£ô HTTP 200
+   Ô£ô corpo cont├®m "BR001"
+   Ô£ô corpo cont├®m "BR004"
+   Ô£ô corpo cont├®m "4 colaboradores"
+   Ô£ô total geral R$ 9.100,00
+   Ô£ô Padr├úo R$ 2.500,00 (total da categoria)
+   Ô£ô Comissionado R$ 4.500,00 (BR002 + BR004)
+   Ô£ô Por produ├º├úo R$ 2.100,00
+   Ô£ô corpo N├âO cont├®m "BR012"
+22 CT-027 demonstrativo individual comissionado (200 ) - 22 ms
+Tests
+   Ô£ô HTTP 200
+   Ô£ô corpo cont├®m "BR002"
+   Ô£ô sal├írio base R$ 2.000,00
+   Ô£ô adicional R$ 500,00
+   Ô£ô sal├írio final R$ 2.500,00
+   Ô£ô corpo cont├®m "Imprimir demonstrativo"
+23 CT-038 adicional zerado explicito (RN010) (200 ) - 15 ms
+Tests
+   Ô£ô HTTP 200
+   Ô£ô corpo cont├®m "Adicionais"
+   Ô£ô Adicionais exibido como R$ 0,00
+   Ô£ô sal├írio final R$ 2.000,00
+24 BUG-005 reprocessar nao duplica (200 ) - 38 ms
+Tests
+   Ô£ô HTTP 200
+   Ô£ô corpo cont├®m "4 colaboradores"
+   Ô£ô total continua R$ 9.100,00
+25 CT-024 atualiza cadastro (200 ) - 39 ms
+Tests
+   Ô£ô HTTP 200
+   Ô£ô corpo N├âO cont├®m "Confira os campos destacados"
+26 CT-024 painel mostra o cadastro atualizado (200 ) - 20 ms
+Tests
+   Ô£ô HTTP 200
+   Ô£ô corpo cont├®m "Ana Atualizada"
+   Ô£ô novo sal├írio R$ 3.200,00
+27 CT-037 snapshot antigo preservado apos alteracao (200 ) - 15 ms
+Tests
+   Ô£ô HTTP 200
+   Ô£ô corpo cont├®m "Ana Padrao"
+   Ô£ô demonstrativo continua R$ 2.500,00
+   Ô£ô corpo N├âO cont├®m "Ana Atualizada"
+28 CT-025 exclui logicamente (200 ) - 29 ms
+Tests
+   Ô£ô HTTP 200
+29 CT-025 excluido some da lista ativa (200 ) - 15 ms
+Tests
+   Ô£ô HTTP 200
+   Ô£ô corpo N├âO cont├®m "Diego Sem Vendas"
+   Ô£ô corpo cont├®m "BR001"
+30 CT-037 historico preservado apos exclusao (200 ) - 14 ms
+Tests
+   Ô£ô HTTP 200
+   Ô£ô corpo cont├®m "Diego Sem Vendas"
+   Ô£ô snapshot R$ 2.000,00
+   Ô£ô sem bot├úo Editar para colaborador inativo
+31 CT-037 folha do mes ainda lista o excluido (200 ) - 14 ms
+Tests
+   Ô£ô HTTP 200
+   Ô£ô corpo cont├®m "BR004"
+   Ô£ô corpo cont├®m "4 colaboradores"
+   Ô£ô total do m├¬s continua R$ 9.100,00
+
+­ƒôè Execution Summary
+ÔöîÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö¼ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÉ
+Ôöé Metric        Ôöé     Result     Ôöé
+Ôö£ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö╝ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöñ
+Ôöé Status        Ôöé     Ô£ô PASS     Ôöé
+Ôö£ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö╝ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöñ
+Ôöé Requests      Ôöé 31 (31 Passed) Ôöé
+Ôö£ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö╝ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöñ
+Ôöé Tests         Ôöé    106/106     Ôöé
+Ôö£ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö╝ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöñ
+Ôöé Assertions    Ôöé      0/0       Ôöé
+Ôö£ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö╝ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöñ
+Ôöé Duration (ms) Ôöé      3377      Ôöé
+ÔööÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÿ
+Wrote html results to C:\Users\Amanda\Documents\A3_FolhaPag\09_Homologacao\evidencias-auto\bruno\relatorio.html
+Wrote json results to C:\Users\Amanda\Documents\A3_FolhaPag\09_Homologacao\evidencias-auto\bruno\resultado.json
+Wrote junit results to C:\Users\Amanda\Documents\A3_FolhaPag\09_Homologacao\evidencias-auto\bruno\resultado.xml

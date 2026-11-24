@@ -1,0 +1,30 @@
+meta {
+  name: 07 CT-011 matricula em branco
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/colaboradores
+  body: formUrlEncoded
+  auth: none
+}
+
+body:form-urlencoded {
+  matricula: 
+  nome: Sem Matricula
+  salarioBase: 1000
+  tipo: PADRAO
+}
+
+tests {
+  test("HTTP 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("formulário devolvido com erros", function() {
+    expect(String(res.getBody())).to.include("Confira os campos destacados");
+  });
+  test("corpo contém \"Informe a matrícula.\"", function() {
+    expect(String(res.getBody())).to.include("Informe a matrícula.");
+  });
+}

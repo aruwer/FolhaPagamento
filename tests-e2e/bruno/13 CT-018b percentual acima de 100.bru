@@ -1,0 +1,32 @@
+meta {
+  name: 13 CT-018b percentual acima de 100
+  type: http
+  seq: 13
+}
+
+post {
+  url: {{baseUrl}}/colaboradores
+  body: formUrlEncoded
+  auth: none
+}
+
+body:form-urlencoded {
+  matricula: BR019
+  nome: Perc 101
+  salarioBase: 1000
+  tipo: COMISSIONADO
+  valorVendas: 100
+  percentualComissao: 101
+}
+
+tests {
+  test("HTTP 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("formulário devolvido com erros", function() {
+    expect(String(res.getBody())).to.include("Confira os campos destacados");
+  });
+  test("corpo contém \"A comissão não pode ser maior que 100%.\"", function() {
+    expect(String(res.getBody())).to.include("A comissão não pode ser maior que 100%.");
+  });
+}

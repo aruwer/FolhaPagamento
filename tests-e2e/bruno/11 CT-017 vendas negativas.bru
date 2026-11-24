@@ -1,0 +1,32 @@
+meta {
+  name: 11 CT-017 vendas negativas
+  type: http
+  seq: 11
+}
+
+post {
+  url: {{baseUrl}}/colaboradores
+  body: formUrlEncoded
+  auth: none
+}
+
+body:form-urlencoded {
+  matricula: BR017
+  nome: Vendas Neg
+  salarioBase: 1000
+  tipo: COMISSIONADO
+  valorVendas: -10
+  percentualComissao: 5
+}
+
+tests {
+  test("HTTP 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("formulário devolvido com erros", function() {
+    expect(String(res.getBody())).to.include("Confira os campos destacados");
+  });
+  test("corpo contém \"O valor de vendas não pode ser negativo.\"", function() {
+    expect(String(res.getBody())).to.include("O valor de vendas não pode ser negativo.");
+  });
+}

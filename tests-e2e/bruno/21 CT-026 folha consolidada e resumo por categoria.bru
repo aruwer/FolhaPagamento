@@ -1,0 +1,41 @@
+meta {
+  name: 21 CT-026 folha consolidada e resumo por categoria
+  type: http
+  seq: 21
+}
+
+get {
+  url: {{baseUrl}}/folha?mes={{mes}}&ano={{ano}}
+  body: none
+  auth: none
+}
+
+tests {
+  test("HTTP 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("corpo contém \"BR001\"", function() {
+    expect(String(res.getBody())).to.include("BR001");
+  });
+  test("corpo contém \"BR004\"", function() {
+    expect(String(res.getBody())).to.include("BR004");
+  });
+  test("corpo contém \"4 colaboradores\"", function() {
+    expect(String(res.getBody())).to.include("4 colaboradores");
+  });
+  test("total geral R$ 9.100,00", function() {
+    expect(String(res.getBody())).to.match(/R\$\s*9\.100,00/);
+  });
+  test("Padrão R$ 2.500,00 (total da categoria)", function() {
+    expect(String(res.getBody())).to.match(/R\$\s*2\.500,00/);
+  });
+  test("Comissionado R$ 4.500,00 (BR002 + BR004)", function() {
+    expect(String(res.getBody())).to.match(/R\$\s*4\.500,00/);
+  });
+  test("Por produção R$ 2.100,00", function() {
+    expect(String(res.getBody())).to.match(/R\$\s*2\.100,00/);
+  });
+  test("corpo NÃO contém \"BR012\"", function() {
+    expect(String(res.getBody())).to.not.include("BR012");
+  });
+}

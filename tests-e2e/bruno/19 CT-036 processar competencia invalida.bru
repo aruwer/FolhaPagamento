@@ -1,0 +1,25 @@
+meta {
+  name: 19 CT-036 processar competencia invalida
+  type: http
+  seq: 19
+}
+
+post {
+  url: {{baseUrl}}/folha/processar
+  body: formUrlEncoded
+  auth: none
+}
+
+body:form-urlencoded {
+  mes: 13
+  ano: {{ano}}
+}
+
+tests {
+  test("HTTP 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("corpo contém \"Informe uma competência válida.\"", function() {
+    expect(String(res.getBody())).to.include("Informe uma competência válida.");
+  });
+}

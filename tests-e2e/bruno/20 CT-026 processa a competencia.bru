@@ -1,0 +1,25 @@
+meta {
+  name: 20 CT-026 processa a competencia
+  type: http
+  seq: 20
+}
+
+post {
+  url: {{baseUrl}}/folha/processar
+  body: formUrlEncoded
+  auth: none
+}
+
+body:form-urlencoded {
+  mes: {{mes}}
+  ano: {{ano}}
+}
+
+tests {
+  test("HTTP 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("total geral R$ 9.100,00", function() {
+    expect(String(res.getBody())).to.match(/R\$\s*9\.100,00/);
+  });
+}

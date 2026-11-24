@@ -1,0 +1,26 @@
+meta {
+  name: 27 CT-037 snapshot antigo preservado apos alteracao
+  type: http
+  seq: 27
+}
+
+get {
+  url: {{baseUrl}}/folha/BR001?mes={{mes}}&ano={{ano}}
+  body: none
+  auth: none
+}
+
+tests {
+  test("HTTP 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("corpo contém \"Ana Padrao\"", function() {
+    expect(String(res.getBody())).to.include("Ana Padrao");
+  });
+  test("demonstrativo continua R$ 2.500,00", function() {
+    expect(String(res.getBody())).to.match(/R\$\s*2\.500,00/);
+  });
+  test("corpo NÃO contém \"Ana Atualizada\"", function() {
+    expect(String(res.getBody())).to.not.include("Ana Atualizada");
+  });
+}

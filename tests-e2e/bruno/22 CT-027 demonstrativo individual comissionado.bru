@@ -1,0 +1,32 @@
+meta {
+  name: 22 CT-027 demonstrativo individual comissionado
+  type: http
+  seq: 22
+}
+
+get {
+  url: {{baseUrl}}/folha/BR002?mes={{mes}}&ano={{ano}}
+  body: none
+  auth: none
+}
+
+tests {
+  test("HTTP 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("corpo contém \"BR002\"", function() {
+    expect(String(res.getBody())).to.include("BR002");
+  });
+  test("salário base R$ 2.000,00", function() {
+    expect(String(res.getBody())).to.match(/R\$\s*2\.000,00/);
+  });
+  test("adicional R$ 500,00", function() {
+    expect(String(res.getBody())).to.match(/R\$\s*500,00/);
+  });
+  test("salário final R$ 2.500,00", function() {
+    expect(String(res.getBody())).to.match(/R\$\s*2\.500,00/);
+  });
+  test("corpo contém \"Imprimir demonstrativo\"", function() {
+    expect(String(res.getBody())).to.include("Imprimir demonstrativo");
+  });
+}

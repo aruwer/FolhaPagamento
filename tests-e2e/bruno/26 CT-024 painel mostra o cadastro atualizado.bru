@@ -1,0 +1,23 @@
+meta {
+  name: 26 CT-024 painel mostra o cadastro atualizado
+  type: http
+  seq: 26
+}
+
+get {
+  url: {{baseUrl}}/
+  body: none
+  auth: none
+}
+
+tests {
+  test("HTTP 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("corpo contém \"Ana Atualizada\"", function() {
+    expect(String(res.getBody())).to.include("Ana Atualizada");
+  });
+  test("novo salário R$ 3.200,00", function() {
+    expect(String(res.getBody())).to.match(/R\$\s*3\.200,00/);
+  });
+}
