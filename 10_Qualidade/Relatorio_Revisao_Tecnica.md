@@ -64,6 +64,6 @@ Observações sem defeito:
 
 **Conclusão proposta:** **Aprovado com ressalvas.** O produto atende a 100% dos requisitos funcionais, não funcionais e regras de negócio, sem defeitos abertos e com cobertura acima da meta. Permanecem duas não conformidades **de processo** (NC-01 — registro de revisão de PRs; NC-06 — defeitos fora das Issues), com ações corretivas definidas e sem impacto no comportamento do sistema.
 
-**Revisora técnica (PGQ 6.3):** Amanda Ruwer  **Assinatura:** ______________________________  **Data:** ____/____/________
+**Revisora técnica (PGQ 6.3):** Amanda Ruwer  **Assinatura:** Amanda M Ruwer  **Data:** 24/11/2026
 
-**Responsável pela qualidade (PGQ):** Ana Luísa Lopes  **Assinatura:** ______________________________  **Data:** ____/____/________
+**Responsável pela qualidade (PGQ):** Ana Luísa Lopes  **Assinatura:** Ana Luísa Lopes  **Data:** 24/11/2026

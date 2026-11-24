@@ -22,7 +22,7 @@ Em 24/11/2026 (01:17), a aplicação real (JAR 2.0.0 + PostgreSQL 17, database l
 | Defeito | Evidência automatizada | O que conferir |
 | :--- | :--- | :--- |
 | BUG-001 | Bruno `04 CT-015 campos variaveis em branco valem zero (BUG-001)`; Cypress `reteste-bugs.cy.js/BUG-001/` | Cadastro concluído com vendas e comissão em branco; `RT001` aparece no painel com R$ 2.000,00 |
-| BUG-002 | só JUnit (seção 1) | 3 testes PostgreSQL executados, 0 ignorados |
+| BUG-002 | só JUnit (seção 1); não é coberto pelo E2E | 3 testes PostgreSQL executados, 0 ignorados |
 | BUG-003 | os 31 requests do Bruno, via HTTP real | Todos aprovados |
 | BUG-004 | Cypress `reteste-bugs.cy.js/BUG-004/` e [PDF de impressão](../09_Homologacao/evidencias-auto/impressao/demonstrativo-BR002.pdf) | Adicionais R$ 0,00 no demonstrativo; o PDF traz só os dados, sem menu nem botões |
 | BUG-005 | Bruno `24 BUG-005 reprocessar nao duplica`; Cypress `reteste-bugs.cy.js/BUG-005/`; JUnit em PostgreSQL | Uma linha por colaborador; total inalterado |
@@ -153,7 +153,7 @@ Em outro PowerShell, na raiz do projeto (com o Docker ligado):
 | Defeito | Executor | Data | Resultado | Observações |
 | :--- | :--- | :---: | :---: | :--- |
 | BUG-001 | Execução automatizada (Bruno CLI + Cypress, 24/11/2026 01:17); evidências revisadas por Amanda Ruwer | 24/11/2026 | **Aprovado** | Bruno `04` e Cypress `BUG-001/`: cadastro concluído com campos em branco; `RT001` com R$ 2.000,00 |
-| BUG-002 | — | — | **Fora da revisão E2E** | Só a suíte JUnit prova este defeito (3 testes PostgreSQL, 0 ignorados no `clean verify` de 23/11/2026). A revisão E2E não o cobre; repetir `.\mvnw.cmd test -Dtest=RepositorioColaboradoresPostgresTest` se quiser validá-lo pessoalmente |
+| BUG-002 | Evidência da suíte JUnit (`clean verify` de 23/11/2026), revisada por Amanda Ruwer | 24/11/2026 | **Aprovado** | Validado pela evidência do JUnit, **não** pelo E2E: 3 testes PostgreSQL (Testcontainers) executados, 0 ignorados ([Surefire](../04_Testes/surefire-reports/folhapagamento.RepositorioColaboradoresPostgresTest.txt), [log](../04_Testes/log-verify.txt)). Não houve nova execução |
 | BUG-003 | Execução automatizada (Bruno CLI + Cypress, 24/11/2026 01:17); evidências revisadas por Amanda Ruwer | 24/11/2026 | **Aprovado** | Bruno: 31 requisições HTTP reais, 106 asserções, 0 falhas |
 | BUG-004 | Execução automatizada (Bruno CLI + Cypress, 24/11/2026 01:17); evidências revisadas por Amanda Ruwer | 24/11/2026 | **Aprovado** | Cypress `BUG-004/` e PDF de impressão: Adicionais R$ 0,00; impressão sem menu e botões |
 | BUG-005 | Execução automatizada (Bruno CLI + Cypress, 24/11/2026 01:17); evidências revisadas por Amanda Ruwer | 24/11/2026 | **Aprovado (parte E2E)** | Bruno `24` e Cypress `BUG-005/`: uma linha por colaborador, total inalterado. A comprovação principal em PostgreSQL é do JUnit (23/11/2026) |
@@ -162,6 +162,6 @@ Em outro PowerShell, na raiz do projeto (com o Docker ligado):
 
 **Se algum item reprovar:** não altere o [Registro de Defeitos](Registro_Defeitos.md) para "Validado". Anote o que foi obtido, guarde a captura e volte o defeito para "Em Correção" na Issue correspondente.
 
-**Situação em 24/11/2026:** reteste E2E aprovado por Amanda Ruwer (BUG-001, 003, 004, 005 na parte E2E, 006 e regressão). BUG-002 não é coberto pela revisão E2E.
+**Situação em 24/11/2026:** reteste E2E aprovado por Amanda Ruwer (BUG-001, 003, 004, 005 na parte E2E, 006 e regressão). BUG-002 foi validado pela evidência da suíte JUnit (não é coberto pelo E2E).
 
 **Se todos aprovarem:** os defeitos podem ser marcados como **Validados** por quem executou e passam a **Fechados** quando o PR for integrado e as Issues #29 a #34 forem encerradas com o link dele.

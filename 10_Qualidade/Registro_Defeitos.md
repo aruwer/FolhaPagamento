@@ -28,7 +28,7 @@ Reteste por execução automatizada ([Bruno CLI e Cypress](../tests-e2e/README.m
 | Defeito | Reteste E2E (24/11/2026) | Evidência |
 | :--- | :--- | :--- |
 | BUG-001 | Aprovado | [Cypress BUG-001](../09_Homologacao/evidencias-auto/cypress/screenshots/reteste-bugs.cy.js/BUG-001/), [Bruno](../09_Homologacao/evidencias-auto/bruno/relatorio.html) |
-| BUG-002 | Não coberto pelo E2E (prova pela suíte JUnit, 23/11/2026) | [log](../04_Testes/log-verify.txt) |
+| BUG-002 | Aprovado, validado pela evidência da suíte JUnit de 23/11/2026 (não coberto pelo E2E; sem nova execução) | [Surefire](../04_Testes/surefire-reports/folhapagamento.RepositorioColaboradoresPostgresTest.txt), [log](../04_Testes/log-verify.txt) |
 | BUG-003 | Aprovado | [Bruno](../09_Homologacao/evidencias-auto/bruno/relatorio.html) |
 | BUG-004 | Aprovado | [Cypress BUG-004](../09_Homologacao/evidencias-auto/cypress/screenshots/reteste-bugs.cy.js/BUG-004/), [PDF](../09_Homologacao/evidencias-auto/impressao/demonstrativo-BR002.pdf) |
 | BUG-005 | Aprovado (parte E2E; prova principal em PostgreSQL pelo JUnit) | [Cypress BUG-005](../09_Homologacao/evidencias-auto/cypress/screenshots/reteste-bugs.cy.js/BUG-005/) |
