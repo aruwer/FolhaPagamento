@@ -45,3 +45,9 @@ Database dedicada `folha_evidencias`, alimentada pela própria interface HTTP:
 | Bloqueado | 0 |
 
 Critérios gerais de aceitação da ERS: **6/6 aprovados** ([Criterios_Aceitacao.md](Criterios_Aceitacao.md)). Nenhum defeito aberto. Parecer formal no [Termo de Homologação](Termo_Homologacao.md).
+
+## Execução E2E automatizada (24/11/2026)
+
+Os casos de tela e de endpoint também foram executados por automação contra a aplicação real e PostgreSQL 17 (database limpa), com as evidências **revisadas e validadas por Amanda Ruwer em 24/11/2026**: Bruno CLI com 31/31 requisições e 106 asserções aprovadas, e Cypress com 9/9 testes aprovados, mais o PDF de impressão. Cobre CT-010 (UI), CT-023 a CT-027, CT-034 a CT-038 e o reteste dos BUG-001, 003, 004, 005 e 006.
+
+Evidências: [evidencias-auto/](../09_Homologacao/evidencias-auto/) · Como repetir: [tests-e2e/README.md](../tests-e2e/README.md) · Registro por defeito: [Roteiro de Reteste](../10_Qualidade/Roteiro_Reteste_Bugs.md).

@@ -21,6 +21,21 @@
 | **BUG-005** | Ao ler um snapshot do PostgreSQL, `data_processamento` voltava com offset UTC (`Z`) em vez de `-03:00`; o mesmo instante gerava um `FolhaProcessada` diferente do gravado, quebrando a comparação de snapshots. Não ocorria com H2. | RNF003, RN009; CT-037 | Primeira execução real em PostgreSQL após a correção do BUG-002 | S3 | P1 | Validado | `FolhaProcessadaJpaEntity.paraDominio()` normaliza o instante para o fuso da folha (America/Sao_Paulo) (`noFusoDaFolha`). | `congelaFolhaPorCompetenciaEPreservaHistoricoNoSoftDelete` (PostgreSQL) e `snapshotLidoEmUtcEhIgualAoGravado` aprovados |
 | **BUG-006** | Em competência não processada, o estado vazio da folha dizia "Cadastre colaboradores para gerar o demonstrativo", mesmo com colaboradores cadastrados, induzindo o usuário à ação errada. | RNF001, RF007; CT-036 | Revisão visual das evidências de CT-036 | S3 | P2 | Validado | `folha.html` passou a orientar "Processar folha desta competência" quando a competência é válida e "Selecione um mês e um ano válidos" quando não é. | `competenciaNaoProcessadaOrientaProcessamento` aprovado; [captura](../09_Homologacao/evidencias/CT-036/CT-036-A3-competencia-nao-processada-01-2027.png) |
 
+## Reteste (PGQ 6.5.2)
+
+Reteste por execução automatizada ([Bruno CLI e Cypress](../tests-e2e/README.md)) em 24/11/2026, com as evidências revisadas e validadas por **Amanda Ruwer**. Detalhes por defeito no [Roteiro de Reteste](Roteiro_Reteste_Bugs.md#4-registro-do-reteste).
+
+| Defeito | Reteste E2E (24/11/2026) | Evidência |
+| :--- | :--- | :--- |
+| BUG-001 | Aprovado | [Cypress BUG-001](../09_Homologacao/evidencias-auto/cypress/screenshots/reteste-bugs.cy.js/BUG-001/), [Bruno](../09_Homologacao/evidencias-auto/bruno/relatorio.html) |
+| BUG-002 | Não coberto pelo E2E (prova pela suíte JUnit, 23/11/2026) | [log](../04_Testes/log-verify.txt) |
+| BUG-003 | Aprovado | [Bruno](../09_Homologacao/evidencias-auto/bruno/relatorio.html) |
+| BUG-004 | Aprovado | [Cypress BUG-004](../09_Homologacao/evidencias-auto/cypress/screenshots/reteste-bugs.cy.js/BUG-004/), [PDF](../09_Homologacao/evidencias-auto/impressao/demonstrativo-BR002.pdf) |
+| BUG-005 | Aprovado (parte E2E; prova principal em PostgreSQL pelo JUnit) | [Cypress BUG-005](../09_Homologacao/evidencias-auto/cypress/screenshots/reteste-bugs.cy.js/BUG-005/) |
+| BUG-006 | Aprovado | [Cypress BUG-006](../09_Homologacao/evidencias-auto/cypress/screenshots/reteste-bugs.cy.js/BUG-006/) |
+
+Os defeitos continuam em **Validado**. Passam a **Fechado** quando o PR #35 for integrado e as Issues #29 a #34 forem encerradas com o link dele.
+
 ## Observações
 
 - Nenhum defeito S1 ou S2 foi encontrado; o critério de aprovação do PGQ (0 críticos e 0 altos abertos) está atendido.

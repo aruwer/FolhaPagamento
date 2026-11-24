@@ -74,6 +74,7 @@ Detalhamento e fórmulas: [Metricas_Qualidade.md](Metricas_Qualidade.md).
 | Relatório JaCoCo (HTML, CSV, XML) | [10_Qualidade/evidencias/jacoco/](evidencias/jacoco/index.html) |
 | Capturas, vídeos e PDF por caso de teste | [09_Homologacao/evidencias/](../09_Homologacao/evidencias/) (CT-023, 026, 027, 030, 032, 034, 035, 036, 038, 040) |
 | Persistência após reinício (passos, HTTP, SQL) | [CT-030-A3-T130-reinicio.txt](../09_Homologacao/evidencias/CT-030/CT-030-A3-T130-reinicio.txt), [CT-030-D-A3-persistencia-apos-reinicio.txt](../09_Homologacao/evidencias/CT-030/CT-030-D-A3-persistencia-apos-reinicio.txt) |
+| Execução E2E automatizada (Bruno CLI 31/31 e Cypress 9/9), validada em 24/11/2026 | [evidencias-auto/](../09_Homologacao/evidencias-auto/) (relatório HTML, respostas HTTP, capturas, vídeos e PDF de impressão) |
 | Histórico de commits, PRs e Issues | <https://github.com/aruwer/FolhaPagamentoA3> |
 
 ## 6. Conclusões

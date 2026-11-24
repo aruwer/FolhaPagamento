@@ -144,14 +144,16 @@ Em outro PowerShell, na raiz do projeto (com o Docker ligado):
 
 | Defeito | Executor | Data | Resultado | Observações |
 | :--- | :--- | :---: | :---: | :--- |
-| BUG-001 | | | | |
-| BUG-002 | | | | |
-| BUG-003 | | | | |
-| BUG-004 | | | | |
-| BUG-005 | | | | |
-| BUG-006 | | | | |
-| Regressão CT-036 / CT-037 | | | | |
+| BUG-001 | Execução automatizada (Bruno CLI + Cypress, 24/11/2026 01:17); evidências revisadas por Amanda Ruwer | 24/11/2026 | **Aprovado** | Bruno `04` e Cypress `BUG-001/`: cadastro concluído com campos em branco; `RT001` com R$ 2.000,00 |
+| BUG-002 | — | — | **Fora da revisão E2E** | Só a suíte JUnit prova este defeito (3 testes PostgreSQL, 0 ignorados no `clean verify` de 23/11/2026). A revisão E2E não o cobre; repetir `.\mvnw.cmd test -Dtest=RepositorioColaboradoresPostgresTest` se quiser validá-lo pessoalmente |
+| BUG-003 | Execução automatizada (Bruno CLI + Cypress, 24/11/2026 01:17); evidências revisadas por Amanda Ruwer | 24/11/2026 | **Aprovado** | Bruno: 31 requisições HTTP reais, 106 asserções, 0 falhas |
+| BUG-004 | Execução automatizada (Bruno CLI + Cypress, 24/11/2026 01:17); evidências revisadas por Amanda Ruwer | 24/11/2026 | **Aprovado** | Cypress `BUG-004/` e PDF de impressão: Adicionais R$ 0,00; impressão sem menu e botões |
+| BUG-005 | Execução automatizada (Bruno CLI + Cypress, 24/11/2026 01:17); evidências revisadas por Amanda Ruwer | 24/11/2026 | **Aprovado (parte E2E)** | Bruno `24` e Cypress `BUG-005/`: uma linha por colaborador, total inalterado. A comprovação principal em PostgreSQL é do JUnit (23/11/2026) |
+| BUG-006 | Execução automatizada (Bruno CLI + Cypress, 24/11/2026 01:17); evidências revisadas por Amanda Ruwer | 24/11/2026 | **Aprovado** | Bruno `17` e Cypress `BUG-006/`: texto novo presente e texto antigo ausente |
+| Regressão CT-036 / CT-037 | Execução automatizada (Bruno CLI + Cypress, 24/11/2026 01:17); evidências revisadas por Amanda Ruwer | 24/11/2026 | **Aprovado** | Bruno `27` a `31` e Cypress `regressao-ct036-ct037.cy.js/` |
 
 **Se algum item reprovar:** não altere o [Registro de Defeitos](Registro_Defeitos.md) para "Validado". Anote o que foi obtido, guarde a captura e volte o defeito para "Em Correção" na Issue correspondente.
+
+**Situação em 24/11/2026:** reteste E2E aprovado por Amanda Ruwer (BUG-001, 003, 004, 005 na parte E2E, 006 e regressão). BUG-002 não é coberto pela revisão E2E.
 
 **Se todos aprovarem:** os defeitos podem ser marcados como **Validados** por quem executou e passam a **Fechados** quando o PR for integrado e as Issues #29 a #34 forem encerradas com o link dele.
