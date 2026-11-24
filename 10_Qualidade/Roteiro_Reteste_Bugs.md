@@ -61,7 +61,8 @@ Em outro PowerShell, na raiz do projeto (com o Docker ligado):
 
 **Esperado:** `BUILD SUCCESS`, `Tests run: 105, Failures: 0, Errors: 0, Skipped: 0` e `All coverage checks have been met`.
 
-- [ ] Passou  [ ] Falhou — Resultado obtido: ______________________________________
+- [ ] Passou  [ ] Falhou — **Execução de referência (23/11/2026, sem marcação nesta validação):** BUILD SUCCESS, 105 testes, 0 falhas, 0 ignorados, cobertura 96,98% / 95,96%.
+- **Evidências:** [log do clean verify](../04_Testes/log-verify.txt) · [relatório JaCoCo](evidencias/jacoco/index.html) · [relatórios Surefire](../04_Testes/surefire-reports/)
 
 ---
 
@@ -74,7 +75,8 @@ Em outro PowerShell, na raiz do projeto (com o Docker ligado):
 **Esperado:** o cadastro conclui (mensagem "Colaborador cadastrado") e `RT001` aparece no painel com salário final **R$ 2.000,00**. Não pode haver erro de campo obrigatório.
 
 - Teste automatizado relacionado: `ct015E016AceitaCamposComissionadosEmBranco`, `ct019E020AceitaCamposProducaoEmBranco` (item 1 acima).
-- [ ] Aprovado  [ ] Reprovado — Obtido: ______________________________________
+- [X] Aprovado  [ ] Reprovado — Obtido: conforme o esperado; validado por Amanda Ruwer em 24/11/2026 (evidências abaixo).
+- **Evidências:** [captura 1: formulário com vendas e comissão em branco](../09_Homologacao/evidencias-auto/cypress/screenshots/reteste-bugs.cy.js/BUG-001/passo1-formulario-em-branco.png) · [captura 2: painel com RT001 e R$ 2.000,00](../09_Homologacao/evidencias-auto/cypress/screenshots/reteste-bugs.cy.js/BUG-001/passo2-painel-com-RT001.png) · [vídeo do spec](../09_Homologacao/evidencias-auto/cypress/videos/reteste-bugs.cy.js.mp4) · [Bruno: requisição 04 (relatório)](../09_Homologacao/evidencias-auto/bruno/relatorio.html)
 
 ### BUG-002 — Testes PostgreSQL executam (não são ignorados)
 ```powershell
@@ -82,7 +84,8 @@ Em outro PowerShell, na raiz do projeto (com o Docker ligado):
 ```
 **Esperado:** `Tests run: 3, Failures: 0, Errors: 0, Skipped: 0`. Se aparecer `Skipped: 3`, o Docker não está acessível ou o Testcontainers voltou a ser incompatível.
 
-- [ ] Aprovado  [ ] Reprovado — Obtido: ______________________________________
+- [X] Aprovado  [ ] Reprovado — Obtido: conforme o esperado; validado por Amanda Ruwer em 24/11/2026 (evidências abaixo).
+- **Evidências:** [relatório Surefire do teste PostgreSQL (3 testes, 0 ignorados)](../04_Testes/surefire-reports/folhapagamento.RepositorioColaboradoresPostgresTest.txt) · [log do clean verify](../04_Testes/log-verify.txt)
 
 ### BUG-003 — Testes HTTP de ponta a ponta
 ```powershell
@@ -90,7 +93,8 @@ Em outro PowerShell, na raiz do projeto (com o Docker ligado):
 ```
 **Esperado:** `Tests run: 21, Failures: 0, Errors: 0`.
 
-- [ ] Aprovado  [ ] Reprovado — Obtido: ______________________________________
+- [X] Aprovado  [ ] Reprovado — Obtido: conforme o esperado; validado por Amanda Ruwer em 24/11/2026 (evidências abaixo).
+- **Evidências:** [Bruno: 31 requisições (relatório)](../09_Homologacao/evidencias-auto/bruno/relatorio.html) · [respostas HTTP completas](../09_Homologacao/evidencias-auto/bruno/resultado.json) · [Surefire: FolhaPagamentoWebCasosDeTesteTest](../04_Testes/surefire-reports/folhapagamento.FolhaPagamentoWebCasosDeTesteTest.txt)
 
 ### BUG-004 — Evidências de CT-038 e CT-040 no demonstrativo individual
 1. Cadastre `RT002`, nome `Reteste Dois`, salário `2000`, **Salário + comissão**, vendas e comissão em branco.
@@ -100,7 +104,8 @@ Em outro PowerShell, na raiz do projeto (com o Docker ligado):
 
 **Esperado:** o demonstrativo mostra matrícula, nome, tipo, competência, **Salário base R$ 2.000,00**, **Adicionais R$ 0,00** e **Salário final R$ 2.000,00**. A pré-visualização de impressão traz esses dados **sem** menu de navegação nem botões. Compare com `09_Homologacao/evidencias/CT-038/CT-038-A3-individual-adicional-zero-E004.png` e `CT-040/CT-040-A3-impressao-demonstrativo-E003.pdf`.
 
-- [ ] Aprovado  [ ] Reprovado — Obtido: ______________________________________
+- [X] Aprovado  [ ] Reprovado — Obtido: conforme o esperado; validado por Amanda Ruwer em 24/11/2026 (evidências abaixo).
+- **Evidências:** [captura 1: demonstrativo individual (Adicionais R$ 0,00)](../09_Homologacao/evidencias-auto/cypress/screenshots/reteste-bugs.cy.js/BUG-004/passo1-demonstrativo-individual.png) · [captura 2: demonstrativo na tela (regras de impressão conferidas no CSS)](../09_Homologacao/evidencias-auto/cypress/screenshots/reteste-bugs.cy.js/BUG-004/passo2-demonstrativo-na-tela.png) · [PDF da impressão real (Edge)](../09_Homologacao/evidencias-auto/impressao/demonstrativo-BR002.pdf) · [página 1 do PDF](../09_Homologacao/evidencias-auto/impressao/demonstrativo-BR002-pagina-1.png)
 
 ### BUG-005 — Snapshot lido do PostgreSQL igual ao gravado
 1. Depois do passo 3 do BUG-004, abra o pgAdmin (<http://localhost:5050>) e execute na database `folha_reteste`:
@@ -114,7 +119,8 @@ Em outro PowerShell, na raiz do projeto (com o Docker ligado):
 **Esperado:** a consulta mostra uma única linha para `RT002` na competência; os valores do demonstrativo são os mesmos antes e depois de recarregar. Depois de processada, a tela deixa de oferecer o botão de processamento; a ausência de duplicidade em reprocessamentos é conferida pelos testes automatizados (JUnit e Bruno).
 
 - Comprovação principal (automatizada): `RepositorioColaboradoresPostgresTest.congelaFolhaPorCompetenciaEPreservaHistoricoNoSoftDelete` e `CompetenciaEBordasTest.snapshotLidoEmUtcEhIgualAoGravado` (item 1).
-- [ ] Aprovado  [ ] Reprovado — Obtido: ______________________________________
+- [X] Aprovado  [ ] Reprovado — Obtido: conforme o esperado; validado por Amanda Ruwer em 24/11/2026 (evidências abaixo).
+- **Evidências:** [captura: folha com uma linha por colaborador](../09_Homologacao/evidencias-auto/cypress/screenshots/reteste-bugs.cy.js/BUG-005/folha-sem-duplicar.png) · [Bruno: requisição 24 (reprocessar não duplica)](../09_Homologacao/evidencias-auto/bruno/relatorio.html) · [Surefire: teste em PostgreSQL real](../04_Testes/surefire-reports/folhapagamento.RepositorioColaboradoresPostgresTest.txt) · [Surefire: teste de leitura em UTC](../04_Testes/surefire-reports/folhapagamento.CompetenciaEBordasTest$Dominio.txt)
 
 ### BUG-006 — Mensagem da folha vazia orienta processar a competência
 1. **Folha de pagamento** → mês `1` e ano `2099` → **Consultar competência**.
@@ -124,7 +130,8 @@ Em outro PowerShell, na raiz do projeto (com o Docker ligado):
 - passo 1: aviso "A folha de 01/2099 ainda não foi processada" e, na área vazia, o texto **"Esta competência ainda não tem folha processada. Use “Processar folha desta competência” acima…"**. O texto antigo "Cadastre colaboradores para gerar o demonstrativo" **não** pode aparecer;
 - passo 2: mensagem "Informe uma competência válida." e, na área vazia, "Selecione um mês e um ano válidos para consultar a folha." Sem erro HTTP 500.
 
-- [ ] Aprovado  [ ] Reprovado — Obtido: ______________________________________
+- [X] Aprovado  [ ] Reprovado — Obtido: conforme o esperado; validado por Amanda Ruwer em 24/11/2026 (evidências abaixo).
+- **Evidências:** [captura 1: competência não processada (texto novo)](../09_Homologacao/evidencias-auto/cypress/screenshots/reteste-bugs.cy.js/BUG-006/passo1-competencia-nao-processada.png) · [captura 2: competência inválida](../09_Homologacao/evidencias-auto/cypress/screenshots/reteste-bugs.cy.js/BUG-006/passo2-competencia-invalida.png) · [Bruno: requisições 17 e 18 (relatório)](../09_Homologacao/evidencias-auto/bruno/relatorio.html)
 
 ---
 
@@ -136,7 +143,8 @@ Em outro PowerShell, na raiz do projeto (com o Docker ligado):
 4. No painel, **Excluir** `RT002`. **Esperado:** `RT002` some da lista de colaboradores ativos.
 5. Abra de novo a folha da competência atual e clique em `Reteste Dois`. **Esperado:** o demonstrativo continua disponível, sem o botão **Editar cadastro** (CT-037: histórico preservado após exclusão lógica).
 
-- [ ] Aprovado  [ ] Reprovado — Obtido: ______________________________________
+- [X] Aprovado  [ ] Reprovado — Obtido: conforme o esperado; validado por Amanda Ruwer em 24/11/2026 (evidências abaixo).
+- **Evidências:** [CT-036 passo 1: competência processada](../09_Homologacao/evidencias-auto/cypress/screenshots/regressao-ct036-ct037.cy.js/CT-036/passo1-competencia-processada.png) · [CT-036 passo 2: outra competência vazia](../09_Homologacao/evidencias-auto/cypress/screenshots/regressao-ct036-ct037.cy.js/CT-036/passo2-outra-competencia-vazia.png) · [CT-037 passo 1: excluído some do painel](../09_Homologacao/evidencias-auto/cypress/screenshots/regressao-ct036-ct037.cy.js/CT-037/passo1-excluido-some-do-painel.png) · [CT-037 passo 2: demonstrativo do excluído (sem "Editar cadastro")](../09_Homologacao/evidencias-auto/cypress/screenshots/regressao-ct036-ct037.cy.js/CT-037/passo2-demonstrativo-do-excluido.png) · [vídeo do spec](../09_Homologacao/evidencias-auto/cypress/videos/regressao-ct036-ct037.cy.js.mp4) · [Bruno: requisições 27 a 31 (relatório)](../09_Homologacao/evidencias-auto/bruno/relatorio.html)
 
 ---
 
