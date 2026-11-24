@@ -1,0 +1,29 @@
+meta {
+  name: 03 CT-006 cadastra producao
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/colaboradores
+  body: formUrlEncoded
+  auth: none
+}
+
+body:form-urlencoded {
+  matricula: BR003
+  nome: Carla Producao
+  salarioBase: 1800
+  tipo: PRODUCAO
+  quantidadeProduzida: 120
+  valorPorUnidade: 2.50
+}
+
+tests {
+  test("HTTP 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("cadastro aceito (sem erros de formulário)", function() {
+    expect(String(res.getBody())).to.not.include("Confira os campos destacados");
+  });
+}

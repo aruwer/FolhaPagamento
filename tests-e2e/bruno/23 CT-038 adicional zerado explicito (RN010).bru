@@ -1,0 +1,26 @@
+meta {
+  name: 23 CT-038 adicional zerado explicito (RN010)
+  type: http
+  seq: 23
+}
+
+get {
+  url: {{baseUrl}}/folha/BR004?mes={{mes}}&ano={{ano}}
+  body: none
+  auth: none
+}
+
+tests {
+  test("HTTP 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("corpo contém \"Adicionais\"", function() {
+    expect(String(res.getBody())).to.include("Adicionais");
+  });
+  test("Adicionais exibido como R$ 0,00", function() {
+    expect(String(res.getBody())).to.match(/Adicionais[\s\S]{0,200}?R\$\s*0,00/);
+  });
+  test("salário final R$ 2.000,00", function() {
+    expect(String(res.getBody())).to.match(/R\$\s*2\.000,00/);
+  });
+}

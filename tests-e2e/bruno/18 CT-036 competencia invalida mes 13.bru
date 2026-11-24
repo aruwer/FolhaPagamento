@@ -1,0 +1,23 @@
+meta {
+  name: 18 CT-036 competencia invalida mes 13
+  type: http
+  seq: 18
+}
+
+get {
+  url: {{baseUrl}}/folha?mes=13&ano={{ano}}
+  body: none
+  auth: none
+}
+
+tests {
+  test("HTTP 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("corpo contém \"Informe uma competência válida.\"", function() {
+    expect(String(res.getBody())).to.include("Informe uma competência válida.");
+  });
+  test("corpo contém \"Selecione um mês e um ano válidos\"", function() {
+    expect(String(res.getBody())).to.include("Selecione um mês e um ano válidos");
+  });
+}

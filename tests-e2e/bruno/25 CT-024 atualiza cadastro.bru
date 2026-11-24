@@ -1,0 +1,27 @@
+meta {
+  name: 25 CT-024 atualiza cadastro
+  type: http
+  seq: 25
+}
+
+post {
+  url: {{baseUrl}}/colaboradores/BR001
+  body: formUrlEncoded
+  auth: none
+}
+
+body:form-urlencoded {
+  matricula: BR001
+  nome: Ana Atualizada
+  salarioBase: 3200
+  tipo: PADRAO
+}
+
+tests {
+  test("HTTP 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("corpo NÃO contém \"Confira os campos destacados\"", function() {
+    expect(String(res.getBody())).to.not.include("Confira os campos destacados");
+  });
+}

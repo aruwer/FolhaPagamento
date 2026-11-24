@@ -1,0 +1,17 @@
+meta {
+  name: 28 CT-025 exclui logicamente
+  type: http
+  seq: 28
+}
+
+post {
+  url: {{baseUrl}}/colaboradores/BR004/excluir
+  body: none
+  auth: none
+}
+
+tests {
+  test("HTTP 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

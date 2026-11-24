@@ -1,0 +1,29 @@
+meta {
+  name: 17 CT-036 competencia nao processada orienta processar (BUG-006)
+  type: http
+  seq: 17
+}
+
+get {
+  url: {{baseUrl}}/folha?mes={{mes}}&ano={{anoOutro}}
+  body: none
+  auth: none
+}
+
+tests {
+  test("HTTP 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("corpo contém \"ainda não foi processada\"", function() {
+    expect(String(res.getBody())).to.include("ainda não foi processada");
+  });
+  test("corpo contém \"Esta competência ainda não tem folha processada\"", function() {
+    expect(String(res.getBody())).to.include("Esta competência ainda não tem folha processada");
+  });
+  test("texto antigo (BUG-006) não aparece", function() {
+    expect(String(res.getBody())).to.not.include("Cadastre colaboradores para gerar o demonstrativo");
+  });
+  test("total R$ 0,00", function() {
+    expect(String(res.getBody())).to.match(/R\$\s*0,00/);
+  });
+}

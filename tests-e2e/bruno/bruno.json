@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Folha de Pagamento - testes de backend",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

@@ -1,0 +1,32 @@
+meta {
+  name: 14 CT-021 quantidade negativa
+  type: http
+  seq: 14
+}
+
+post {
+  url: {{baseUrl}}/colaboradores
+  body: formUrlEncoded
+  auth: none
+}
+
+body:form-urlencoded {
+  matricula: BR021
+  nome: Qtd Neg
+  salarioBase: 1000
+  tipo: PRODUCAO
+  quantidadeProduzida: -1
+  valorPorUnidade: 2
+}
+
+tests {
+  test("HTTP 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("formulário devolvido com erros", function() {
+    expect(String(res.getBody())).to.include("Confira os campos destacados");
+  });
+  test("corpo contém \"A quantidade produzida não pode ser negativa.\"", function() {
+    expect(String(res.getBody())).to.include("A quantidade produzida não pode ser negativa.");
+  });
+}

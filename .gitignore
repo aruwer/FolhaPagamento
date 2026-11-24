@@ -10,3 +10,5 @@ LICENSE
 README
 release
 FolhaPagamento2.0/
+# JAR gerado/baixado localmente (56 MB): fica na release do GitHub, nao no git
+07_Executavel/*.jar

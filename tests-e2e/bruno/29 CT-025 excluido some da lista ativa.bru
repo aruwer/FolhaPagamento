@@ -1,0 +1,23 @@
+meta {
+  name: 29 CT-025 excluido some da lista ativa
+  type: http
+  seq: 29
+}
+
+get {
+  url: {{baseUrl}}/
+  body: none
+  auth: none
+}
+
+tests {
+  test("HTTP 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("corpo NÃO contém \"Diego Sem Vendas\"", function() {
+    expect(String(res.getBody())).to.not.include("Diego Sem Vendas");
+  });
+  test("corpo contém \"BR001\"", function() {
+    expect(String(res.getBody())).to.include("BR001");
+  });
+}

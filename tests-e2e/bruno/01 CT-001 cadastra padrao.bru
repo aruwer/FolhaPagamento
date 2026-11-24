@@ -1,0 +1,27 @@
+meta {
+  name: 01 CT-001 cadastra padrao
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/colaboradores
+  body: formUrlEncoded
+  auth: none
+}
+
+body:form-urlencoded {
+  matricula: BR001
+  nome: Ana Padrao
+  salarioBase: 2500
+  tipo: PADRAO
+}
+
+tests {
+  test("HTTP 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("cadastro aceito (sem erros de formulário)", function() {
+    expect(String(res.getBody())).to.not.include("Confira os campos destacados");
+  });
+}

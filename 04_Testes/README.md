@@ -9,4 +9,6 @@
 | [log-verify.txt](log-verify.txt) | Saída integral de `.\mvnw.cmd clean verify` |
 | [surefire-reports/](surefire-reports/) | Relatórios Surefire (TXT e XML) por classe de teste |
 
+Testes de backend (Bruno CLI) e de frontend (Cypress) contra a aplicação real, com evidências em arquivos: [tests-e2e/](../tests-e2e/README.md) e [09_Homologacao/evidencias-auto/](../09_Homologacao/evidencias-auto/).
+
 O código dos testes está em [`src/test/java/folhapagamento/`](../src/test/java/folhapagamento/). Os testes de aceitação (6.5) estão em [09_Homologacao/Relatorio_Testes_Aceitacao.md](../09_Homologacao/Relatorio_Testes_Aceitacao.md).

@@ -1,0 +1,11 @@
+{
+  "name": "folha-pagamento-e2e",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Testes de backend (Bruno CLI) e de frontend (Cypress) com evidencias salvas em arquivos",
+  "scripts": {},
+  "devDependencies": {
+    "@usebruno/cli": "^4.3.0",
+    "cypress": "^16.3.0"
+  }
+}

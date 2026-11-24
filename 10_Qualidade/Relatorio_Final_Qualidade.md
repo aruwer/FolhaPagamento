@@ -61,7 +61,7 @@ Build: `.\mvnw.cmd clean verify` → **BUILD SUCCESS**, "All coverage checks hav
 | Defeitos críticos (S1) e altos (S2) abertos | 0 / 0 | 0 | ✔ |
 | Requisitos funcionais atendidos | 100% | 100% | ✔ |
 | Casos de teste executados e aprovados | 40 / 40 | 100% | ✔ |
-| PRs integrados com revisão registrada | 8,3% (1/12) | 100% | ✘ (NC-01) |
+| PRs integrados com revisão registrada | 15,4% (2/13) | 100% | ✘ (NC-01) |
 
 Detalhamento e fórmulas: [Metricas_Qualidade.md](Metricas_Qualidade.md).
 
@@ -74,6 +74,7 @@ Detalhamento e fórmulas: [Metricas_Qualidade.md](Metricas_Qualidade.md).
 | Relatório JaCoCo (HTML, CSV, XML) | [10_Qualidade/evidencias/jacoco/](evidencias/jacoco/index.html) |
 | Capturas, vídeos e PDF por caso de teste | [09_Homologacao/evidencias/](../09_Homologacao/evidencias/) (CT-023, 026, 027, 030, 032, 034, 035, 036, 038, 040) |
 | Persistência após reinício (passos, HTTP, SQL) | [CT-030-A3-T130-reinicio.txt](../09_Homologacao/evidencias/CT-030/CT-030-A3-T130-reinicio.txt), [CT-030-D-A3-persistencia-apos-reinicio.txt](../09_Homologacao/evidencias/CT-030/CT-030-D-A3-persistencia-apos-reinicio.txt) |
+| Execução E2E automatizada (Bruno CLI 31/31 e Cypress 9/9), validada em 24/11/2026 | [evidencias-auto/](../09_Homologacao/evidencias-auto/) (relatório HTML, respostas HTTP, capturas, vídeos e PDF de impressão) |
 | Histórico de commits, PRs e Issues | <https://github.com/aruwer/FolhaPagamentoA3> |
 
 ## 6. Conclusões

@@ -12,7 +12,7 @@
 | — | Cobertura de branches (complementar) | 95 / 99 × 100 | **95,96%** | ≥ 80% | ✔ Atingida |
 | 2 | Defeitos críticos abertos (S1) | Σ S1 com status ≠ Validado/Fechado | **0** | 0 | ✔ Atingida |
 | 3 | Requisitos funcionais atendidos | 11 RF aprovados / 11 RF na ERS × 100 | **100%** | 100% | ✔ Atingida |
-| 4 | Índice de revisão de PRs | 1 PR aprovado / 12 PRs integrados na `main` × 100 | **8,3%** | 100% | ✘ **Não atingida** (NC-01) |
+| 4 | Índice de revisão de PRs | 2 PRs aprovados / 13 PRs integrados na `main` × 100 | **15,4%** | 100% | ✘ **Não atingida** (NC-01) |
 | 5 | Taxa de execução de testes | 40 casos executados / 40 planejados × 100 | **100%** | 100% | ✔ Atingida |
 
 ## 1. Cobertura de testes (JaCoCo)
@@ -66,7 +66,7 @@ Cada requisito aponta para casos executados e evidências na [Matriz de conformi
 
 ## 5. Revisão de Pull Requests
 
-Levantado com `gh pr list --state merged` em 23/11/2026:
+Levantado com `gh pr list --state merged` e `gh pr view` em 24/11/2026:
 
 | PR | Título | Revisão registrada no GitHub |
 | :---: | :--- | :---: |
@@ -82,5 +82,6 @@ Levantado com `gh pr list --state merged` em 23/11/2026:
 | #26 | feat: adiciona estrutura básica de testes e testes iniciais JUnit | não |
 | #27 | Feat/qds 2.0.0/testes unitarios junit | não |
 | #28 | Feat/qds 2.0.0/db postgresql | não |
+| #35 | feat(A3): fechamento da entrega A3 (testes, homologação e documentação) | **aprovado** (Rafaela Acosta, 23/11/2026) |
 
-Resultado: **1 / 12 = 8,3%**, abaixo da meta de 100%. Revisões feitas fora do GitHub (conversa, chamada) não deixam registro verificável e não foram contadas. Tratamento em NC-01 do [Relatório de Revisão Técnica](Relatorio_Revisao_Tecnica.md).
+Resultado: **2 / 13 = 15,4%**, abaixo da meta de 100%. Revisões feitas fora do GitHub (conversa, chamada) não deixam registro verificável e não foram contadas. Tratamento em NC-01 do [Relatório de Revisão Técnica](Relatorio_Revisao_Tecnica.md).

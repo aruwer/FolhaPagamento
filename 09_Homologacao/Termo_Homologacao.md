@@ -19,9 +19,10 @@ Declaramos, para os devidos fins, que a versão 2.0.0 do Sistema de Folha de Pag
 | Critérios gerais de aceitação ACE-1 a ACE-6 | 6/6 aprovados ([Criterios_Aceitacao.md](Criterios_Aceitacao.md)) |
 | Cenários de aceitação | 15/15 aprovados ([Relatorio_Testes_Aceitacao.md](Relatorio_Testes_Aceitacao.md)) |
 | Casos de teste CT-001 a CT-040 | 40/40 executados e aprovados |
-| Testes automatizados | 105/105 aprovados, 0 ignorados |
+| Testes automatizados (JUnit) | 105/105 aprovados, 0 ignorados |
+| Testes E2E contra a aplicação real | Bruno CLI 31/31 (106 asserções) e Cypress 9/9; evidências em [evidencias-auto](evidencias-auto/), validadas em 24/11/2026 |
 | Cobertura de código | 96,98% linhas · 95,96% branches (meta ≥ 80%) |
-| Defeitos | 6 encontrados, 6 corrigidos e validados; 0 abertos; 0 críticos/altos |
+| Defeitos | 6 encontrados, 6 corrigidos, validados e encerrados nas Issues #29 a #34; 0 abertos; 0 críticos/altos |
 
 ## 2. Critérios de aprovação do PGQ (seção 6.6)
 
@@ -30,7 +31,7 @@ Declaramos, para os devidos fins, que a versão 2.0.0 do Sistema de Folha de Pag
 | 1 | 100% dos requisitos funcionais implementados e rastreados com casos aprovados | ✔ Atendido |
 | 2 | Cobertura JaCoCo ≥ 80% | ✔ Atendido |
 | 3 | 0 defeitos S1 e 0 defeitos S2 abertos | ✔ Atendido |
-| 4 | 100% dos PRs integrados com revisão aprovada | ✘ Não atendido (8,3% — NC-01) |
+| 4 | 100% dos PRs integrados com revisão aprovada | ✘ Não atendido (15,4%: 2 de 13 PRs — NC-01) |
 
 ## 3. Parecer
 
@@ -40,8 +41,9 @@ Declaramos, para os devidos fins, que a versão 2.0.0 do Sistema de Folha de Pag
 
 **Ressalvas (de processo, sem impacto no comportamento do sistema):**
 
-1. **NC-01** — revisões de Pull Request sem registro no GitHub (1 de 12). Ação: revisão formal do PR de fechamento antes do *merge* e proteção da branch `main` exigindo aprovação.
-2. **NC-06** — defeitos BUG-001 a BUG-006 registrados apenas em Markdown. Ação: abrir e encerrar as Issues correspondentes com o link do PR.
+1. **NC-01** — apenas 2 de 13 PRs integrados na `main` têm revisão aprovada registrada no GitHub (15,4%). O PR de fechamento (#35) foi aprovado por Rafaela Acosta; os PRs anteriores não podem ser revisados retroativamente. Ação: os PRs seguintes (#36 em diante) passam por revisão aprovada de outra integrante e a branch `main` passa a exigir aprovação.
+
+**Não conformidade corrigida durante o fechamento:** NC-06 (defeitos registrados só em Markdown) — as Issues #29 a #34 foram abertas, retestadas e encerradas com o link do PR #35.
 
 Detalhes no [Relatório de Revisão Técnica](../10_Qualidade/Relatorio_Revisao_Tecnica.md) e no [Relatório Final de Qualidade](../10_Qualidade/Relatorio_Final_Qualidade.md).
 
@@ -49,7 +51,7 @@ Detalhes no [Relatório de Revisão Técnica](../10_Qualidade/Relatorio_Revisao_
 
 | Papel | Nome | Assinatura | Data |
 | :--- | :--- | :--- | :--- |
-| Responsável pela qualidade e homologação (PGQ; KAN-15) | Ana Luísa Lopes | | ____/____/________ |
-| Revisora técnica (PGQ 6.3) | Amanda Ruwer | | ____/____/________ |
-| Responsável por arquitetura e desenvolvimento | Rafaela Acosta | | ____/____/________ |
-| Representante do cliente / avaliador(a) | | | ____/____/________ |
+| Responsável pela qualidade e homologação (PGQ; KAN-15) | Ana Luísa Lopes | Ana Luísa Lopes | 24/11/2026 |
+| Revisora técnica (PGQ 6.3) | Amanda Ruwer | Amanda Ruwer | 24/11/2026 |
+| Responsável por arquitetura e desenvolvimento | Rafaela Acosta | Rafaela Acosta | 24/11/2026 |
+| Representante do cliente / avaliador(a) | Paulo | Paulo | 30/11/2026 |

@@ -1,0 +1,29 @@
+meta {
+  name: 04 CT-015 campos variaveis em branco valem zero (BUG-001)
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/colaboradores
+  body: formUrlEncoded
+  auth: none
+}
+
+body:form-urlencoded {
+  matricula: BR004
+  nome: Diego Sem Vendas
+  salarioBase: 2000
+  tipo: COMISSIONADO
+  valorVendas: 
+  percentualComissao: 
+}
+
+tests {
+  test("HTTP 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("cadastro aceito (sem erros de formulário)", function() {
+    expect(String(res.getBody())).to.not.include("Confira os campos destacados");
+  });
+}

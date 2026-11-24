@@ -1,0 +1,44 @@
+meta {
+  name: 16 CT-023 lista as tres categorias
+  type: http
+  seq: 16
+}
+
+get {
+  url: {{baseUrl}}/
+  body: none
+  auth: none
+}
+
+tests {
+  test("HTTP 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("corpo contém \"BR001\"", function() {
+    expect(String(res.getBody())).to.include("BR001");
+  });
+  test("corpo contém \"BR002\"", function() {
+    expect(String(res.getBody())).to.include("BR002");
+  });
+  test("corpo contém \"BR003\"", function() {
+    expect(String(res.getBody())).to.include("BR003");
+  });
+  test("corpo contém \"BR004\"", function() {
+    expect(String(res.getBody())).to.include("BR004");
+  });
+  test("corpo contém \"Padrão\"", function() {
+    expect(String(res.getBody())).to.include("Padrão");
+  });
+  test("corpo contém \"Comissionado\"", function() {
+    expect(String(res.getBody())).to.include("Comissionado");
+  });
+  test("corpo contém \"Por produção\"", function() {
+    expect(String(res.getBody())).to.include("Por produção");
+  });
+  test("registros inválidos não foram gravados", function() {
+    expect(String(res.getBody())).to.not.include("BR012");
+  });
+  test("corpo NÃO contém \"BR-010\"", function() {
+    expect(String(res.getBody())).to.not.include("BR-010");
+  });
+}
