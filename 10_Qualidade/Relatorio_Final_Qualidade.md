@@ -61,7 +61,7 @@ Build: `.\mvnw.cmd clean verify` → **BUILD SUCCESS**, "All coverage checks hav
 | Defeitos críticos (S1) e altos (S2) abertos | 0 / 0 | 0 | ✔ |
 | Requisitos funcionais atendidos | 100% | 100% | ✔ |
 | Casos de teste executados e aprovados | 40 / 40 | 100% | ✔ |
-| PRs integrados com revisão registrada | 8,3% (1/12) | 100% | ✘ (NC-01) |
+| PRs integrados com revisão registrada | 15,4% (2/13) | 100% | ✘ (NC-01) |
 
 Detalhamento e fórmulas: [Metricas_Qualidade.md](Metricas_Qualidade.md).
 
