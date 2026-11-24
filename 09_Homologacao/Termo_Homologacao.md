@@ -31,7 +31,7 @@ Declaramos, para os devidos fins, que a versão 2.0.0 do Sistema de Folha de Pag
 | 1 | 100% dos requisitos funcionais implementados e rastreados com casos aprovados | ✔ Atendido |
 | 2 | Cobertura JaCoCo ≥ 80% | ✔ Atendido |
 | 3 | 0 defeitos S1 e 0 defeitos S2 abertos | ✔ Atendido |
-| 4 | 100% dos PRs integrados com revisão aprovada | ✘ Não atendido (15,4%: 2 de 13 PRs — NC-01) |
+| 4 | 100% dos PRs integrados com revisão aprovada | ✘ Não atendido (21,4%: 3 de 14 PRs até o #36 — NC-01) |
 
 ## 3. Parecer
 
@@ -41,7 +41,7 @@ Declaramos, para os devidos fins, que a versão 2.0.0 do Sistema de Folha de Pag
 
 **Ressalvas (de processo, sem impacto no comportamento do sistema):**
 
-1. **NC-01** — apenas 2 de 13 PRs integrados na `main` têm revisão aprovada registrada no GitHub (15,4%). O PR de fechamento (#35) foi aprovado por Rafaela Acosta; os PRs anteriores não podem ser revisados retroativamente. Ação: os PRs seguintes (#36 em diante) passam por revisão aprovada de outra integrante e a branch `main` passa a exigir aprovação.
+1. **NC-01** — apenas 3 de 14 PRs integrados na `main` até o #36 têm revisão aprovada registrada no GitHub (21,4%): #25, #35 (Rafaela Acosta) e #36 (Ana Luísa Lopes). Os PRs anteriores não podem ser revisados retroativamente. A medição está fixada no #36; PRs posteriores (como o #37, que contém esta atualização) não entram no cálculo, para o denominador não mudar a cada PR de documentação. Ação: os PRs seguintes passam por revisão aprovada de outra integrante e a branch `main` passa a exigir aprovação.
 
 **Não conformidade corrigida durante o fechamento:** NC-06 (defeitos registrados só em Markdown) — as Issues #29 a #34 foram abertas, retestadas e encerradas com o link do PR #35.
 

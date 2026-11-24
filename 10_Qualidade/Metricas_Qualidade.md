@@ -12,7 +12,7 @@
 | — | Cobertura de branches (complementar) | 95 / 99 × 100 | **95,96%** | ≥ 80% | ✔ Atingida |
 | 2 | Defeitos críticos abertos (S1) | Σ S1 com status ≠ Validado/Fechado | **0** | 0 | ✔ Atingida |
 | 3 | Requisitos funcionais atendidos | 11 RF aprovados / 11 RF na ERS × 100 | **100%** | 100% | ✔ Atingida |
-| 4 | Índice de revisão de PRs | 2 PRs aprovados / 13 PRs integrados na `main` × 100 | **15,4%** | 100% | ✘ **Não atingida** (NC-01) |
+| 4 | Índice de revisão de PRs | 3 PRs aprovados / 14 PRs integrados na `main` (até o #36) × 100 | **21,4%** | 100% | ✘ **Não atingida** (NC-01) |
 | 5 | Taxa de execução de testes | 40 casos executados / 40 planejados × 100 | **100%** | 100% | ✔ Atingida |
 
 ## 1. Cobertura de testes (JaCoCo)
@@ -83,5 +83,6 @@ Levantado com `gh pr list --state merged` e `gh pr view` em 24/11/2026:
 | #27 | Feat/qds 2.0.0/testes unitarios junit | não |
 | #28 | Feat/qds 2.0.0/db postgresql | não |
 | #35 | feat(A3): fechamento da entrega A3 (testes, homologação e documentação) | **aprovado** (Rafaela Acosta, 23/11/2026) |
+| #36 | test(e2e): testes Bruno e Cypress, reteste dos defeitos e validação | **aprovado** (Ana Luísa Lopes, 24/11/2026) |
 
-Resultado: **2 / 13 = 15,4%**, abaixo da meta de 100%. Revisões feitas fora do GitHub (conversa, chamada) não deixam registro verificável e não foram contadas. Tratamento em NC-01 do [Relatório de Revisão Técnica](Relatorio_Revisao_Tecnica.md).
+Resultado: **3 / 14 = 21,4%**, abaixo da meta de 100%. Ponto de medição fixado: PRs integrados na `main` **até o #36** (commit `48a956f`, 24/11/2026). PRs posteriores, como o #37 que contém esta atualização, **não entram no cálculo**: cada PR de documentação alteraria o denominador e a métrica nunca fecharia. Revisões feitas fora do GitHub (conversa, chamada) não deixam registro verificável e não foram contadas. Tratamento em NC-01 do [Relatório de Revisão Técnica](Relatorio_Revisao_Tecnica.md).

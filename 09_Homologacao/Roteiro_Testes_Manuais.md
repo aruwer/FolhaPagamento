@@ -251,7 +251,7 @@ Esse caso é observado com uma pessoa que não participou do desenvolvimento. El
 - **Resultado esperado:** todas as tarefas concluídas, com as dificuldades registradas.
 - **Evidência:** anotações da observação (tabela acima) e vídeos [CT-032-01 a CT-032-05](evidencias/CT-032/); captura complementar do [formulário de cadastro](evidencias/CT-032/CT-032-A3-formulario-cadastro.png)
 - **Situação:** [X] Aprovado  [ ] Reprovado  [ ] Bloqueado
-- **Quem executou:** pessoa que não participou do desenvolvimento (informado por Amanda Ruwer; nome e data da execução: ______________________). O resultado foi o mesmo da gravação anterior e, por isso, **os vídeos anexados são os da gravação anterior**, não necessariamente da execução dessa pessoa.
+- **Quem executou:** pessoa que não participou do desenvolvimento (informado por Amanda Ruwer; nome e data da execução: Pessoa externa ao projeto 23/11/2026). O resultado foi o mesmo da gravação anterior e, por isso, **os vídeos anexados são os da gravação anterior**, não necessariamente da execução dessa pessoa.
 - **Observações da revisão dos vídeos:** o roteiro aparece aberto no editor durante a gravação e os dados das tarefas são copiados dele. As cinco tarefas aparecem concluídas (FP132, FP133, FP134, edição de nome e abertura da folha). Na tarefa 4 o vídeo edita um cadastro existente em vez de corrigir um formulário em branco, o que coincide com a dificuldade descrita na tabela. Os tempos do vídeo (20, 34, 32, 20 e 41 s) são próximos dos registrados.
 
 ---
@@ -285,4 +285,4 @@ Esse caso é uma inspeção, não um teste de execução. Um revisor lê o códi
 
 - **Conclusão:** o RNF004 é atendido — novos tipos de remuneração são incluídos **sem alterar os cálculos existentes**. As mudanças necessárias são aditivas e restritas a cadastro, mapeamento de persistência, migration e interface.
 - **Situação:** [X] Aprovado  [ ] Reprovado  [ ] Bloqueado
-- **Revisora (PGQ 6.3):** ______________________________ **Data:** ____/____/________
+- **Revisora (PGQ 6.3):** Amanda Ruwer **Data:** 24/11/2026

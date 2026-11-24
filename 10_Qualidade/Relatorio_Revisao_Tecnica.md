@@ -13,7 +13,7 @@ Desvios em relação ao que o próprio PGQ, o Plano de Testes ou o enunciado exi
 
 | ID | Não conformidade | Referência violada | Situação | Ação |
 | :--- | :--- | :--- | :--- | :--- |
-| **NC-01** | Apenas 2 de 13 PRs integrados na `main` têm revisão aprovada registrada no GitHub (15,4%): o #25 e o #35 (aprovado por Rafaela Acosta em 23/11/2026). | PGQ 6.3 e 6.6-4 (100% dos PRs revisados) | **Parcialmente corrigida** (PR #35 aprovado; PRs antigos não podem ser revisados retroativamente) | Revisar formalmente o PR desta branch antes do *merge*; ativar a regra de proteção da `main` que exige 1 aprovação. PRs já integrados não podem ser revisados retroativamente de forma válida. |
+| **NC-01** | Apenas 3 de 14 PRs integrados na `main` até o #36 têm revisão aprovada registrada no GitHub (21,4%): o #25, o #35 (Rafaela Acosta, 23/11/2026) e o #36 (Ana Luísa Lopes, 24/11/2026). Medição fixada no #36; PRs posteriores não entram no cálculo. | PGQ 6.3 e 6.6-4 (100% dos PRs revisados) | **Parcialmente corrigida** (PR #35 aprovado; PRs antigos não podem ser revisados retroativamente) | Revisar formalmente o PR desta branch antes do *merge*; ativar a regra de proteção da `main` que exige 1 aprovação. PRs já integrados não podem ser revisados retroativamente de forma válida. |
 | **NC-02** | Cobertura de branches 77,32%, abaixo da meta de 80%; o build não aplicava limite automático. | PGQ 6.4-1 e 6.6-2 | Corrigida | 18 novos testes (bordas de competência, nulos, CT-033, CT-039); `jacoco:check` ≥ 80% (linhas e branches) no `pom.xml`. Resultado: 95,96%. |
 | **NC-03** | RNF003 sem verificação automatizada em PostgreSQL real (3 testes ignorados). | Plano de Testes 3 ("o teste Testcontainers ignorado não substitui a evidência em PostgreSQL") | Corrigida | BUG-002 corrigido; 3/3 testes executados. |
 | **NC-04** | Entrega fora da estrutura `01_Requisitos` … `11_Apresentacao` e README apontando para arquivos inexistentes (`VisaoDeSistema+ERSRastreavel.pdf`, `Consolidar EAP...pdf`, `CASOS_TESTE_RASTREAVEIS_A1.md`). | Enunciado, seção 7 | Corrigida | Documentos movidos com `git mv` (histórico preservado), README de cada pasta e índice novo no README principal. |
@@ -64,6 +64,6 @@ Observações sem defeito:
 
 **Conclusão proposta:** **Aprovado com ressalvas.** O produto atende a 100% dos requisitos funcionais, não funcionais e regras de negócio, sem defeitos abertos e com cobertura acima da meta. Permanecem duas não conformidades **de processo** (NC-01 — registro de revisão de PRs; NC-06 — defeitos fora das Issues), com ações corretivas definidas e sem impacto no comportamento do sistema.
 
-**Revisora técnica (PGQ 6.3):** Amanda Ruwer  **Assinatura:** ______________________________  **Data:** ____/____/________
+**Revisora técnica (PGQ 6.3):** Amanda Ruwer  **Assinatura:** Amanda M Ruwer  **Data:** 24/11/2026
 
-**Responsável pela qualidade (PGQ):** Ana Luísa Lopes  **Assinatura:** ______________________________  **Data:** ____/____/________
+**Responsável pela qualidade (PGQ):** Ana Luísa Lopes  **Assinatura:** Ana Luísa Lopes  **Data:** 24/11/2026
