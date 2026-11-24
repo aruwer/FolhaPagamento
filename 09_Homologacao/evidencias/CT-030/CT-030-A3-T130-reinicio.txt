@@ -1,0 +1,20 @@
+CT-030 — Recuperar dados persistidos (cenário especificado, matrícula T130)
+Executado em: 23/11/2026 21:40:51 -0300 | Aplicação: folha-pagamento-2.0.0.jar :8090 | Banco: PostgreSQL 17, database folha_evidencias
+Adaptação: competência 11/2026 no lugar de 03/2026, pois a regra de elegibilidade não inclui competências anteriores à data de cadastro.
+
+1) POST /colaboradores (T130, Sara Melo, produção 1900.00 + 80 x 3.00) -> 302 http://localhost:8090/
+2) POST /folha/processar mes=11 ano=2026 -> 302 http://localhost:8090/folha?mes=11&ano=2026
+3) Antes do reinício: GET /folha/T130?mes=11&ano=2026 -> salário final exibido: R$ 2.140,00
+4) Aplicação finalizada (PID 37000). GET / -> 000 (000 = indisponível)
+5) Aplicação reiniciada: Started FolhaPagamentoWebApplication in 5.414 seconds (process running for 5.96)
+6) Após o reinício: GET /folha/T130?mes=11&ano=2026 -> HTTP 200; salário final exibido: R$ 2.140,00
+7) Consulta SQL após o reinício:
+ matricula |   nome    | tipo_colaborador | qtd_matricula | mes | ano  | salario_base_snapshot | adicional_calculado | salario_final 
+-----------+-----------+------------------+---------------+-----+------+-----------------------+---------------------+---------------
+ T130      | Sara Melo | PRODUCAO         |             1 |  11 | 2026 |               1900.00 |              240.00 |       2140.00
+(1 row)
+
+8) Conexão configurada: HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@5c18d6d4
+
+Resultado esperado: dados e folha recuperados do banco SQL após o reinício, salário final 2140.00 e uma única matrícula.
+Resultado obtido: conforme esperado (ver itens 6 e 7 e a captura CT-030-A3-T130-demonstrativo-apos-reinicio.png). Situação: APROVADO.
