@@ -4,7 +4,7 @@ Executam a aplicação **real** (JAR + PostgreSQL 17) e salvam as evidências em
 
 | Ferramenta | O que cobre | Evidência gerada |
 | :--- | :--- | :--- |
-| **Bruno CLI** (`bruno/`) | Casos de backend por endpoint (seção 2 de [Casos_Teste_Rastreaveis.md](../04_Testes/Casos_Teste_Rastreaveis.md)): cadastro, validações, competência, folha, demonstrativo, alteração, exclusão lógica e histórico. 31 requisições, 106 asserções. | `resultado.json` (requisições e respostas completas), `relatorio.html`, `resultado.xml` (JUnit), `saida.txt` |
+| **Bruno CLI** (`bruno/`) | Casos de backend por endpoint (seção 2 de [Casos_Teste_Rastreaveis.md](../04_Testes/Casos_Teste_Rastreaveis.md)): cadastro, validações, competência, folha, demonstrativo, alteração, exclusão lógica e histórico. 33 requisições, 112 testes (asserções). | `resultado.json` (requisições e respostas completas), `relatorio.html`, `resultado.xml` (JUnit), `saida.txt` |
 | **Cypress** (`cypress/e2e/`) | Casos de tela: CT-034, CT-035, CT-010 (UI), CT-036, CT-037 e o reteste dos BUG-001, 004, 005 e 006. | capturas de tela (`.png`) por passo e vídeo (`.mp4`) de cada spec |
 
 Tudo é gravado em [`09_Homologacao/evidencias-auto/`](../09_Homologacao/evidencias-auto/).

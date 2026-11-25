@@ -1,0 +1,26 @@
+meta {
+  name: 34 BUG-007 demonstrativo da comissao de 150 por cento
+  type: http
+  seq: 34
+}
+
+get {
+  url: {{baseUrl}}/folha/BR019?mes=6&ano=2030
+  body: none
+  auth: none
+}
+
+tests {
+  test("HTTP 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("salário base R$ 1.000,00", function() {
+    expect(String(res.getBody())).to.match(/R\$\s*1\.000,00/);
+  });
+  test("adicional R$ 3.000,00 (2.000 x 150%)", function() {
+    expect(String(res.getBody())).to.match(/R\$\s*3\.000,00/);
+  });
+  test("salário final R$ 4.000,00", function() {
+    expect(String(res.getBody())).to.match(/R\$\s*4\.000,00/);
+  });
+}
