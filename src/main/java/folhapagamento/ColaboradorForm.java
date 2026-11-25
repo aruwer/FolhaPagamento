@@ -2,7 +2,6 @@ package folhapagamento;
 
 import java.math.BigDecimal;
 
-import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
@@ -34,7 +33,6 @@ public class ColaboradorForm {
     private BigDecimal valorVendas;
 
     @DecimalMin(value = "0.0", message = "A comissão não pode ser negativa.")
-    @DecimalMax(value = "100.0", message = "A comissão não pode ser maior que 100%.")
     @Digits(integer = 3, fraction = 2, message = "Informe um percentual válido com até duas casas decimais.")
     private BigDecimal percentualComissao;
 

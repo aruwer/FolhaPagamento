@@ -28,14 +28,13 @@ class ConformidadeRequisitosTest {
     }
 
     @Test
-    @DisplayName("RNF002, RN002–RN007: dados vazios e negativos bloqueados")
-    void deveBloquearDadosVaziosNegativosOuAcimaDoLimite() {
+    @DisplayName("RNF002, RN002–RN007: dados vazios e negativos bloqueados (sem teto de comissão, BUG-007)")
+    void deveBloquearDadosVaziosOuNegativos() {
         assertThrows(IllegalArgumentException.class, () -> new ColaboradorPadrao("", "Nome", 2000.0));
         assertThrows(IllegalArgumentException.class, () -> new ColaboradorPadrao("001", "   ", 2000.0));
         assertThrows(IllegalArgumentException.class, () -> new ColaboradorPadrao("001", "Nome", -1.0));
         assertThrows(IllegalArgumentException.class, () -> new ColaboradorComissionado("002", "Nome", 2000.0, -10.0, 5.0));
         assertThrows(IllegalArgumentException.class, () -> new ColaboradorComissionado("002", "Nome", 2000.0, 1000.0, -5.0));
-        assertThrows(IllegalArgumentException.class, () -> new ColaboradorComissionado("002", "Nome", 2000.0, 1000.0, 120.0));
         assertThrows(IllegalArgumentException.class, () -> new ColaboradorProducao("003", "Nome", 2000.0, -1.0, 5.0));
         assertThrows(IllegalArgumentException.class, () -> new ColaboradorProducao("003", "Nome", 2000.0, 10.0, -2.0));
     }

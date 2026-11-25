@@ -104,12 +104,13 @@ class ColaboradorTest {
     }
 
     @Test
-    @DisplayName("CT-005 - Deve aceitar comissão de até 100% e rejeitar percentual acima do limite")
-    void validaLimitesDeComissao() {
-        ColaboradorComissionado noLimite = new ColaboradorComissionado("007", "Gabi", 0, 0, 100);
-        assertEquals(new BigDecimal("0.00"), noLimite.getSalarioFinal());
+    @DisplayName("CT-005 / BUG-007 - Deve aceitar comissão acima de 100% (RN005 só proíbe negativo)")
+    void aceitaComissaoAcimaDeCemPorCento() {
+        ColaboradorComissionado acima = new ColaboradorComissionado("007", "Gabi", 1_000, 2_000, 150);
+        assertEquals(new BigDecimal("3000.00"), acima.getAdicional());
+        assertEquals(new BigDecimal("4000.00"), acima.getSalarioFinal());
         assertThrows(IllegalArgumentException.class,
-                () -> new ColaboradorComissionado("008", "Hugo", 1_000, 1, 100.01));
+                () -> new ColaboradorComissionado("008", "Hugo", 1_000, 1, -0.01));
     }
 
     @Test
