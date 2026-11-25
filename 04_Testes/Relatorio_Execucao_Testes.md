@@ -1,7 +1,7 @@
 # Relatório de Execução dos Testes Automatizados
 
-**Projeto:** Sistema de Folha de Pagamento · **Versão:** 2.0.0 · **Branch:** `feat/QDS_2.0.0/fechamento-a3`  
-**Data/hora:** 23/11/2026, 22:55 (-03:00)  
+**Projeto:** Sistema de Folha de Pagamento · **Versão:** 2.0.0 · **Branch:** `fix/QDS_2.0.0/correcoes-avaliacao-a3`  
+**Data/hora:** 25/11/2026, 00:12 (-03:00)  
 **Comando:** `.\mvnw.cmd clean verify` (saída integral em [log-verify.txt](log-verify.txt))  
 **Ambiente:** Windows 11 Home, JDK 23.0.1 (compilação com `release 17`), Maven 3.9.9 (wrapper), Docker Desktop (Engine 29.9.3), Testcontainers 1.21.4, PostgreSQL 17-alpine  
 **Relatórios brutos:** [surefire-reports/](surefire-reports/) (TXT/XML por classe) e [relatório JaCoCo](../10_Qualidade/evidencias/jacoco/index.html)
@@ -11,12 +11,12 @@
 | Indicador | Resultado |
 | :--- | ---: |
 | Build Maven | **BUILD SUCCESS** |
-| Testes executados | **105** |
-| Aprovados | **105** |
+| Testes executados | **106** |
+| Aprovados | **106** |
 | Falhas / erros | **0 / 0** |
 | Ignorados | **0** |
 | Verificação de cobertura (`jacoco:check`, mínimo 80%) | **All coverage checks have been met** |
-| Tempo total do build | 35,7 s |
+| Tempo total do build | 35,6 s |
 
 ## 2. Testes unitários (seção 6.3 do enunciado)
 
@@ -42,11 +42,11 @@ Detalhados por categoria (persistência, fluxos de negócio, relatórios e integ
 | `FolhaPagamentoWebCasosDeTesteTest` | Spring Boot + MockMvc + JPA + H2 | 21 | 21 | 0 | 0 | 0 |
 | `CompetenciaEBordasTest.Web` | Spring Boot + MockMvc + JPA + H2 | 11 | 11 | 0 | 0 | 0 |
 | `RepositorioColaboradoresTest` | Spring Boot + JPA + H2 | 4 | 4 | 0 | 0 | 0 |
-| `RepositorioColaboradoresPostgresTest` | Spring Boot + JPA + Flyway + **PostgreSQL 17 real (Testcontainers)** | 3 | 3 | 0 | 0 | 0 |
+| `RepositorioColaboradoresPostgresTest` | Spring Boot + JPA + Flyway + **PostgreSQL 17 real (Testcontainers)** | 4 | 4 | 0 | 0 | 0 |
 | `FolhaPagamentoWebApplicationTest` | Contexto completo + Thymeleaf + JPA | 2 | 2 | 0 | 0 | 0 |
-| **Subtotal integração** | | **41** | **41** | **0** | **0** | **0** |
+| **Subtotal integração** | | **42** | **42** | **0** | **0** | **0** |
 
-**Total geral: 105 testes, 105 aprovados.**
+**Total geral: 106 testes, 106 aprovados.**
 
 ## 4. Cobertura de código (JaCoCo 0.8.13)
 
@@ -54,9 +54,9 @@ Escopo: todas as classes de produção do pacote `folhapagamento` (15 classes), 
 
 | Métrica | Cobertos / total | Resultado | Meta PGQ |
 | :--- | ---: | ---: | :---: |
-| Linhas | 385 / 397 | **96,98%** | ≥ 80% ✔ |
-| Branches | 95 / 99 | **95,96%** | ≥ 80% ✔ |
-| Instruções | 1680 / 1725 | **97,39%** | — |
+| Linhas | 383 / 395 | **96,96%** | ≥ 80% ✔ |
+| Branches | 93 / 97 | **95,88%** | ≥ 80% ✔ |
+| Instruções | 1670 / 1715 | **97,38%** | — |
 | Métodos | 124 / 126 | **98,41%** | — |
 
 ### Por classe
@@ -65,7 +65,7 @@ Escopo: todas as classes de produção do pacote `folhapagamento` (15 classes), 
 | :--- | :---: | :---: | :---: |
 | `Colaborador` | 27/27 | 19/20 | 113/113 |
 | `ColaboradorPadrao` | 8/8 | — | 22/22 |
-| `ColaboradorComissionado` | 21/21 | 2/2 | 76/76 |
+| `ColaboradorComissionado` | 19/19 | — | 66/66 |
 | `ColaboradorProducao` | 21/21 | 2/2 | 73/73 |
 | `ColaboradorForm` | 39/39 | 10/10 | 180/180 |
 | `ColaboradorJpaEntity` (+ enum `TipoColaborador`) | 48/49 | 7/7 | 194/197 |
@@ -84,9 +84,9 @@ As linhas não cobertas são: o método `main` (a aplicação é iniciada pelo c
 
 | Indicador | Antes | Agora |
 | :--- | :---: | :---: |
-| Testes executados / ignorados | 84 / 3 | 105 / 0 |
-| Linhas | 93,38% | 96,98% |
-| Branches | 77,32% (abaixo da meta) | 95,96% |
+| Testes executados / ignorados | 84 / 3 | 106 / 0 |
+| Linhas | 93,38% | 96,96% |
+| Branches | 77,32% (abaixo da meta) | 95,88% |
 | Limite automático de cobertura | não havia | `jacoco:check` ≥ 80% |
 
 ## 5. Reprodutibilidade

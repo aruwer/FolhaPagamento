@@ -5,8 +5,8 @@ O projeto Maven está na **raiz do repositório**, para que `mvnw.cmd`, o Docker
 | Item do enunciado | Onde está |
 | :--- | :--- |
 | Código completo | [`src/main/java/folhapagamento/`](../src/main/java/folhapagamento/) (17 classes), [`src/main/resources/templates/`](../src/main/resources/templates/) (Thymeleaf), [`src/main/resources/static/`](../src/main/resources/static/) (CSS/JS) |
-| Código dos testes | [`src/test/java/folhapagamento/`](../src/test/java/folhapagamento/) (11 classes, 105 testes) |
-| Scripts de banco de dados | [`src/main/resources/db/migration/`](../src/main/resources/db/migration/) (Flyway V1, V2) e [06_Banco_Dados/seed-colaboradores.sql](../06_Banco_Dados/seed-colaboradores.sql) |
+| Código dos testes | [`src/test/java/folhapagamento/`](../src/test/java/folhapagamento/) (11 classes, 106 testes) |
+| Scripts de banco de dados | [`src/main/resources/db/migration/`](../src/main/resources/db/migration/) (Flyway V1, V2, V3) e [06_Banco_Dados/seed-colaboradores.sql](../06_Banco_Dados/seed-colaboradores.sql) |
 | Arquivos de configuração | [`pom.xml`](../pom.xml), [`application.properties`](../src/main/resources/application.properties), [`docker-compose.yml`](../docker-compose.yml), [`.env.example`](../.env.example) |
 | Instruções de instalação | [README principal](../README.md#instalação-e-execução) e [Manual do Usuário](../08_Manuais/Manual_Usuario.md) |
 

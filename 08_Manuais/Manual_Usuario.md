@@ -88,7 +88,7 @@ O painel lista os colaboradores **ativos** com matrícula, nome, tipo, detalhes 
 
 ![Formulário de cadastro](../09_Homologacao/evidencias/CT-032/CT-032-A3-formulario-cadastro.png)
 
-**Mensagens de validação:** o sistema não aceita matrícula repetida, nome ou salário base em branco, valores negativos, percentual acima de 100% ou mais de duas casas decimais em valores monetários. O campo com problema fica destacado com a explicação.
+**Mensagens de validação:** o sistema não aceita matrícula repetida, nome ou salário base em branco, valores negativos ou mais de duas casas decimais em valores monetários. O percentual de comissão não tem limite superior (por exemplo, 150% é aceito); só não pode ser negativo. O campo com problema fica destacado com a explicação.
 
 ### 3.3. Alterar e excluir
 

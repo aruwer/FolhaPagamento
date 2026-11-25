@@ -20,41 +20,38 @@ public final class ColaboradorComissionado extends Colaborador {
 <span class="fc" id="L20">        percentualComissao = valorOuZero(percentualComissao);</span>
 <span class="fc" id="L21">        validarNaoNegativo(valorVendas, &quot;O valor das vendas&quot;);</span>
 <span class="fc" id="L22">        validarNaoNegativo(percentualComissao, &quot;O percentual de comissão&quot;);</span>
-<span class="fc bfc" id="L23" title="All 2 branches covered.">        if (percentualComissao.compareTo(BigDecimal.valueOf(100)) &gt; 0) {</span>
-<span class="fc" id="L24">            throw new IllegalArgumentException(&quot;O percentual de comissão não pode ser maior que 100%.&quot;);</span>
-        }
-<span class="fc" id="L26">        this.valorVendas = valorMonetario(valorVendas);</span>
-<span class="fc" id="L27">        this.percentualComissao = valorMonetario(percentualComissao);</span>
-<span class="fc" id="L28">    }</span>
+<span class="fc" id="L23">        this.valorVendas = valorMonetario(valorVendas);</span>
+<span class="fc" id="L24">        this.percentualComissao = valorMonetario(percentualComissao);</span>
+<span class="fc" id="L25">    }</span>
 
     @Override
     public String getTipo() {
-<span class="fc" id="L32">        return &quot;Comissionado&quot;;</span>
+<span class="fc" id="L29">        return &quot;Comissionado&quot;;</span>
     }
 
     @Override
     public String getCodigoPersistencia() {
-<span class="fc" id="L37">        return &quot;COMISSIONADO&quot;;</span>
+<span class="fc" id="L34">        return &quot;COMISSIONADO&quot;;</span>
     }
 
     @Override
     public BigDecimal getAdicional() {
-<span class="fc" id="L42">        return valorVendas.multiply(percentualComissao)</span>
-<span class="fc" id="L43">                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);</span>
+<span class="fc" id="L39">        return valorVendas.multiply(percentualComissao)</span>
+<span class="fc" id="L40">                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);</span>
     }
 
     public BigDecimal getValorVendas() {
-<span class="fc" id="L47">        return valorVendas;</span>
+<span class="fc" id="L44">        return valorVendas;</span>
     }
 
     public BigDecimal getPercentualComissao() {
-<span class="fc" id="L51">        return percentualComissao;</span>
+<span class="fc" id="L48">        return percentualComissao;</span>
     }
 
     @Override
     public String getDetalhesRemuneracao() {
-<span class="fc" id="L56">        return &quot;Vendas: &quot; + valorVendas.toPlainString() + &quot; | Comissão: &quot;</span>
-<span class="fc" id="L57">                + percentualComissao.toPlainString() + &quot;%&quot;;</span>
+<span class="fc" id="L53">        return &quot;Vendas: &quot; + valorVendas.toPlainString() + &quot; | Comissão: &quot;</span>
+<span class="fc" id="L54">                + percentualComissao.toPlainString() + &quot;%&quot;;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

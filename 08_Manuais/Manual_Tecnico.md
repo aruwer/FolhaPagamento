@@ -22,7 +22,7 @@ Navegador ──HTTP──► FolhaPagamentoController (+ ColaboradorForm, Forma
                                    └─ FolhaProcessadaJpaRepository → folhas_processadas
                                                      │
                                                      ▼
-                                          PostgreSQL 17 (Flyway V1, V2)
+                                          PostgreSQL 17 (Flyway V1, V2, V3)
 ```
 
 **Decisões principais**
@@ -72,7 +72,7 @@ src/main/resources/
   templates/                    index, colaboradores/form, folha, folha-individual, fragments/nav
   static/css/app.css            estilos (inclui @media print)
   static/js/colaborador-form.js exibe campos conforme o tipo selecionado
-src/test/java/folhapagamento/   11 classes, 105 testes (unitários e integração)
+src/test/java/folhapagamento/   11 classes, 106 testes (unitários e integração)
 ```
 
 | Classe | Responsabilidade |
@@ -131,7 +131,7 @@ Configuração por variáveis de ambiente: `DATABASE_URL`, `DATABASE_USERNAME`, 
 ## 6. Manutenção
 
 ### 6.1. Alterar o esquema do banco
-1. Crie `src/main/resources/db/migration/V3__descricao.sql` (nunca edite V1/V2, que já foram aplicadas).
+1. Crie `src/main/resources/db/migration/V4__descricao.sql` (nunca edite V1 a V3, que já foram aplicadas).
 2. Ajuste as entidades JPA correspondentes — com `ddl-auto=validate`, a aplicação não inicia se entidade e esquema divergirem.
 3. Rode `.\mvnw.cmd clean verify`: `RepositorioColaboradoresPostgresTest` aplica todas as migrations em um PostgreSQL limpo.
 

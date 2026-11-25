@@ -18,11 +18,11 @@ Declaramos, para os devidos fins, que a versão 2.0.0 do Sistema de Folha de Pag
 | Regras de negócio RN001–RN010 | 10/10 atendidas |
 | Critérios gerais de aceitação ACE-1 a ACE-6 | 6/6 aprovados ([Criterios_Aceitacao.md](Criterios_Aceitacao.md)) |
 | Cenários de aceitação | 15/15 aprovados ([Relatorio_Testes_Aceitacao.md](Relatorio_Testes_Aceitacao.md)) |
-| Casos de teste CT-001 a CT-040 | 40/40 executados e aprovados |
-| Testes automatizados (JUnit) | 105/105 aprovados, 0 ignorados |
-| Testes E2E contra a aplicação real | Bruno CLI 31/31 (106 asserções) e Cypress 9/9; evidências em [evidencias-auto](evidencias-auto/), validadas em 24/11/2026 |
-| Cobertura de código | 96,98% linhas · 95,96% branches (meta ≥ 80%) |
-| Defeitos | 6 encontrados, 6 corrigidos, validados e encerrados nas Issues #29 a #34; 0 abertos; 0 críticos/altos |
+| Casos de teste CT-001 a CT-041 | 41/41 executados e aprovados |
+| Testes automatizados (JUnit) | 106/106 aprovados, 0 ignorados |
+| Testes E2E contra a aplicação real | Bruno CLI 33/33 (112 testes) e Cypress 11/11, execução de 24/11/2026 23:50; evidências em [evidencias-auto](evidencias-auto/) (a primeira execução foi validada em 24/11/2026; a revisão da reexecução, pelo BUG-007, está pendente) |
+| Cobertura de código | 96,96% linhas · 95,88% branches (meta ≥ 80%) |
+| Defeitos | 7 encontrados e 7 corrigidos; BUG-001 a BUG-006 validados e encerrados nas Issues #29 a #34; BUG-007 (Issue #38, teto de 100% na comissão, apontado pela avaliação da A3) corrigido e a validar; 0 abertos; 0 críticos/altos |
 
 ## 2. Critérios de aprovação do PGQ (seção 6.6)
 

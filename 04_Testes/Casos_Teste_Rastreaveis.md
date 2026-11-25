@@ -3,7 +3,7 @@
 **Projeto:** Sistema de Folha de Pagamento  
 **Versão-alvo:** QDS_2.0.0<br>
 **Tarefa:** [Testes][A1] Especificar no mínimo 20 casos de teste rastreáveis  
-**Status:** 40 casos especificados (A1) e **executados na A3 — 40 aprovados, 0 reprovados, 0 bloqueados** (registro na seção 6)
+**Status:** 41 casos (40 especificados na A1 + CT-041, incluído na revisão do BUG-007) e **executados na A3 — 41 aprovados, 0 reprovados, 0 bloqueados** (registro na seção 6)
 
 ## 1. Convenções
 
@@ -616,13 +616,34 @@ Scenario: avaliar inclusão de novo tipo de remuneração
 	Then a análise deve registrar classes e fórmulas afetadas e verificar se os cálculos existentes podem permanecer isolados
 ```
 
+### CT-041 - Aceitar percentual de comissão acima de 100% (regressão do BUG-007)
+
+**Requisitos:** RF003, RN005, RN008 | **Nível:** Integração HTTP / Sistema | **Prioridade:** P1 | **Execução:** MockMvc, HTTP local e navegador
+**Endpoint:** `POST /colaboradores` com `tipo=COMISSIONADO` e `percentualComissao=150`; `GET /folha/{matricula}`.
+
+**Variáveis sugeridas:** `matricula = "BR019"`; `salarioBase = 1000.00`; `valorVendas = 2000.00`; `percentualComissao = 150`; `adicionalEsperado = 3000.00`; `salarioFinalEsperado = 4000.00`; contraprova `percentualComissao = -0.01`.
+
+```gherkin
+Scenario: aceitar percentual de comissão acima de 100%
+	Given que a RN005 só proíbe percentual de comissão negativo
+	When cadastrar um comissionado com base 1000.00, vendas 2000.00 e comissão de 150%
+	Then o cadastro deve ser aceito e o demonstrativo deve exibir adicional R$ 3.000,00 e salário final R$ 4.000,00
+
+Scenario: continuar rejeitando percentual negativo
+	Given o mesmo colaborador com percentual -0.01
+	When enviar o formulário por `POST /colaboradores`
+	Then a resposta deve indicar a validação do campo e não deve persistir o colaborador
+```
+
+**Nota:** o teto de 100% foi uma restrição adicional do grupo, sem respaldo na RN005 do cliente; foi removido no BUG-007 (domínio, formulário, tela e banco, migração V3).
+
 ## 5. Rastreabilidade requisito a requisito
 
 | Requisito/grupo | Casos |
 |---|---|
 | RF001, cadastro com matrícula, nome, salário base e tipo | CT-001 a CT-006, CT-009 a CT-016, CT-019 a CT-020 |
 | RF002, cadastro padrão | CT-001, CT-002, CT-014 |
-| RF003, cadastro comissionado | CT-003 a CT-005, CT-015 a CT-018 |
+| RF003, cadastro comissionado | CT-003 a CT-005, CT-015 a CT-018, CT-041 |
 | RF004, cadastro por produção | CT-006 a CT-008, CT-019 a CT-022 |
 | RF005, consulta de colaboradores | CT-023, CT-024, CT-025, CT-037 |
 | RF006, cálculo automático por categoria e competência | CT-001 a CT-008, CT-036 |
@@ -639,7 +660,7 @@ Scenario: avaliar inclusão de novo tipo de remuneração
 | RN002, nome obrigatório | CT-012 |
 | RN003, salário base não negativo | CT-002, CT-014 |
 | RN004, vendas não negativas | CT-004, CT-017 |
-| RN005, percentual de comissão não negativo | CT-005, CT-018 |
+| RN005, percentual de comissão não negativo (sem teto) | CT-005, CT-018, CT-041 |
 | RN006, quantidade produzida não negativa | CT-007, CT-021 |
 | RN007, valor por unidade não negativo | CT-008, CT-022 |
 | RN008, salário final calculado automaticamente | CT-001 a CT-008, CT-036 |
@@ -658,7 +679,7 @@ Os IDs `CT001`–`CT010` da matriz de rastreabilidade incluída na ERS são agru
 |---|---|---|
 | CT001 | RF001, RF009, RN001, RN002, RN009 | CT-009, CT-012, CT-023 a CT-025, CT-037 |
 | CT002 | RF002, RN003 | CT-001, CT-002, CT-014 |
-| CT003 | RF003, RN004, RN005 | CT-003 a CT-005, CT-017, CT-018 |
+| CT003 | RF003, RN004, RN005 | CT-003 a CT-005, CT-017, CT-018, CT-041 |
 | CT004 | RF004, RN006, RN007 | CT-006 a CT-008, CT-021, CT-022 |
 | CT005 | RF005, RF009, RN009 | CT-023 a CT-025, CT-037 |
 | CT006 | RF006, RF007, RF010, RN008, RN010 | CT-001 a CT-008, CT-026, CT-027, CT-036, CT-038, CT-040 |
@@ -669,7 +690,7 @@ Os IDs `CT001`–`CT010` da matriz de rastreabilidade incluída na ERS são agru
 
 ## 6. Registro de execução
 
-Execução de referência: `.\mvnw.cmd clean verify` em 23/11/2026 (105 testes, 0 falhas, 0 erros, 0 ignorados — [log](log-verify.txt)) e execuções manuais registradas no [roteiro](../09_Homologacao/Roteiro_Testes_Manuais.md). Os nomes dos testes são os métodos JUnit cujo `@DisplayName` cita o caso.
+Execução de referência: `.\mvnw.cmd clean verify` em 25/11/2026 (106 testes, 0 falhas, 0 erros, 0 ignorados — [log](log-verify.txt)) e execuções manuais registradas no [roteiro](../09_Homologacao/Roteiro_Testes_Manuais.md). Os nomes dos testes são os métodos JUnit cujo `@DisplayName` cita o caso.
 
 | ID do caso | Versão | Data | Executor | Ambiente | Resultado | Evidência |
 |---|---|---|---|---|---|---|
@@ -677,7 +698,7 @@ Execução de referência: `.\mvnw.cmd clean verify` em 23/11/2026 (105 testes, 
 | CT-002 | 2.0.0 | 23/11/2026 | Suíte automatizada (`mvnw clean verify`) | Windows 11, JDK 23.0.1, Maven 3.9.9; H2 + MockMvc e PostgreSQL 17 (Testcontainers) | **Aprovado** | `ColaboradorTest.aceitaSalariosEAdicionaisZero` |
 | CT-003 | 2.0.0 | 23/11/2026 | Suíte automatizada (`mvnw clean verify`) | Windows 11, JDK 23.0.1, Maven 3.9.9; H2 + MockMvc e PostgreSQL 17 (Testcontainers) | **Aprovado** | `ColaboradorFormTest.construiComissionado`, `ColaboradorTest.colaboradorComissionadoCalculaAdicionalSobreVendas`, `FolhaPagamentoWebCasosDeTesteTest.ct003CalculaComissaoOuZero` |
 | CT-004 | 2.0.0 | 23/11/2026 | Suíte automatizada (`mvnw clean verify`) | Windows 11, JDK 23.0.1, Maven 3.9.9; H2 + MockMvc e PostgreSQL 17 (Testcontainers) | **Aprovado** | `ColaboradorTest.aceitaSalariosEAdicionaisZero`, `FolhaPagamentoWebCasosDeTesteTest.ct003CalculaComissaoOuZero` |
-| CT-005 | 2.0.0 | 23/11/2026 | Suíte automatizada (`mvnw clean verify`) | Windows 11, JDK 23.0.1, Maven 3.9.9; H2 + MockMvc e PostgreSQL 17 (Testcontainers) | **Aprovado** | `ColaboradorTest.validaLimitesDeComissao`, `FolhaPagamentoWebCasosDeTesteTest.ct003CalculaComissaoOuZero` |
+| CT-005 | 2.0.0 | 23/11/2026 | Suíte automatizada (`mvnw clean verify`) | Windows 11, JDK 23.0.1, Maven 3.9.9; H2 + MockMvc e PostgreSQL 17 (Testcontainers) | **Aprovado** | `FolhaPagamentoWebCasosDeTesteTest.ct003CalculaComissaoOuZero` |
 | CT-006 | 2.0.0 | 23/11/2026 | Suíte automatizada (`mvnw clean verify`) | Windows 11, JDK 23.0.1, Maven 3.9.9; H2 + MockMvc e PostgreSQL 17 (Testcontainers) | **Aprovado** | `ColaboradorFormTest.construiProducao`, `ColaboradorTest.colaboradorProducaoCalculaAdicionalPelaQuantidadeProduzida`, `FolhaPagamentoWebCasosDeTesteTest.ct006CalculaProducaoOuZero` |
 | CT-007 | 2.0.0 | 23/11/2026 | Suíte automatizada (`mvnw clean verify`) | Windows 11, JDK 23.0.1, Maven 3.9.9; H2 + MockMvc e PostgreSQL 17 (Testcontainers) | **Aprovado** | `ColaboradorTest.aceitaSalariosEAdicionaisZero`, `FolhaPagamentoWebCasosDeTesteTest.ct006CalculaProducaoOuZero` |
 | CT-008 | 2.0.0 | 23/11/2026 | Suíte automatizada (`mvnw clean verify`) | Windows 11, JDK 23.0.1, Maven 3.9.9; H2 + MockMvc e PostgreSQL 17 (Testcontainers) | **Aprovado** | `ColaboradorTest.aceitaSalariosEAdicionaisZero`, `FolhaPagamentoWebCasosDeTesteTest.ct006CalculaProducaoOuZero` |
@@ -689,7 +710,7 @@ Execução de referência: `.\mvnw.cmd clean verify` em 23/11/2026 (105 testes, 
 | CT-014 | 2.0.0 | 23/11/2026 | Suíte automatizada (`mvnw clean verify`) | Windows 11, JDK 23.0.1, Maven 3.9.9; H2 + MockMvc e PostgreSQL 17 (Testcontainers) | **Aprovado** | `ColaboradorFormTest.validaValoresVariaveisNegativos`, `ColaboradorTest.rejeitaSalarioBaseNegativoOuNaoFinito`, `FolhaPagamentoControllerTest.errosDeValidacaoDoFormulario`, `FolhaPagamentoWebCasosDeTesteTest.ct014E018RejeitaValoresNegativos` |
 | CT-015 | 2.0.0 | 23/11/2026 | Suíte automatizada (`mvnw clean verify`) | Windows 11, JDK 23.0.1, Maven 3.9.9; H2 + MockMvc e PostgreSQL 17 (Testcontainers) | **Aprovado** | `FolhaPagamentoControllerTest.errosDeValidacaoDoFormulario`, `FolhaPagamentoWebCasosDeTesteTest.ct015E016AceitaCamposComissionadosEmBranco` |
 | CT-016 | 2.0.0 | 23/11/2026 | Suíte automatizada (`mvnw clean verify`) | Windows 11, JDK 23.0.1, Maven 3.9.9; H2 + MockMvc e PostgreSQL 17 (Testcontainers) | **Aprovado** | `FolhaPagamentoControllerTest.errosDeValidacaoDoFormulario`, `FolhaPagamentoWebCasosDeTesteTest.ct015E016AceitaCamposComissionadosEmBranco` |
-| CT-017 | 2.0.0 | 23/11/2026 | Suíte automatizada (`mvnw clean verify`) | Windows 11, JDK 23.0.1, Maven 3.9.9; H2 + MockMvc e PostgreSQL 17 (Testcontainers) | **Aprovado** | `ColaboradorFormTest.validaValoresVariaveisNegativos`, `ColaboradorTest.rejeitaValoresAdicionaisNegativos`, `FolhaPagamentoControllerTest.errosDeValidacaoDoFormulario`, `FolhaPagamentoWebCasosDeTesteTest.ct014E018RejeitaValoresNegativos` |
+| CT-017 | 2.0.0 | 23/11/2026 | Suíte automatizada (`mvnw clean verify`) | Windows 11, JDK 23.0.1, Maven 3.9.9; H2 + MockMvc e PostgreSQL 17 (Testcontainers) | **Aprovado** | `ColaboradorFormTest.validaValoresVariaveisNegativos`, `ColaboradorFormTest.validaComissaoAcimaDeCemEhNegativa`, `ColaboradorTest.rejeitaValoresAdicionaisNegativos`, `FolhaPagamentoControllerTest.errosDeValidacaoDoFormulario`, `FolhaPagamentoWebCasosDeTesteTest.ct014E018RejeitaValoresNegativos` |
 | CT-018 | 2.0.0 | 23/11/2026 | Suíte automatizada (`mvnw clean verify`) | Windows 11, JDK 23.0.1, Maven 3.9.9; H2 + MockMvc e PostgreSQL 17 (Testcontainers) | **Aprovado** | `ColaboradorFormTest.validaValoresVariaveisNegativos`, `ColaboradorTest.rejeitaValoresAdicionaisNegativos`, `FolhaPagamentoWebCasosDeTesteTest.ct014E018RejeitaValoresNegativos` |
 | CT-019 | 2.0.0 | 23/11/2026 | Suíte automatizada (`mvnw clean verify`) | Windows 11, JDK 23.0.1, Maven 3.9.9; H2 + MockMvc e PostgreSQL 17 (Testcontainers) | **Aprovado** | `FolhaPagamentoWebCasosDeTesteTest.ct019E020AceitaCamposProducaoEmBranco` |
 | CT-020 | 2.0.0 | 23/11/2026 | Suíte automatizada (`mvnw clean verify`) | Windows 11, JDK 23.0.1, Maven 3.9.9; H2 + MockMvc e PostgreSQL 17 (Testcontainers) | **Aprovado** | `FolhaPagamentoWebCasosDeTesteTest.ct019E020AceitaCamposProducaoEmBranco` |
@@ -713,8 +734,9 @@ Execução de referência: `.\mvnw.cmd clean verify` em 23/11/2026 (105 testes, 
 | CT-038 | 2.0.0 | 23/11/2026 | Suíte automatizada + revisão A3 | Windows 11, JDK 23.0.1, Maven 3.9.9; H2 + MockMvc e PostgreSQL 17 (Testcontainers); PostgreSQL 17 (Docker Compose) + navegador | **Aprovado** | `FolhaPagamentoWebCasosDeTesteTest.ct038ExibeAdicionaisZerados`, `FolhaPagamentoWebCasosDeTesteTest.ct038BrancoAceitaVendasEmBranco`; [demonstrativo com R$ 0,00](../09_Homologacao/evidencias/CT-038/) |
 | CT-039 | 2.0.0 | 23/11/2026 | Suíte automatizada (`mvnw clean verify`) | Windows 11, JDK 23.0.1, Maven 3.9.9; H2 + MockMvc e PostgreSQL 17 (Testcontainers) | **Aprovado** | `FolhaPagamentoWebCasosDeTesteTest.ct039ResumePorCategoriaECompetencia` |
 | CT-040 | 2.0.0 | 23/11/2026 | Revisão A3 | Edge 158 headless; PostgreSQL 17 (Docker Compose) | **Aprovado** | [tela, PDF e página impressa](../09_Homologacao/evidencias/CT-040/) |
+| CT-041 | 2.0.0 | 25/11/2026 | Suíte automatizada (`mvnw clean verify`) + E2E Bruno e Cypress | Windows 11, JDK 23.0.1, Maven 3.9.9; H2 + MockMvc e PostgreSQL 17 (Testcontainers); aplicação real + PostgreSQL 17 | **Aprovado** | `ColaboradorTest.aceitaComissaoAcimaDeCemPorCento`, `ColaboradorFormTest.validaComissaoAcimaDeCemEhNegativa`, `RepositorioColaboradoresPostgresTest.persisteComissaoAcimaDeCemPorCento`; Bruno 32–34 e [Cypress BUG-007](../09_Homologacao/evidencias-auto/cypress/screenshots/bug007-comissao-acima-de-100.cy.js/BUG-007/) (execução de 24/11/2026 23:50; revisão por Amanda Ruwer pendente) |
 
-**Resumo:** 40 casos executados; 40 aprovados; 0 reprovados; 0 bloqueados.
+**Resumo:** 41 casos executados; 41 aprovados; 0 reprovados; 0 bloqueados.
 
 ## 7. Revisão
 
@@ -723,4 +745,5 @@ Casos revisados contra a [ERS](../01_Requisitos/Documento_Visao_e_ERS.md) no fec
 - O contrato HTTP de competência adotado é `mes`/`ano` nas rotas `/folha`, `/folha/processar` e `/folha/{matricula}`.
 - Não há rota própria de recibo: o recibo é a impressão do demonstrativo individual pelo navegador (CT-040).
 - CT-015, CT-016, CT-019 e CT-020 foram corrigidos para tratar valores variáveis em branco como zero, conforme RN010 (BUG-001).
+- O CT-041 foi incluído na avaliação da A3: a RN005 só proíbe percentual negativo, então comissão acima de 100% deve ser aceita (BUG-007, [Issue #38](https://github.com/aruwer/FolhaPagamento/issues/38)).
 - Os resultados acima foram associados aos IDs dos casos e aos defeitos do [Registro de Defeitos](../10_Qualidade/Registro_Defeitos.md).

@@ -13,9 +13,9 @@ Aplicação web Java (Spring Boot + PostgreSQL) para cadastrar colaboradores, ca
 | Indicador | Resultado | Meta (PGQ) |
 | :--- | :--- | :--- |
 | Build `.\mvnw.cmd clean verify` | **BUILD SUCCESS** | sucesso |
-| Testes automatizados (unitários + integração) | **105 executados, 105 aprovados, 0 falhas, 0 ignorados** | 100% |
-| Cobertura de linhas / branches (JaCoCo) | **96,98% / 95,96%** | ≥ 80% (verificado automaticamente no build) |
-| Casos de teste especificados executados e aprovados | **40 / 40** | 100% |
+| Testes automatizados (unitários + integração) | **106 executados, 106 aprovados, 0 falhas, 0 ignorados** | 100% |
+| Cobertura de linhas / branches (JaCoCo) | **96,96% / 95,88%** | ≥ 80% (verificado automaticamente no build) |
+| Casos de teste especificados executados e aprovados | **41 / 41** | 100% |
 | Requisitos funcionais atendidos | **11 / 11 (100%)** | 100% |
 | Defeitos S1/S2 abertos | **0** | 0 |
 
@@ -28,7 +28,7 @@ Detalhes em [10_Qualidade/Relatorio_Final_Qualidade.md](10_Qualidade/Relatorio_F
 | [01_Requisitos](01_Requisitos/) | Documento de Visão e ERS (RF, RN, RNF, critérios de aceitação, matriz de rastreabilidade), matriz de conformidade e baseline A1 em PDF |
 | [02_Analise](02_Analise/) | Modelagem UML: casos de uso, classes e sequência |
 | [03_Projeto](03_Projeto/) | Documento de Arquitetura; EAP, cronograma e responsabilidades |
-| [04_Testes](04_Testes/) | Plano de testes, 40 casos de teste rastreáveis, relatórios de execução (unitários e integração), log e relatórios Surefire |
+| [04_Testes](04_Testes/) | Plano de testes, 41 casos de teste rastreáveis, relatórios de execução (unitários e integração), log e relatórios Surefire |
 | [05_Codigo_Fonte](05_Codigo_Fonte/) | Guia do código-fonte (o projeto Maven fica na raiz: `pom.xml`, `src/`) |
 | [06_Banco_Dados](06_Banco_Dados/) | Modelo de dados, migrations Flyway e script de carga de demonstração |
 | [07_Executavel](07_Executavel/) | Como gerar e executar o JAR |
@@ -74,7 +74,7 @@ Executa os testes unitários (JUnit 5, Mockito), de integração com H2 e MockMv
 
 ## Testes de backend e de frontend (Bruno e Cypress)
 
-Além do JUnit, a pasta [tests-e2e/](tests-e2e/README.md) tem uma coleção Bruno CLI (31 requisições, 106 asserções) e specs Cypress (9 testes) que exercitam a aplicação real e salvam evidências em [09_Homologacao/evidencias-auto/](09_Homologacao/evidencias-auto/). Execução: `cd tests-e2e; npm install; .\scripts\run-all.ps1`.
+Além do JUnit, a pasta [tests-e2e/](tests-e2e/README.md) tem uma coleção Bruno CLI (33 requisições, 112 testes) e specs Cypress (11 testes) que exercitam a aplicação real e salvam evidências em [09_Homologacao/evidencias-auto/](09_Homologacao/evidencias-auto/). Execução: `cd tests-e2e; npm install; .\scripts\run-all.ps1`.
 
 ## Funcionalidades
 

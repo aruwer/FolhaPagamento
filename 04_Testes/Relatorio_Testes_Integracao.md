@@ -1,7 +1,7 @@
 # Relatório de Testes de Integração
 
-**Projeto:** Sistema de Folha de Pagamento · **Versão:** 2.0.0 · **Execução:** 23/11/2026 ([log](log-verify.txt))  
-**Resultado:** 41 testes de integração executados, **41 aprovados**, 0 falhas, 0 erros, 0 ignorados.
+**Projeto:** Sistema de Folha de Pagamento · **Versão:** 2.0.0 · **Execução:** 25/11/2026 ([log](log-verify.txt))  
+**Resultado:** 42 testes de integração executados, **42 aprovados**, 0 falhas, 0 erros, 0 ignorados.
 
 ## 1. Estratégia
 
@@ -9,7 +9,7 @@
 | :--- | :--- | :--- |
 | HTTP → Controller → Service → Repositório JPA → banco | `@SpringBootTest` + `MockMvc` + H2 (modo PostgreSQL), transação revertida a cada teste | Exercita as rotas reais com formulário `application/x-www-form-urlencoded`, sem mocks, de forma rápida e isolada |
 | Repositório JPA → banco | `@SpringBootTest` + H2 | Verifica mapeamento JPA, restrições e consultas |
-| Repositório JPA → **PostgreSQL 17 real** com migrations Flyway | Testcontainers 1.21.4 (`postgres:17-alpine`) | Garante que o esquema versionado (V1, V2) e os tipos `NUMERIC`/`TIMESTAMPTZ` se comportam como em produção |
+| Repositório JPA → **PostgreSQL 17 real** com migrations Flyway | Testcontainers 1.21.4 (`postgres:17-alpine`) | Garante que o esquema versionado (V1, V2, V3) e os tipos `NUMERIC`/`TIMESTAMPTZ` se comportam como em produção |
 | Contexto completo + Thymeleaf | `@SpringBootTest` + `MockMvc` | Confirma que a aplicação inicializa e renderiza as telas |
 
 ## 2. Persistência
@@ -18,6 +18,7 @@
 | :--- | :--- | :--- | :---: |
 | `RepositorioColaboradoresPostgresTest.persisteCadastroERejeitaMatriculaDuplicada` | Cadastrar comissionado no PostgreSQL real e repetir a matrícula | Salário final 2.050,00 recuperado do banco; segunda inclusão rejeitada (RN001) | Aprovado |
 | `RepositorioColaboradoresPostgresTest.congelaFolhaPorCompetenciaEPreservaHistoricoNoSoftDelete` | Processar 02/2099, alterar salário, processar 03/2099, excluir | Snapshot de 02 inalterado e idêntico ao gravado; 03 com o novo salário; histórico disponível após exclusão lógica (RN009) | Aprovado |
+| `RepositorioColaboradoresPostgresTest.persisteComissaoAcimaDeCemPorCento` | Cadastrar comissionado com base 1.000,00, vendas 2.000,00 e comissão de 150% (migração V3) | Persistido e recuperado com salário final 4.000,00; sem rejeição pelo banco (BUG-007) | Aprovado |
 | `RepositorioColaboradoresPostgresTest.validaCompetenciaEPrecisaoMonetaria` | Comissão de meio centavo; competência 13/2099 | Adicional 0,01 (HALF_UP); competência inválida rejeitada | Aprovado |
 | `RepositorioColaboradoresTest.persisteTiposDeColaboradorERejeitaDuplicidade` | Persistir os três tipos e repetir matrícula | Três tipos recuperados corretamente; duplicidade rejeitada | Aprovado |
 | `RepositorioColaboradoresTest.atualizaCadastroEExcluiColaboradorAtivo` | Atualizar e excluir | Alteração persistida; excluído some da lista ativa | Aprovado |
