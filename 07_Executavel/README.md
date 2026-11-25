@@ -49,4 +49,4 @@ O build com `verify` falha se a cobertura ficar abaixo de 80%. O hash de um JAR 
 
 ## Verificação do artefato
 
-Em 24/11/2026, `executar.ps1` iniciou o JAR desta pasta em cerca de 7 s, o Flyway validou as migrations V1 e V2 (o JAR desta pasta é anterior à V3) e a aplicação respondeu HTTP 200. Ver também [CT-030-D](../09_Homologacao/evidencias/CT-030/CT-030-D-A3-persistencia-apos-reinicio.txt).
+Em 24/11/2026, `executar.ps1` iniciou o JAR desta pasta em cerca de 7 s, o Flyway validou as migrations V1 e V2 e a aplicação respondeu HTTP 200 (verificação feita com o JAR da release original). O JAR atual desta pasta foi recompilado em 25/11/2026 com a migração V3 (BUG-007) e o hash em `SHA256.txt` é o dele. Em 25/11/2026, `executar.ps1` o iniciou em um banco isolado (`folha_reteste`): o Flyway validou 3 migrations (versão 3) e a aplicação respondeu HTTP 200. Ver também [CT-030-D](../09_Homologacao/evidencias/CT-030/CT-030-D-A3-persistencia-apos-reinicio.txt).

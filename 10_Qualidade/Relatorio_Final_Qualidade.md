@@ -57,7 +57,7 @@ Build: `.\mvnw.cmd clean verify` → **BUILD SUCCESS**, "All coverage checks hav
 | :--- | :---: | :---: | :---: |
 | Cobertura de linhas | 96,96% | ≥ 80% | ✔ |
 | Cobertura de branches | 95,88% | ≥ 80% | ✔ |
-| Defeitos encontrados / corrigidos | 7 / 7 (6 validados; BUG-007 a validar) | — | ✔ |
+| Defeitos encontrados / corrigidos | 7 / 7 | — | ✔ |
 | Defeitos críticos (S1) e altos (S2) abertos | 0 / 0 | 0 | ✔ |
 | Requisitos funcionais atendidos | 100% | 100% | ✔ |
 | Casos de teste executados e aprovados | 41 / 41 | 100% | ✔ |
@@ -74,13 +74,13 @@ Detalhamento e fórmulas: [Metricas_Qualidade.md](Metricas_Qualidade.md).
 | Relatório JaCoCo (HTML, CSV, XML) | [10_Qualidade/evidencias/jacoco/](evidencias/jacoco/index.html) |
 | Capturas, vídeos e PDF por caso de teste | [09_Homologacao/evidencias/](../09_Homologacao/evidencias/) (CT-023, 026, 027, 030, 032, 034, 035, 036, 038, 040) |
 | Persistência após reinício (passos, HTTP, SQL) | [CT-030-A3-T130-reinicio.txt](../09_Homologacao/evidencias/CT-030/CT-030-A3-T130-reinicio.txt), [CT-030-D-A3-persistencia-apos-reinicio.txt](../09_Homologacao/evidencias/CT-030/CT-030-D-A3-persistencia-apos-reinicio.txt) |
-| Execução E2E automatizada (Bruno CLI 33/33 e Cypress 11/11) de 24/11/2026; revisão pelo reteste do BUG-007 pendente | [evidencias-auto/](../09_Homologacao/evidencias-auto/) (relatório HTML, respostas HTTP, capturas, vídeos e PDF de impressão) |
+| Execução E2E automatizada (Bruno CLI 33/33 e Cypress 11/11) de 24/11/2026 (reteste do BUG-007 validado em 25/11/2026) | [evidencias-auto/](../09_Homologacao/evidencias-auto/) (relatório HTML, respostas HTTP, capturas, vídeos e PDF de impressão) |
 | Histórico de commits, PRs e Issues | <https://github.com/aruwer/FolhaPagamentoA3> |
 
 ## 6. Conclusões
 
 1. **O produto está conforme.** Todos os 11 RF, 4 RNF e 10 RN estão implementados e verificados por casos executados, com evidência objetiva; os 6 critérios de aceitação da ERS foram aprovados.
 2. **A suíte é completa e confiável.** 106 testes sem falhas e sem testes ignorados, incluindo persistência no mesmo SGBD de produção. A cobertura (96,96% / 95,88%) supera a meta e passou a ser verificada automaticamente a cada build.
-3. **Os defeitos foram tratados.** Sete defeitos encontrados, todos corrigidos (seis validados; o BUG-007, apontado pela avaliação da A3, aguarda a validação do reteste), nenhum S1/S2. A execução em PostgreSQL real e a revisão visual das evidências encontraram problemas que a suíte em H2 não mostrava (BUG-005 e BUG-006).
+3. **Os defeitos foram tratados.** Sete defeitos encontrados (o BUG-007 foi apontado pela avaliação da A3), todos corrigidos e validados, nenhum S1/S2. A execução em PostgreSQL real e a revisão visual das evidências encontraram problemas que a suíte em H2 não mostrava (BUG-005 e BUG-006).
 4. **Há ressalvas de processo, não de produto.** O registro formal de revisão dos PRs (NC-01) e o registro dos defeitos nas Issues (NC-06) não seguiram o PGQ; as ações corretivas estão definidas no [Relatório de Revisão Técnica](Relatorio_Revisao_Tecnica.md).
 5. **Recomendação:** homologar a versão 2.0.0 **com ressalvas de processo** — parecer formal no [Termo de Homologação](../09_Homologacao/Termo_Homologacao.md).

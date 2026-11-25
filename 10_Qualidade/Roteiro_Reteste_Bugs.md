@@ -146,7 +146,7 @@ Em outro PowerShell, na raiz do projeto (com o Docker ligado):
 - passo 1/2: cadastro aceito; `RT007` aparece com comissão de 150,00% e **salário final R$ 4.000,00** (base 1.000,00 + adicional 3.000,00); nenhuma mensagem "não pode ser maior que 100%";
 - passo 3: o valor negativo continua rejeitado.
 
-- [ ] Aprovado  [ ] Reprovado — **Executor/validação: pendente (Amanda Ruwer).** Executado de forma automatizada em 24/11/2026 23:50 (Bruno 32–34 e Cypress `bug007`), sem falhas.
+- [X] Aprovado  [ ] Reprovado — **Executor/validação: Amanda Ruwer, em 25/11/2026.** Executado de forma automatizada em 24/11/2026 23:50 (Bruno 32–34 e Cypress `bug007`), sem falhas.
 - **Evidências:** [captura 1: formulário com 150%](../09_Homologacao/evidencias-auto/cypress/screenshots/bug007-comissao-acima-de-100.cy.js/BUG-007/passo1-formulario-150.png) · [captura 2: cadastro aceito, salário final R$ 4.000,00](../09_Homologacao/evidencias-auto/cypress/screenshots/bug007-comissao-acima-de-100.cy.js/BUG-007/passo2-cadastro-aceito.png) · [captura 3: negativo rejeitado](../09_Homologacao/evidencias-auto/cypress/screenshots/bug007-comissao-acima-de-100.cy.js/BUG-007/passo3-negativo-rejeitado.png) · [relatório Bruno](../09_Homologacao/evidencias-auto/bruno/relatorio.html) (requisições 32 a 34) · [vídeo](../09_Homologacao/evidencias-auto/cypress/videos/bug007-comissao-acima-de-100.cy.js.mp4)
 
 ---
@@ -175,12 +175,12 @@ Em outro PowerShell, na raiz do projeto (com o Docker ligado):
 | BUG-005 | Execução automatizada (Bruno CLI + Cypress, 24/11/2026 01:17); evidências revisadas por Amanda Ruwer | 24/11/2026 | **Aprovado (parte E2E)** | Bruno `24` e Cypress `BUG-005/`: uma linha por colaborador, total inalterado. A comprovação principal em PostgreSQL é do JUnit (23/11/2026) |
 | BUG-006 | Execução automatizada (Bruno CLI + Cypress, 24/11/2026 01:17); evidências revisadas por Amanda Ruwer | 24/11/2026 | **Aprovado** | Bruno `17` e Cypress `BUG-006/`: texto novo presente e texto antigo ausente |
 | Regressão CT-036 / CT-037 | Execução automatizada (Bruno CLI + Cypress, 24/11/2026 01:17); evidências revisadas por Amanda Ruwer | 24/11/2026 | **Aprovado** | Bruno `27` a `31` e Cypress `regressao-ct036-ct037.cy.js/` |
-| BUG-007 | Execução automatizada (Bruno CLI + Cypress, 24/11/2026 23:50); **revisão por Amanda Ruwer pendente** | — | **A validar** | Bruno `32` a `34` e Cypress `BUG-007/`: 150% aceito (adicional R$ 3.000,00; final R$ 4.000,00); negativo rejeitado. JUnit em PostgreSQL: `persisteComissaoAcimaDeCemPorCento` |
+| BUG-007 | Execução automatizada (Bruno CLI + Cypress, 24/11/2026 23:50); evidências revisadas por Amanda Ruwer | 25/11/2026 | **Aprovado** | Bruno `32` a `34` e Cypress `BUG-007/`: 150% aceito (adicional R$ 3.000,00; final R$ 4.000,00); negativo rejeitado. JUnit em PostgreSQL: `persisteComissaoAcimaDeCemPorCento` |
 
-**Reexecução de 24/11/2026 (23:50), após a correção do BUG-007:** a coleção e os specs foram executados de novo com o JAR corrigido (Bruno 33/33 requisições e 112 testes; Cypress 11/11 testes). Os arquivos de `evidencias-auto/` são os dessa reexecução; os resultados revisados às 01:17 permanecem no histórico do Git. A revisão da reexecução por Amanda Ruwer está **pendente** e só o BUG-007 depende dela para passar a Validado.
+**Reexecução de 24/11/2026 (23:50), após a correção do BUG-007:** a coleção e os specs foram executados de novo com o JAR corrigido (Bruno 33/33 requisições e 112 testes; Cypress 11/11 testes). Os arquivos de `evidencias-auto/` são os dessa reexecução; os resultados revisados às 01:17 permanecem no histórico do Git. Amanda Ruwer validou o reteste do BUG-007 em 25/11/2026; os demais defeitos seguem validados pela primeira execução (01:17).
 
 **Se algum item reprovar:** não altere o [Registro de Defeitos](Registro_Defeitos.md) para "Validado". Anote o que foi obtido, guarde a captura e volte o defeito para "Em Correção" na Issue correspondente.
 
-**Situação em 24/11/2026:** reteste E2E aprovado por Amanda Ruwer (BUG-001, 003, 004, 005 na parte E2E, 006 e regressão). BUG-002 foi validado pela evidência da suíte JUnit (não é coberto pelo E2E).
+**Situação em 24/11/2026:** reteste E2E aprovado por Amanda Ruwer (BUG-001, 003, 004, 005 na parte E2E, 006 e regressão). **Em 25/11/2026:** BUG-007 também aprovado por Amanda Ruwer. BUG-002 foi validado pela evidência da suíte JUnit (não é coberto pelo E2E).
 
 **Se todos aprovarem:** os defeitos podem ser marcados como **Validados** por quem executou e passam a **Fechados** quando o PR for integrado e as Issues #29 a #34 forem encerradas com o link dele.

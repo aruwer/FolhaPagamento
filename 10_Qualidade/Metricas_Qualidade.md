@@ -46,7 +46,7 @@ Escopo: 15 classes de produção, sem exclusões. O `verify` aplica `jacoco:chec
 | Indicador | Resultado |
 | :--- | ---: |
 | Defeitos encontrados | **7** |
-| Defeitos corrigidos | **7 (100%)**; validados: 6 (BUG-007 aguarda a revisão do reteste) |
+| Defeitos corrigidos e validados | **7 (100%)** |
 | Defeitos abertos | 0 |
 | Por severidade | S1: 0 · S2: 0 · S3: 6 · S4: 1 |
 | Densidade de defeitos | 7 / 0,912 KLOC ≈ **7,7 defeitos/KLOC** (linhas não vazias de produção; eram 6 / 0,912 ≈ 6,6 antes do BUG-007) |
