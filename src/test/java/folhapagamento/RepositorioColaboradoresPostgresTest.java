@@ -85,6 +85,17 @@ class RepositorioColaboradoresPostgresTest {
         assertThrows(IllegalArgumentException.class, () -> service.consultarFolha(13, 2099));
     }
 
+    @Test
+    @DisplayName("BUG-007 (PostgreSQL): persiste comissão de 150% (migração V3)")
+    void persisteComissaoAcimaDeCemPorCento() throws Exception {
+        String matricula = matriculaUnica();
+        service.cadastrar(new ColaboradorComissionado(
+                matricula, "Comissão 150", new BigDecimal("1000.00"),
+                new BigDecimal("2000.00"), new BigDecimal("150.00")));
+
+        assertEquals(new BigDecimal("4000.00"), service.buscar(matricula).orElseThrow().getSalarioFinal());
+    }
+
     private String matriculaUnica() {
         return "T" + UUID.randomUUID().toString().replace("-", "").substring(0, 20).toUpperCase();
     }

@@ -1,1 +1,1 @@
-923f22c12883ef6340216de1b6c008c5245510d59c90679af8bc938f3d031958  folha-pagamento-2.0.0.jar
+db4e043e2df8e2b7da1080efa34d7aa0fef0241827b5b853b73bfdd63b42aaf6  folha-pagamento-2.0.0.jar

@@ -1,7 +1,7 @@
 # Termo de Homologação
 
 **Projeto:** Sistema de Folha de Pagamento ("Folha Clara")  
-**Versão homologada:** 2.0.0 (`folha-pagamento-2.0.0.jar`; branch `feat/QDS_2.0.0/fechamento-a3`)  
+**Versão homologada:** 2.0.0 (`folha-pagamento-2.0.0.jar`; branch `fix/QDS_2.0.0/correcoes-avaliacao-a3`)  
 **Unidade Curricular:** Garantia da Qualidade de Software — Trabalho Integrador A3  
 **Equipe:** Amanda Ruwer, Ana Luísa Lopes e Rafaela Acosta
 
@@ -18,11 +18,11 @@ Declaramos, para os devidos fins, que a versão 2.0.0 do Sistema de Folha de Pag
 | Regras de negócio RN001–RN010 | 10/10 atendidas |
 | Critérios gerais de aceitação ACE-1 a ACE-6 | 6/6 aprovados ([Criterios_Aceitacao.md](Criterios_Aceitacao.md)) |
 | Cenários de aceitação | 15/15 aprovados ([Relatorio_Testes_Aceitacao.md](Relatorio_Testes_Aceitacao.md)) |
-| Casos de teste CT-001 a CT-040 | 40/40 executados e aprovados |
-| Testes automatizados (JUnit) | 105/105 aprovados, 0 ignorados |
-| Testes E2E contra a aplicação real | Bruno CLI 31/31 (106 asserções) e Cypress 9/9; evidências em [evidencias-auto](evidencias-auto/), validadas em 24/11/2026 |
-| Cobertura de código | 96,98% linhas · 95,96% branches (meta ≥ 80%) |
-| Defeitos | 6 encontrados, 6 corrigidos, validados e encerrados nas Issues #29 a #34; 0 abertos; 0 críticos/altos |
+| Casos de teste CT-001 a CT-041 | 41/41 executados e aprovados |
+| Testes automatizados (JUnit) | 106/106 aprovados, 0 ignorados |
+| Testes E2E contra a aplicação real | Bruno CLI 33/33 (112 testes) e Cypress 11/11, execução de 24/11/2026 23:50; evidências em [evidencias-auto](evidencias-auto/) (primeira execução validada em 24/11/2026; reteste do BUG-007 validado em 25/11/2026) |
+| Cobertura de código | 96,96% linhas · 95,88% branches (meta ≥ 80%) |
+| Defeitos | 7 encontrados e 7 corrigidos; BUG-001 a BUG-006 validados e encerrados nas Issues #29 a #34; BUG-007 (Issue #38, teto de 100% na comissão, apontado pela avaliação da A3) corrigido e validado em 25/11/2026; 0 abertos; 0 críticos/altos |
 
 ## 2. Critérios de aprovação do PGQ (seção 6.6)
 
@@ -51,7 +51,13 @@ Detalhes no [Relatório de Revisão Técnica](../10_Qualidade/Relatorio_Revisao_
 
 | Papel | Nome | Assinatura | Data |
 | :--- | :--- | :--- | :--- |
-| Responsável pela qualidade e homologação (PGQ; KAN-15) | Ana Luísa Lopes | Ana Luísa Lopes | 24/11/2026 |
-| Revisora técnica (PGQ 6.3) | Amanda Ruwer | Amanda Ruwer | 24/11/2026 |
-| Responsável por arquitetura e desenvolvimento | Rafaela Acosta | Rafaela Acosta | 24/11/2026 |
-| Representante do cliente / avaliador(a) | Paulo | Paulo | 30/11/2026 |
+| Responsável pela qualidade e homologação (PGQ; KAN-15) | Ana Luísa Lopes | Ana Luísa Lopes | 25/11/2026 |
+| Revisora técnica (PGQ 6.3) | Amanda Ruwer | Amanda Ruwer | 25/11/2026 |
+| Responsável por arquitetura e desenvolvimento | Rafaela Acosta | Rafaela Acosta | 25/11/2026 |
+| Representante do cliente / avaliador(a) | Paulo | *(assinatura pendente: a ser preenchida pelo próprio avaliador)* | *(data pendente)* |
+
+## 5. Registro da apresentação e atualização do termo
+
+- **Apresentação e homologação presenciais:** dispensadas por determinação expressa do professor, que concedeu a pontuação integral do critério "Apresentação e homologação" na avaliação da A3 de 24/11/2026. O pacote mantém os [slides e o roteiro](../11_Apresentacao/).
+- **Aceite do cliente:** a linha do representante do cliente fica em branco até o próprio avaliador manifestar o aceite. Nenhuma assinatura ou data foi preenchida em nome dele.
+- **Atualização de 25/11/2026:** os números deste termo foram atualizados após a correção do BUG-007 (teto de 100% no percentual de comissão, sem respaldo na RN005; [Issue #38](https://github.com/aruwer/FolhaPagamento/issues/38)). As assinaturas da equipe, antes datadas de 24/11/2026, foram reconfirmadas pelas integrantes em 25/11/2026 sobre esta versão do termo.

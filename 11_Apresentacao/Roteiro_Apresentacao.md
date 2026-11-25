@@ -11,7 +11,7 @@
 | Arquitetura | 4 | 1,5 min | Camadas, snapshots por competência, extensibilidade |
 | Demonstração ao vivo | 5–6 | 4 min | Ver passo a passo abaixo |
 | Testes e métricas | 7–8 | 2,5 min | Níveis de teste, cobertura, metas do PGQ |
-| Defeitos e revisão técnica | 9–10 | 2 min | 6 defeitos, não conformidades, lições aprendidas |
+| Defeitos e revisão técnica | 9–10 | 2 min | 7 defeitos, não conformidades, lições aprendidas |
 | Homologação e entrega | 11–13 | 1,5 min | Critérios de aceitação, parecer, estrutura 01–11 |
 
 A divisão entre as integrantes fica a critério da equipe; uma opção alinhada à EAP é: requisitos e homologação (Dev 1), arquitetura e demonstração (Dev 2), testes, métricas e qualidade (Dev 3).

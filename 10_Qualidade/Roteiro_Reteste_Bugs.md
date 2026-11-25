@@ -1,4 +1,4 @@
-# Roteiro de Reteste dos Defeitos (BUG-001 a BUG-006)
+# Roteiro de Reteste dos Defeitos (BUG-001 a BUG-007)
 
 **Projeto:** Sistema de Folha de Pagamento · **Versão:** 2.0.0  
 **Base:** [Registro de Defeitos](Registro_Defeitos.md) · Ciclo de vida do PGQ 6.5.2: *Resolvido → **Validado** → Fechado*  
@@ -14,7 +14,7 @@ Em 24/11/2026 (01:17), a aplicação real (JAR 2.0.0 + PostgreSQL 17, database l
 
 | Resultado da execução | Bruno CLI (backend) | Cypress (frontend) |
 | :--- | :--- | :--- |
-| Situação | 31 de 31 requisições aprovadas, 106 asserções | 3 specs, 9 testes, 9 aprovados |
+| Situação | 33 de 33 requisições aprovadas, 112 testes | 4 specs, 11 testes, 11 aprovados |
 | Onde | [`bruno/relatorio.html`](../09_Homologacao/evidencias-auto/bruno/relatorio.html), [`resultado.json`](../09_Homologacao/evidencias-auto/bruno/resultado.json) (respostas completas), [`saida.txt`](../09_Homologacao/evidencias-auto/bruno/saida.txt) | [`screenshots/`](../09_Homologacao/evidencias-auto/cypress/screenshots/) e [`videos/`](../09_Homologacao/evidencias-auto/cypress/videos/) |
 
 **O que revisar por defeito** (as pastas dentro de `cypress/screenshots/` têm o nome do spec):
@@ -23,10 +23,11 @@ Em 24/11/2026 (01:17), a aplicação real (JAR 2.0.0 + PostgreSQL 17, database l
 | :--- | :--- | :--- |
 | BUG-001 | Bruno `04 CT-015 campos variaveis em branco valem zero (BUG-001)`; Cypress `reteste-bugs.cy.js/BUG-001/` | Cadastro concluído com vendas e comissão em branco; `RT001` aparece no painel com R$ 2.000,00 |
 | BUG-002 | só JUnit (seção 1); não é coberto pelo E2E | 3 testes PostgreSQL executados, 0 ignorados |
-| BUG-003 | os 31 requests do Bruno, via HTTP real | Todos aprovados |
+| BUG-003 | os 33 requests do Bruno, via HTTP real | Todos aprovados |
 | BUG-004 | Cypress `reteste-bugs.cy.js/BUG-004/` e [PDF de impressão](../09_Homologacao/evidencias-auto/impressao/demonstrativo-BR002.pdf) | Adicionais R$ 0,00 no demonstrativo; o PDF traz só os dados, sem menu nem botões |
 | BUG-005 | Bruno `24 BUG-005 reprocessar nao duplica`; Cypress `reteste-bugs.cy.js/BUG-005/`; JUnit em PostgreSQL | Uma linha por colaborador; total inalterado |
 | BUG-006 | Bruno `17 CT-036 competencia nao processada ...`; Cypress `reteste-bugs.cy.js/BUG-006/` | Texto novo "Esta competência ainda não tem folha processada…"; sem o texto antigo |
+| BUG-007 | Bruno `32` a `34`; Cypress `bug007-comissao-acima-de-100.cy.js/BUG-007/` | Comissão de 150% aceita; adicional R$ 3.000,00 e salário final R$ 4.000,00; negativo continua rejeitado |
 | Regressão CT-036/037 | Bruno `27` a `31`; Cypress `regressao-ct036-ct037.cy.js/` | Outra competência vazia; excluído some do painel e o demonstrativo continua sem "Editar cadastro" |
 
 **Limites desta automação:** a impressão (diálogo do navegador) é coberta pelo PDF gerado pelo Edge e pela checagem das regras `@media print` do CSS, não pelo diálogo nativo. A seção 3, passo 3, abaixo também vale para a tela: depois de processada, a competência não oferece mais o botão de processamento.
@@ -59,9 +60,9 @@ Em outro PowerShell, na raiz do projeto (com o Docker ligado):
 .\mvnw.cmd clean verify
 ```
 
-**Esperado:** `BUILD SUCCESS`, `Tests run: 105, Failures: 0, Errors: 0, Skipped: 0` e `All coverage checks have been met`.
+**Esperado:** `BUILD SUCCESS`, `Tests run: 106, Failures: 0, Errors: 0, Skipped: 0` e `All coverage checks have been met`.
 
-- [ ] Passou  [ ] Falhou — **Execução de referência (23/11/2026, sem marcação nesta validação):** BUILD SUCCESS, 105 testes, 0 falhas, 0 ignorados, cobertura 96,98% / 95,96%.
+- [ ] Passou  [ ] Falhou — **Execução de referência (25/11/2026, sem marcação nesta validação):** BUILD SUCCESS, 106 testes, 0 falhas, 0 ignorados, cobertura 96,96% / 95,88%.
 - **Evidências:** [log do clean verify](../04_Testes/log-verify.txt) · [relatório JaCoCo](evidencias/jacoco/index.html) · [relatórios Surefire](../04_Testes/surefire-reports/)
 
 ---
@@ -135,6 +136,21 @@ Em outro PowerShell, na raiz do projeto (com o Docker ligado):
 
 ---
 
+### BUG-007 — Percentual de comissão acima de 100% (RN005)
+
+1. **Novo colaborador** → matrícula `RT007`, nome `Reteste Comissao`, salário `1000`, tipo **Comissionado**, vendas `2000`, comissão `150` → **Cadastrar**.
+2. No painel, confira a linha `RT007`.
+3. Em **Novo colaborador**, escolha **Comissionado** e digite `-1` na comissão: o campo deve ser marcado como inválido.
+
+**Esperado:**
+- passo 1/2: cadastro aceito; `RT007` aparece com comissão de 150,00% e **salário final R$ 4.000,00** (base 1.000,00 + adicional 3.000,00); nenhuma mensagem "não pode ser maior que 100%";
+- passo 3: o valor negativo continua rejeitado.
+
+- [X] Aprovado  [ ] Reprovado — **Executor/validação: Amanda Ruwer, em 25/11/2026.** Executado de forma automatizada em 24/11/2026 23:50 (Bruno 32–34 e Cypress `bug007`), sem falhas.
+- **Evidências:** [captura 1: formulário com 150%](../09_Homologacao/evidencias-auto/cypress/screenshots/bug007-comissao-acima-de-100.cy.js/BUG-007/passo1-formulario-150.png) · [captura 2: cadastro aceito, salário final R$ 4.000,00](../09_Homologacao/evidencias-auto/cypress/screenshots/bug007-comissao-acima-de-100.cy.js/BUG-007/passo2-cadastro-aceito.png) · [captura 3: negativo rejeitado](../09_Homologacao/evidencias-auto/cypress/screenshots/bug007-comissao-acima-de-100.cy.js/BUG-007/passo3-negativo-rejeitado.png) · [relatório Bruno](../09_Homologacao/evidencias-auto/bruno/relatorio.html) (requisições 32 a 34) · [vídeo](../09_Homologacao/evidencias-auto/cypress/videos/bug007-comissao-acima-de-100.cy.js.mp4)
+
+---
+
 ## 3. Regressão (CT-036 e CT-037, pedidos para validação final)
 
 1. Com `RT002` processado na competência atual (BUG-004), cadastre `RT003`, nome `Reteste Tres`, salário `1500`, tipo **Salário base**.
@@ -154,14 +170,17 @@ Em outro PowerShell, na raiz do projeto (com o Docker ligado):
 | :--- | :--- | :---: | :---: | :--- |
 | BUG-001 | Execução automatizada (Bruno CLI + Cypress, 24/11/2026 01:17); evidências revisadas por Amanda Ruwer | 24/11/2026 | **Aprovado** | Bruno `04` e Cypress `BUG-001/`: cadastro concluído com campos em branco; `RT001` com R$ 2.000,00 |
 | BUG-002 | Evidência da suíte JUnit (`clean verify` de 23/11/2026), revisada por Amanda Ruwer | 24/11/2026 | **Aprovado** | Validado pela evidência do JUnit, **não** pelo E2E: 3 testes PostgreSQL (Testcontainers) executados, 0 ignorados ([Surefire](../04_Testes/surefire-reports/folhapagamento.RepositorioColaboradoresPostgresTest.txt), [log](../04_Testes/log-verify.txt)). Não houve nova execução |
-| BUG-003 | Execução automatizada (Bruno CLI + Cypress, 24/11/2026 01:17); evidências revisadas por Amanda Ruwer | 24/11/2026 | **Aprovado** | Bruno: 31 requisições HTTP reais, 106 asserções, 0 falhas |
+| BUG-003 | Execução automatizada (Bruno CLI + Cypress, 24/11/2026 01:17); evidências revisadas por Amanda Ruwer | 24/11/2026 | **Aprovado** | Bruno: 31 requisições HTTP reais, 106 asserções, 0 falhas (execução revisada de 01:17; a reexecução de 23:50 teve 33 requisições e 112 testes, 0 falhas) |
 | BUG-004 | Execução automatizada (Bruno CLI + Cypress, 24/11/2026 01:17); evidências revisadas por Amanda Ruwer | 24/11/2026 | **Aprovado** | Cypress `BUG-004/` e PDF de impressão: Adicionais R$ 0,00; impressão sem menu e botões |
 | BUG-005 | Execução automatizada (Bruno CLI + Cypress, 24/11/2026 01:17); evidências revisadas por Amanda Ruwer | 24/11/2026 | **Aprovado (parte E2E)** | Bruno `24` e Cypress `BUG-005/`: uma linha por colaborador, total inalterado. A comprovação principal em PostgreSQL é do JUnit (23/11/2026) |
 | BUG-006 | Execução automatizada (Bruno CLI + Cypress, 24/11/2026 01:17); evidências revisadas por Amanda Ruwer | 24/11/2026 | **Aprovado** | Bruno `17` e Cypress `BUG-006/`: texto novo presente e texto antigo ausente |
 | Regressão CT-036 / CT-037 | Execução automatizada (Bruno CLI + Cypress, 24/11/2026 01:17); evidências revisadas por Amanda Ruwer | 24/11/2026 | **Aprovado** | Bruno `27` a `31` e Cypress `regressao-ct036-ct037.cy.js/` |
+| BUG-007 | Execução automatizada (Bruno CLI + Cypress, 24/11/2026 23:50); evidências revisadas por Amanda Ruwer | 25/11/2026 | **Aprovado** | Bruno `32` a `34` e Cypress `BUG-007/`: 150% aceito (adicional R$ 3.000,00; final R$ 4.000,00); negativo rejeitado. JUnit em PostgreSQL: `persisteComissaoAcimaDeCemPorCento` |
+
+**Reexecução de 24/11/2026 (23:50), após a correção do BUG-007:** a coleção e os specs foram executados de novo com o JAR corrigido (Bruno 33/33 requisições e 112 testes; Cypress 11/11 testes). Os arquivos de `evidencias-auto/` são os dessa reexecução; os resultados revisados às 01:17 permanecem no histórico do Git. Amanda Ruwer validou o reteste do BUG-007 em 25/11/2026; os demais defeitos seguem validados pela primeira execução (01:17).
 
 **Se algum item reprovar:** não altere o [Registro de Defeitos](Registro_Defeitos.md) para "Validado". Anote o que foi obtido, guarde a captura e volte o defeito para "Em Correção" na Issue correspondente.
 
-**Situação em 24/11/2026:** reteste E2E aprovado por Amanda Ruwer (BUG-001, 003, 004, 005 na parte E2E, 006 e regressão). BUG-002 foi validado pela evidência da suíte JUnit (não é coberto pelo E2E).
+**Situação em 24/11/2026:** reteste E2E aprovado por Amanda Ruwer (BUG-001, 003, 004, 005 na parte E2E, 006 e regressão). **Em 25/11/2026:** BUG-007 também aprovado por Amanda Ruwer. BUG-002 foi validado pela evidência da suíte JUnit (não é coberto pelo E2E).
 
 **Se todos aprovarem:** os defeitos podem ser marcados como **Validados** por quem executou e passam a **Fechados** quando o PR for integrado e as Issues #29 a #34 forem encerradas com o link dele.

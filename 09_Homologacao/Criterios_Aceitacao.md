@@ -18,7 +18,7 @@
 
 | ID | Executor | Data | Versão | Resultado | Observações |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| ACE-1 | Amanda Ruwer (CT-034) + suíte automatizada | 23/11/2026 | 2.0.0 | Aprovado | Capturas CT-034 revisadas; 105/105 testes aprovados |
+| ACE-1 | Amanda Ruwer (CT-034) + suíte automatizada | 23/11/2026 | 2.0.0 | Aprovado | Capturas CT-034 revisadas; 106/106 testes aprovados |
 | ACE-2 | Amanda Ruwer (CT-035) + suíte automatizada | 23/11/2026 | 2.0.0 | Aprovado | Captura CT-035 revisada |
 | ACE-3 | Revisão de fechamento A3 + suíte automatizada + vídeos da equipe (CT-030-A/B/C) | 23/11/2026 | 2.0.0 | Aprovado | Valores conferidos: 3.000 / 2.500 / 2.100 / 2.000 / 2.140 |
 | ACE-4 | Revisão de fechamento A3 + suíte automatizada | 23/11/2026 | 2.0.0 | Aprovado | Competências 11/2026 e 12/2026 com conteúdos diferentes; 01/2027 não processada |

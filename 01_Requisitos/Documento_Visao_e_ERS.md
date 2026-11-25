@@ -69,7 +69,7 @@ Automatizar e aumentar a precisão dos cálculos de remuneração, consolidar de
 - **RN002:** o nome do colaborador é obrigatório.
 - **RN003:** o salário base não poderá ser negativo.
 - **RN004:** o valor de vendas não poderá ser negativo.
-- **RN005:** o percentual de comissão não poderá ser negativo.
+- **RN005:** o percentual de comissão não poderá ser negativo. *(Não há limite superior: um percentual acima de 100% é válido; ver BUG-007 e CT-041.)*
 - **RN006:** a quantidade produzida não poderá ser negativa.
 - **RN007:** o valor pago por unidade produzida não poderá ser negativo.
 - **RN008:** o salário final deverá ser calculado automaticamente pelo sistema.
@@ -91,7 +91,7 @@ O sistema poderá ser considerado conforme quando:
 
 ## 3. Matriz de Rastreabilidade
 
-A matriz abaixo relaciona requisitos, casos de uso, componentes e casos de teste. Os IDs `CT001`–`CT010` são agrupadores de alto nível; a correspondência com os 40 casos detalhados (`CT-001`–`CT-040`) está em [Casos_Teste_Rastreaveis.md](../04_Testes/Casos_Teste_Rastreaveis.md#correspondência-com-os-ids-da-matriz-da-ers). O status reflete a execução registrada em 23/11/2026 (suíte automatizada e evidências de homologação). A matriz detalhada requisito × implementação × teste está em [Matriz_Conformidade_Requisitos.md](Matriz_Conformidade_Requisitos.md).
+A matriz abaixo relaciona requisitos, casos de uso, componentes e casos de teste. Os IDs `CT001`–`CT010` são agrupadores de alto nível; a correspondência com os 41 casos detalhados (`CT-001`–`CT-040`) está em [Casos_Teste_Rastreaveis.md](../04_Testes/Casos_Teste_Rastreaveis.md#correspondência-com-os-ids-da-matriz-da-ers). O status reflete a execução registrada em 23/11/2026 (suíte automatizada e evidências de homologação). A matriz detalhada requisito × implementação × teste está em [Matriz_Conformidade_Requisitos.md](Matriz_Conformidade_Requisitos.md).
 
 | Requisito / Regra | Caso de Uso | Componente / Classe UML | Caso de Teste | Status (A3, 23/11/2026) |
 | :--- | :--- | :--- | :---: | :--- |

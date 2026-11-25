@@ -358,7 +358,7 @@ erDiagram
         varchar tipo_colaborador "PADRAO | COMISSIONADO | PRODUCAO"
         numeric salario_base
         numeric valor_vendas "nulo se não comissionado"
-        numeric percentual_comissao "0 a 100"
+        numeric percentual_comissao ">= 0"
         numeric quantidade_produzida "nulo se não produção"
         numeric valor_por_unidade
         boolean ativo

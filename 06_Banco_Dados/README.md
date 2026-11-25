@@ -24,7 +24,7 @@ erDiagram
         varchar20 tipo_colaborador "PADRAO | COMISSIONADO | PRODUCAO"
         numeric12_2 salario_base ">= 0 (RN003)"
         numeric12_2 valor_vendas ">= 0 (RN004); só COMISSIONADO"
-        numeric5_2 percentual_comissao "0 a 100 (RN005); só COMISSIONADO"
+        numeric5_2 percentual_comissao ">= 0 (RN005, sem teto; V3); só COMISSIONADO"
         numeric13_3 quantidade_produzida ">= 0 (RN006); só PRODUCAO"
         numeric12_2 valor_por_unidade ">= 0 (RN007); só PRODUCAO"
         boolean ativo "false após exclusão lógica"
@@ -63,7 +63,7 @@ O processamento de uma competência grava em `folhas_processadas` uma cópia de 
 
 ```powershell
 docker compose up -d                  # cria o banco folha_pagamento (porta 5433)
-.\mvnw.cmd spring-boot:run            # Flyway aplica V1 e V2 na primeira inicialização
+.\mvnw.cmd spring-boot:run            # Flyway aplica V1, V2 e V3 na primeira inicialização
 Get-Content 06_Banco_Dados\seed-colaboradores.sql | docker compose exec -T postgres psql -U folha_app -d folha_pagamento
 ```
 

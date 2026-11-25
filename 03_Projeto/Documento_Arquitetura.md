@@ -36,7 +36,7 @@ flowchart LR
 | **Front-end** | Thymeleaf + HTML5 / CSS3 / JS | Renderização Server-Side (SSR) | Integração nativa com o Spring MVC, permitindo bind direto de objetos Java (`ColaboradorForm` e `ResumoFolha`) no HTML sem necessidade de manter um projeto SPA separado, reduzindo a complexidade operacional. |
 | **Back-end** | Java + Spring Boot | Java 17 LTS / Spring Boot 3.5.5 | Java 17 garante suporte de longo prazo (LTS), tipagem forte e segurança aritmética com `BigDecimal` para cálculos financeiros. O Spring Boot fornece injeção de dependências (`@Service`, `@Controller`) e configuração simplificada via Maven (`pom.xml`). |
 | **Persistência** | PostgreSQL + Spring Data JPA | SGBD relacional / ORM | Transações, integridade referencial e restrições `CHECK`/`UNIQUE`; valores monetários persistidos em `NUMERIC(12,2)`. |
-| **Migrações** | Flyway | V1 e V2 em `src/main/resources/db/migration` | Evolução versionada do esquema; Hibernate executa validação (`ddl-auto=validate`) na inicialização. |
+| **Migrações** | Flyway | V1, V2 e V3 em `src/main/resources/db/migration` | Evolução versionada do esquema; Hibernate executa validação (`ddl-auto=validate`) na inicialização. |
 | **Testes de persistência** | H2 + Testcontainers 1.21.4 | H2 para integração rápida; PostgreSQL 17 em container | H2 cobre os testes de integração rápidos (MockMvc + JPA). Testcontainers sobe um PostgreSQL 17 real e executa as migrations Flyway, validando a persistência no mesmo SGBD de produção. |
 | **Qualidade** | JaCoCo 0.8.13 | Cobertura e *quality gate* | O build (`verify`) falha se a cobertura de linhas ou de branches ficar abaixo de 80%, conforme o PGQ. |
 

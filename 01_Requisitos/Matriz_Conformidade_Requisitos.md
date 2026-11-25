@@ -33,7 +33,7 @@
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | RNF001 | Interface amigável e intuitiva | Templates Thymeleaf, `app.css`, `colaborador-form.js` | CT-032, CT-034, CT-035, CT-040 | Avaliação de usabilidade gravada pela equipe (vídeos CT-032-01 a 05) e capturas CT-034/035/040 | Verificado — aprovado |
 | RNF002 | Validação antes de qualquer cálculo | Bean Validation em `ColaboradorForm`, `BindingResult`, validações do domínio | CT-010 a CT-022, CT-035 | `ColaboradorFormTest`, `ct010*`–`ct020*`, `CompetenciaEBordasTest` | Verificado — aprovado |
-| RNF003 | Persistência em banco SQL | `RepositorioColaboradoresJpa`, migrations V1/V2 (Flyway), `docker-compose.yml` | CT-030, CT-037 | 3 testes em PostgreSQL 17 real (Testcontainers) + CT-030-D (reinício da aplicação) | Verificado — aprovado |
+| RNF003 | Persistência em banco SQL | `RepositorioColaboradoresJpa`, migrations V1 a V3 (Flyway), `docker-compose.yml` | CT-030, CT-037 | 4 testes em PostgreSQL 17 real (Testcontainers) + CT-030-D (reinício da aplicação) | Verificado — aprovado |
 | RNF004 | Novos tipos sem alterar cálculos existentes | Hierarquia polimórfica `Colaborador` → `getAdicional()` | CT-033 | `ConformidadeRequisitosTest.novoTipoDeRemuneracaoNaoAlteraCalculosExistentes` + inspeção registrada em CT-033 | Verificado — aprovado |
 
 ## Regras de negócio
@@ -44,7 +44,7 @@
 | RN002 | Nome obrigatório | `@NotBlank` em `ColaboradorForm`, validação em `Colaborador` | CT-012 | `ct011E012*`, `ColaboradorTest` | Verificado — aprovado |
 | RN003 | Salário base não negativo | `@DecimalMin`, `Colaborador.validarNaoNegativo` | CT-002, CT-014 | `ct014E018*`, `ColaboradorTest`, `CompetenciaEBordasTest.Dominio` | Verificado — aprovado |
 | RN004 | Valor de vendas não negativo | `ColaboradorComissionado` | CT-004, CT-017 | `ct014E018*`, `ColaboradorTest` | Verificado — aprovado |
-| RN005 | Percentual de comissão não negativo | `ColaboradorComissionado` | CT-005, CT-018 | `ct014E018*`, `ColaboradorTest` | Verificado — aprovado |
+| RN005 | Percentual de comissão não negativo (sem limite superior) | `ColaboradorComissionado`, `ColaboradorForm`, migração V3 | CT-005, CT-018, CT-041 | `ct014E018*`, `ColaboradorTest.aceitaComissaoAcimaDeCemPorCento`, `ColaboradorFormTest.validaComissaoAcimaDeCemEhNegativa`, `RepositorioColaboradoresPostgresTest.persisteComissaoAcimaDeCemPorCento` | Verificado — aprovado |
 | RN006 | Quantidade produzida não negativa | `ColaboradorProducao` | CT-007, CT-021 | `ct014E018*`, `ColaboradorTest` | Verificado — aprovado |
 | RN007 | Valor por unidade não negativo | `ColaboradorProducao` | CT-008, CT-022 | `ct014E018*`, `ColaboradorTest` | Verificado — aprovado |
 | RN008 | Salário final calculado pelo sistema | `Colaborador.getSalarioFinal()` (método `final`) | CT-001 a CT-008, CT-036 | `ColaboradorTest`, `ConformidadeRequisitosTest` | Verificado — aprovado |
@@ -53,6 +53,6 @@
 
 ## Pontos fora da ERS (decisões registradas)
 
-- O percentual de comissão é limitado a 100% (`@DecimalMax("100.0")` em `ColaboradorForm` e validação equivalente no domínio). A ERS exige apenas que não seja negativo; o limite superior foi mantido por coerência de negócio (comissão acima do valor vendido não faz sentido) e está coberto por `ColaboradorTest.validaLimitesDeComissao`.
+- **Sem limite superior para o percentual de comissão.** A RN005 do cliente só exige que o percentual não seja negativo. Uma versão anterior impunha um teto de 100% (domínio, formulário, tela e `CHECK` do banco), restrição adicional sem respaldo na ERS, apontada na avaliação da A3 e corrigida no BUG-007 ([Issue #38](https://github.com/aruwer/FolhaPagamento/issues/38)): o teto foi removido nas quatro camadas (migração `V3__remove_teto_percentual_comissao.sql`; o limite técnico passou a ser o do tipo `NUMERIC(5,2)`, 999,99). Cenário de regressão: base R$ 1.000,00, vendas R$ 2.000,00 e comissão de 150% resultam em adicional de R$ 3.000,00 e salário final de R$ 4.000,00 (CT-041). Percentuais negativos continuam rejeitados.
 - A elegibilidade de um colaborador para uma competência considera a data de cadastro e a data de exclusão: quem foi cadastrado depois do fim do mês não entra na folha daquele mês, e quem foi excluído durante o mês ainda entra na folha do próprio mês. Comportamento demonstrado nas evidências de [CT-036](../09_Homologacao/evidencias/CT-036/).
 - Para incluir um novo tipo de remuneração basta criar uma subclasse de `Colaborador`; para que ele seja **cadastrável pela interface e persistido**, é necessário também acrescentar o valor ao enum `TipoColaborador`, ao formulário e a uma nova migration. Nenhum cálculo existente é alterado (ver CT-033).

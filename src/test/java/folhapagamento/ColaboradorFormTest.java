@@ -111,13 +111,18 @@ class ColaboradorFormTest {
     }
 
     @Test
-    @DisplayName("RN006 - Deve rejeitar comissão acima de 100% pela validação do formulário")
-    void validaComissaoAcimaDoLimite() {
+    @DisplayName("BUG-007 - Deve aceitar comissão acima de 100% e rejeitar negativa no formulário")
+    void validaComissaoAcimaDeCemEhNegativa() {
         ColaboradorForm form = formularioValido();
         form.setTipo("COMISSIONADO");
-        form.setValorVendas(new BigDecimal("100.00"));
-        form.setPercentualComissao(new BigDecimal("100.01"));
+        form.setSalarioBase(new BigDecimal("1000.00"));
+        form.setValorVendas(new BigDecimal("2000.00"));
+        form.setPercentualComissao(new BigDecimal("150.00"));
 
+        assertFalse(propriedadesComViolacao(form).contains("percentualComissao"));
+        assertEquals(new BigDecimal("4000.00"), form.construirColaborador().getSalarioFinal());
+
+        form.setPercentualComissao(new BigDecimal("-0.01"));
         assertTrue(propriedadesComViolacao(form).contains("percentualComissao"));
     }
 

@@ -30,6 +30,7 @@ Defeitos do produto, dos testes e das evidências — detalhados no [Registro de
 4. **BUG-004 (S4)** — evidências de CT-038/CT-040 mostravam a tela errada.
 5. **BUG-005 (S3)** — snapshot lido do PostgreSQL diferente do gravado por causa do offset de fuso de `data_processamento`.
 6. **BUG-006 (S3)** — mensagem do estado vazio da folha orientava a cadastrar colaboradores em vez de processar a competência.
+7. **BUG-007 (S3)** — teto de 100% no percentual de comissão, sem respaldo na RN005 do cliente (apontado pela avaliação da A3; [Issue #38](https://github.com/aruwer/FolhaPagamento/issues/38)).
 
 Observações sem defeito:
 
@@ -43,12 +44,13 @@ Observações sem defeito:
 | :--- | :--- | :--- |
 | Build | Testcontainers 1.21.3 → 1.21.4; regra `jacoco:check` (≥ 80% linhas e branches) | `pom.xml` |
 | Código de produção | Normalização do fuso de `data_processamento` (BUG-005) | `FolhaProcessadaJpaEntity.java` |
+| Código de produção e banco | Remoção do teto de 100% do percentual de comissão, sem respaldo na RN005 (BUG-007) | `ColaboradorComissionado.java`, `ColaboradorForm.java`, `form.html`, migração `V3__remove_teto_percentual_comissao.sql` |
 | Interface | Mensagem do estado vazio da folha (BUG-006) | `templates/folha.html` |
 | Testes | `CompetenciaEBordasTest` (16 testes: bordas de competência, nulos, fuso, mensagem); `ct039ResumePorCategoriaECompetencia`; `novoTipoDeRemuneracaoNaoAlteraCalculosExistentes` (CT-033) | `src/test/java/folhapagamento/` |
 | Evidências | 15 novos arquivos: capturas de CT-023, 026, 027, 030, 032, 036, 038, 040, PDF de impressão e 2 logs de reinício com consultas SQL | `09_Homologacao/evidencias/` |
 | Documentação | Estrutura 01–11; matrizes com status verificado; registro de execução dos 40 casos; relatórios de execução, integração e aceitação; manuais reescritos; métricas; termo de homologação; apresentação | todas as pastas |
 
-**Resultado da verificação após as correções:** `clean verify` — BUILD SUCCESS, 105 testes, 0 falhas, 0 erros, 0 ignorados; cobertura 96,98% (linhas) e 95,96% (branches).
+**Resultado da verificação após as correções:** `clean verify` — BUILD SUCCESS, 106 testes, 0 falhas, 0 erros, 0 ignorados; cobertura 96,96% (linhas) e 95,88% (branches) (execução de 25/11/2026, após a correção do BUG-007).
 
 ## 4. Lições aprendidas
 
@@ -59,6 +61,7 @@ Observações sem defeito:
 5. **Evidência precisa corresponder ao caso.** Uma captura correta de outra tela (BUG-004) não comprova o requisito; revisar visualmente cada evidência antes de aprovar um critério evitou uma aprovação indevida — e revelou o BUG-006.
 6. **Processo também precisa de evidência.** As revisões de PR provavelmente aconteceram, mas sem registro no GitHub não podem ser comprovadas (NC-01). O registro faz parte da entrega.
 7. **Isolar dados de teste.** As evidências de homologação foram geradas em uma database dedicada (`folha_evidencias`) e em porta separada, sem tocar nos dados de desenvolvimento da equipe.
+8. **Regra adicional exige aprovação do cliente.** O teto de 100% na comissão não estava na RN005 e só foi percebido na avaliação da A3 (BUG-007). Restrições criadas pela equipe precisam ser aprovadas e registradas na ERS; sem isso, valem os requisitos do cliente, e os testes devem verificá-los, não a regra inventada.
 
 ## 5. Parecer
 

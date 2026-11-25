@@ -8,51 +8,52 @@
 
 | # | Métrica (PGQ 6.4) | Fórmula | Resultado | Meta | Situação |
 | :---: | :--- | :--- | :---: | :---: | :---: |
-| 1 | Cobertura de testes (linhas) | 385 / 397 × 100 | **96,98%** | ≥ 80% | ✔ Atingida |
-| — | Cobertura de branches (complementar) | 95 / 99 × 100 | **95,96%** | ≥ 80% | ✔ Atingida |
+| 1 | Cobertura de testes (linhas) | 383 / 395 × 100 | **96,96%** | ≥ 80% | ✔ Atingida |
+| — | Cobertura de branches (complementar) | 93 / 97 × 100 | **95,88%** | ≥ 80% | ✔ Atingida |
 | 2 | Defeitos críticos abertos (S1) | Σ S1 com status ≠ Validado/Fechado | **0** | 0 | ✔ Atingida |
 | 3 | Requisitos funcionais atendidos | 11 RF aprovados / 11 RF na ERS × 100 | **100%** | 100% | ✔ Atingida |
 | 4 | Índice de revisão de PRs | 3 PRs aprovados / 14 PRs integrados na `main` (até o #36) × 100 | **21,4%** | 100% | ✘ **Não atingida** (NC-01) |
-| 5 | Taxa de execução de testes | 40 casos executados / 40 planejados × 100 | **100%** | 100% | ✔ Atingida |
+| 5 | Taxa de execução de testes | 41 casos executados / 41 planejados × 100 | **100%** | 100% | ✔ Atingida |
 
 ## 1. Cobertura de testes (JaCoCo)
 
 | Medida | Cobertos / total | Resultado |
 | :--- | ---: | ---: |
-| Linhas | 385 / 397 | **96,98%** |
-| Branches | 95 / 99 | **95,96%** |
-| Instruções | 1680 / 1725 | **97,39%** |
+| Linhas | 383 / 395 | **96,96%** |
+| Branches | 93 / 97 | **95,88%** |
+| Instruções | 1670 / 1715 | **97,38%** |
 | Métodos | 124 / 126 | **98,41%** |
 
 Escopo: 15 classes de produção, sem exclusões. O `verify` aplica `jacoco:check` (linhas e branches ≥ 80%; `mvnw test` não o aplica) e falha se a meta não for atingida. Cobertura por classe no [relatório de execução](../04_Testes/Relatorio_Execucao_Testes.md#por-classe).
 
-**Evolução:** linhas 93,38% → 96,98%; branches 77,32% → 95,96% (a cobertura de branches estava abaixo da meta antes da revisão de fechamento — NC-02).
+**Evolução:** linhas 93,38% → 96,96%; branches 77,32% → 95,88% (a cobertura de branches estava abaixo da meta antes da revisão de fechamento — NC-02).
 
 ## 2. Testes
 
 | Indicador | Resultado |
 | :--- | ---: |
-| Testes automatizados executados | 105 (64 unitários + 41 de integração) |
-| Aprovados | **105 (100%)** |
+| Testes automatizados executados | 106 (64 unitários + 42 de integração) |
+| Aprovados | **106 (100%)** |
 | Falhas / erros / ignorados | 0 / 0 / 0 |
-| Casos de teste especificados (A1) | 40 (mínimo exigido: 20) |
-| Casos executados / aprovados / reprovados / bloqueados | 40 / **40** / 0 / 0 |
+| Casos de teste especificados | 41 (40 da A1 + CT-041; mínimo exigido: 20) |
+| Casos executados / aprovados / reprovados / bloqueados | 41 / **41** / 0 / 0 |
 | Cenários de aceitação aprovados | 15 / 15 |
 | Critérios gerais de aceitação da ERS aprovados | 6 / 6 |
-| Proporção código de teste / código de produção | 1536 / 912 linhas não vazias ≈ 1,7 |
+| Proporção código de teste / código de produção | 1560 / 912 linhas não vazias ≈ 1,7 |
 
 ## 3. Defeitos
 
 | Indicador | Resultado |
 | :--- | ---: |
-| Defeitos encontrados | **6** |
-| Defeitos corrigidos e validados | **6 (100%)** |
+| Defeitos encontrados | **7** |
+| Defeitos corrigidos e validados | **7 (100%)** |
 | Defeitos abertos | 0 |
-| Por severidade | S1: 0 · S2: 0 · S3: 5 · S4: 1 |
-| Densidade de defeitos | 6 / 0,912 KLOC ≈ **6,6 defeitos/KLOC** (linhas não vazias de produção) |
+| Por severidade | S1: 0 · S2: 0 · S3: 6 · S4: 1 |
+| Densidade de defeitos | 7 / 0,912 KLOC ≈ **7,7 defeitos/KLOC** (linhas não vazias de produção; eram 6 / 0,912 ≈ 6,6 antes do BUG-007) |
 | Encontrados por execução em PostgreSQL real | 1 (BUG-005) |
 | Encontrados por revisão de artefatos/evidências | 4 (BUG-001, 003, 004, 006) |
 | Encontrados por falha de ambiente de teste | 1 (BUG-002) |
+| Encontrados pela avaliação do professor | 1 (BUG-007) |
 
 ## 4. Requisitos atendidos
 

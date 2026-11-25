@@ -1,0 +1,32 @@
+meta {
+  name: 32 BUG-007 comissao acima de 100 e aceita (RN005)
+  type: http
+  seq: 32
+}
+
+post {
+  url: {{baseUrl}}/colaboradores
+  body: formUrlEncoded
+  auth: none
+}
+
+body:form-urlencoded {
+  matricula: BR019
+  nome: Comissao 150
+  salarioBase: 1000
+  tipo: COMISSIONADO
+  valorVendas: 2000
+  percentualComissao: 150
+}
+
+tests {
+  test("HTTP 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("cadastro aceito (sem erros de formulário)", function() {
+    expect(String(res.getBody())).to.not.include("Confira os campos destacados");
+  });
+  test("sem a mensagem do antigo teto de 100%", function() {
+    expect(String(res.getBody())).to.not.include("não pode ser maior que 100%");
+  });
+}

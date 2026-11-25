@@ -1,0 +1,25 @@
+meta {
+  name: 33 BUG-007 processa a competencia 06-2030
+  type: http
+  seq: 33
+}
+
+post {
+  url: {{baseUrl}}/folha/processar
+  body: formUrlEncoded
+  auth: none
+}
+
+body:form-urlencoded {
+  mes: 6
+  ano: 2030
+}
+
+tests {
+  test("HTTP 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("corpo contém \"BR019\"", function() {
+    expect(String(res.getBody())).to.include("BR019");
+  });
+}

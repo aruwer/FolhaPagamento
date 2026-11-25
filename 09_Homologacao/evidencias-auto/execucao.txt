@@ -1,4 +1,4 @@
-﻿Execução: 24/11/2026 01:16:59
-Commit: 8a512cd
+﻿Execução: 24/11/2026 23:50:44
+Commit: 72274ce
 Aplicação: C:\Users\Amanda\Documents\A3_FolhaPag\target\folha-pagamento-2.0.0.jar (porta 8090), database folha_reteste (PostgreSQL 17)
 Node: v26.13.1 · Bruno CLI: 4.3.0 · Cypress: Cypress package version: 16.3.0
