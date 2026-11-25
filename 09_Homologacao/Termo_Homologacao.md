@@ -51,13 +51,13 @@ Detalhes no [Relatório de Revisão Técnica](../10_Qualidade/Relatorio_Revisao_
 
 | Papel | Nome | Assinatura | Data |
 | :--- | :--- | :--- | :--- |
-| Responsável pela qualidade e homologação (PGQ; KAN-15) | Ana Luísa Lopes | Ana Luísa Lopes | 24/11/2026 |
-| Revisora técnica (PGQ 6.3) | Amanda Ruwer | Amanda Ruwer | 24/11/2026 |
-| Responsável por arquitetura e desenvolvimento | Rafaela Acosta | Rafaela Acosta | 24/11/2026 |
+| Responsável pela qualidade e homologação (PGQ; KAN-15) | Ana Luísa Lopes | Ana Luísa Lopes | 25/11/2026 |
+| Revisora técnica (PGQ 6.3) | Amanda Ruwer | Amanda Ruwer | 25/11/2026 |
+| Responsável por arquitetura e desenvolvimento | Rafaela Acosta | Rafaela Acosta | 25/11/2026 |
 | Representante do cliente / avaliador(a) | Paulo | *(assinatura pendente: a ser preenchida pelo próprio avaliador)* | *(data pendente)* |
 
 ## 5. Registro da apresentação e atualização do termo
 
 - **Apresentação e homologação presenciais:** dispensadas por determinação expressa do professor, que concedeu a pontuação integral do critério "Apresentação e homologação" na avaliação da A3 de 24/11/2026. O pacote mantém os [slides e o roteiro](../11_Apresentacao/).
 - **Aceite do cliente:** a linha do representante do cliente fica em branco até o próprio avaliador manifestar o aceite. Nenhuma assinatura ou data foi preenchida em nome dele.
-- **Atualização de 25/11/2026:** os números deste termo foram atualizados após a correção do BUG-007 (teto de 100% no percentual de comissão, sem respaldo na RN005; [Issue #38](https://github.com/aruwer/FolhaPagamento/issues/38)). As assinaturas da equipe, datadas de 24/11/2026, são da versão anterior do termo e devem ser reconfirmadas pelas integrantes antes da entrega.
+- **Atualização de 25/11/2026:** os números deste termo foram atualizados após a correção do BUG-007 (teto de 100% no percentual de comissão, sem respaldo na RN005; [Issue #38](https://github.com/aruwer/FolhaPagamento/issues/38)). As assinaturas da equipe, antes datadas de 24/11/2026, foram reconfirmadas pelas integrantes em 25/11/2026 sobre esta versão do termo.
